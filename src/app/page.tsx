@@ -1,20 +1,19 @@
-import Link from "next/link";
-import { HeroSection } from "@/components/HeroSection";
-import { ServicesPreview } from "@/components/ServicesPreview";
-import { StatsSection } from "@/components/StatsSection";
-import { ProjectsPreview } from "@/components/ProjectsPreview";
-import { TestimonialsSection } from "@/components/TestimonialsSection";
-import { CTASection } from "@/components/CTASection";
+import { Hero } from "@/components/Hero";
+import { Stats } from "@/components/Stats";
+import { Services } from "@/components/Services";
+import { Projects } from "@/components/Projects";
+import { Testimonials } from "@/components/Testimonials";
+import { CTA } from "@/components/CTA";
 
 export default function HomePage() {
   return (
     <>
-      <HeroSection />
-      <StatsSection />
-      <ServicesPreview />
-      <ProjectsPreview />
-      <TestimonialsSection />
-      <CTASection />
+      <Hero />
+      <Stats />
+      <Services />
+      <Projects />
+      <Testimonials />
+      <CTA />
     </>
   );
 }

@@ -3,84 +3,24 @@
 @tailwind utilities;
 
 :root {
-  --tccg-navy: #0A1628;
-  --tccg-blue: #1E3A5F;
-  --tccg-cyan: #00B4D8;
-  --tccg-green: #2ECC71;
-  --tccg-orange: #F39C12;
+  --tccg-blue: #1e40af;
+  --tccg-green: #059669;
+  --tccg-orange: #ea580c;
+  --tccg-slate: #1e293b;
+  --tolani-red: #E10600;
 }
 
 body {
   font-family: "Inter", system-ui, sans-serif;
-  background: var(--tccg-navy);
-  color: white;
+  background-color: #f8fafc;
 }
 
-@layer components {
-  .btn-primary {
-    @apply bg-tccg-cyan hover:bg-cyan-400 text-tccg-navy font-semibold px-6 py-3 rounded-lg transition-all duration-200;
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-tccg-blue to-tccg-green;
   }
   
-  .btn-secondary {
-    @apply border-2 border-tccg-cyan text-tccg-cyan hover:bg-tccg-cyan hover:text-tccg-navy font-semibold px-6 py-3 rounded-lg transition-all duration-200;
-  }
-  
-  .btn-cta {
-    @apply bg-tccg-orange hover:bg-orange-400 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200;
-  }
-
-  .card {
-    @apply bg-tccg-blue/30 backdrop-blur-sm border border-white/10 rounded-xl p-6;
-  }
-
   .card-hover {
-    @apply card hover:border-tccg-cyan/50 hover:bg-tccg-blue/50 transition-all duration-300;
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
   }
-
-  .section-title {
-    @apply text-3xl md:text-4xl font-display font-bold text-white;
-  }
-
-  .section-subtitle {
-    @apply text-lg text-gray-400 mt-4 max-w-2xl;
-  }
-
-  .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
-  }
-
-  .badge-green {
-    @apply badge bg-tccg-green/20 text-tccg-green;
-  }
-
-  .badge-cyan {
-    @apply badge bg-tccg-cyan/20 text-tccg-cyan;
-  }
-
-  .badge-orange {
-    @apply badge bg-tccg-orange/20 text-tccg-orange;
-  }
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--tccg-navy);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--tccg-blue);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--tccg-cyan);
 }
