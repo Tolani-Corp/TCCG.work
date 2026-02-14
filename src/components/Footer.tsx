@@ -28,9 +28,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-tccg-blue to-tccg-green rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">TC</span>
-              </div>
+              <img src="/icon.svg" alt="TC Logo" className="w-10 h-10 object-contain" />
               <div>
                 <span className="text-white font-bold text-lg">TC Construction</span>
                 <span className="text-gray-500 text-xs block -mt-1">BUILDING BEYOND</span>
@@ -135,6 +133,11 @@ export function Footer() {
             Tolani Corp
           </a>{" "}
           Company. All rights reserved.
+          <p className="mt-2">
+            <a href="https://tolanilabs.io" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+              Built by <span className="text-tccg-orange font-semibold italic">Tolani Labs</span>
+            </a>
+          </p>
         </div>
       </div>
     </footer>
