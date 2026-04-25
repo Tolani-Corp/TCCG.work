@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const navigation = [
   { name: "Services", href: "/services" },
@@ -21,9 +22,7 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-tccg-blue to-tccg-green rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">TC</span>
-            </div>
+            <img src="/icon.svg" alt="TC Logo" className="w-10 h-10 object-contain" />
             <div className="hidden sm:block">
               <span className="text-white font-bold text-lg">TC Construction</span>
               <span className="text-gray-400 text-xs block -mt-1">BUILDING BEYOND</span>
@@ -41,6 +40,18 @@ export function Header() {
                 {item.name}
               </Link>
             ))}
+
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
+                  Sign In
+                </button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+
             <Link
               href="/contact"
               className="bg-tccg-orange hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
@@ -54,6 +65,7 @@ export function Header() {
             type="button"
             className="md:hidden text-gray-300 hover:text-white"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle mobile menu"
           >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
               {mobileMenuOpen ? (

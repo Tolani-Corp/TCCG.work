@@ -1,99 +1,61 @@
-import Link from "next/link";
+import { Section, FadeIn } from '@/components/Section'
 
 const services = [
   {
-    id: "smart-hvac",
-    title: "Smart HVAC Systems",
-    description: "Next-generation HVAC installations with IoT sensors, real-time monitoring, and AI-driven optimization. Reduce energy costs by up to 40%.",
-    features: ["IoT Integration", "Remote Monitoring", "Predictive Maintenance", "Energy Analytics"],
-    icon: "🌡️",
-    color: "tccg-orange",
+    title: 'Smart HVAC Systems',
+    description:
+      'Modern HVAC retrofits with sensor-driven monitoring, control-layer upgrades, and performance reporting.',
+    emphasis: 'Controls, sensors, and measurable efficiency',
   },
   {
-    id: "esg-solutions",
-    title: "ESG Construction",
-    description: "Sustainable building practices that meet and exceed environmental standards. Full ESG compliance documentation and reporting.",
-    features: ["Carbon Tracking", "LEED Certification", "Green Materials", "Compliance Reports"],
-    icon: "🌿",
-    color: "tccg-green",
+    title: 'ESG Construction',
+    description:
+      'Sustainability-aligned project execution with documentation support, material discipline, and reporting visibility.',
+    emphasis: 'Governed sustainability posture',
   },
   {
-    id: "commercial",
-    title: "Commercial Construction",
-    description: "Full-service commercial construction from planning to completion. Specializing in office buildings, retail spaces, and industrial facilities.",
-    features: ["Project Management", "Design-Build", "Tenant Improvements", "Renovations"],
-    icon: "🏗️",
-    color: "tccg-blue",
+    title: 'Commercial Build',
+    description:
+      'Commercial and institutional project delivery with structured scopes, site coordination, and schedule discipline.',
+    emphasis: 'Federal and private-sector readiness',
   },
   {
-    id: "design",
-    title: "Design Partnership",
-    description: "In collaboration with Tolani Labs, we offer integrated design-build services using cutting-edge Revit modeling and BIM technology.",
-    features: ["3D BIM Modeling", "Revit Integration", "Virtual Walkthroughs", "Clash Detection"],
-    icon: "📐",
-    color: "tccg-blue",
+    title: 'Performance Monitoring',
+    description:
+      'Connected dashboards for facility performance, energy visibility, and operational follow-through.',
+    emphasis: 'Track the work after installation',
   },
-  {
-    id: "monitoring",
-    title: "Performance Monitoring",
-    description: "Web3-enabled contract performance dashboards. Track ESG metrics, energy consumption, and project milestones in real-time.",
-    features: ["Blockchain Verified", "Real-time Dashboards", "Performance Analytics", "Automated Reports"],
-    icon: "📊",
-    color: "tccg-green",
-  },
-  {
-    id: "maintenance",
-    title: "Maintenance Programs",
-    description: "Comprehensive preventive maintenance programs to ensure optimal system performance and longevity of your installations.",
-    features: ["Scheduled Service", "Emergency Response", "Parts Warranty", "System Upgrades"],
-    icon: "🔧",
-    color: "tccg-orange",
-  },
-];
+]
 
 export function Services() {
   return (
-    <section className="bg-gray-50 py-20" id="services">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <span className="text-tccg-green text-sm font-semibold uppercase tracking-wider">Our Expertise</span>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2">
-            Comprehensive Construction &<br />HVAC Solutions
-          </h2>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service) => (
-            <div
-              key={service.id}
-              className="bg-white rounded-xl p-6 shadow-sm card-hover border border-gray-100"
-            >
-              <div className="text-4xl mb-4">{service.icon}</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">{service.title}</h3>
-              <p className="text-gray-600 text-sm mb-4">{service.description}</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {service.features.map((feature) => (
-                  <span
-                    key={feature}
-                    className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
-                  >
-                    {feature}
-                  </span>
-                ))}
-              </div>
-              <Link
-                href={`/services#${service.id}`}
-                className="text-tccg-blue hover:text-blue-700 text-sm font-medium flex items-center gap-1"
-              >
-                Learn More
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
-              </Link>
-            </div>
-          ))}
-        </div>
+    <Section id="services" title="Capability Lanes" className="bg-[rgba(255,255,255,0.66)]">
+      <div className="mb-12 max-w-3xl">
+        <p className="text-lg leading-8 text-[var(--text-secondary)]">
+          The TCCG offer should read like an execution stack: modernize the system, deliver the
+          work, document the sustainability posture, and keep the performance visible after handoff.
+        </p>
       </div>
-    </section>
-  );
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {services.map((service) => (
+          <FadeIn key={service.title} className="tccg-panel rounded-[2rem] p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--accent-primary)]">
+              {service.emphasis}
+            </p>
+            <h3 className="mt-4 text-2xl font-semibold leading-8 tracking-tight text-[var(--text-primary)]">
+              {service.title}
+            </h3>
+            <p className="mt-4 text-base leading-7 text-[var(--text-secondary)]">
+              {service.description}
+            </p>
+            <div className="mt-6 h-px w-full bg-[var(--border-subtle)]" />
+            <p className="mt-6 text-sm font-semibold text-[var(--accent-steel)]">
+              Project-ready delivery, not generic category language.
+            </p>
+          </FadeIn>
+        ))}
+      </div>
+    </Section>
+  )
 }

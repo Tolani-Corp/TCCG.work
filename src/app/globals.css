@@ -2,25 +2,96 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --tccg-blue: #1e40af;
-  --tccg-green: #059669;
-  --tccg-orange: #ea580c;
-  --tccg-slate: #1e293b;
-  --tolani-red: #E10600;
-}
+@layer base {
+  :root {
+    --font-heading: var(--font-sans);
+    --font-sans: 'Inter', system-ui, sans-serif;
 
-body {
-  font-family: "Inter", system-ui, sans-serif;
-  background-color: #f8fafc;
+    --bg-page: #f6f4ef;
+    --bg-surface: #ffffff;
+    --bg-surface-hover: #f0ece5;
+    --bg-strong: #111317;
+    --bg-muted: #e7e1d5;
+
+    --text-primary: #17191c;
+    --text-secondary: #5f6670;
+    --text-inverse: #f8f6f1;
+
+    --border-subtle: #d8d2c8;
+    --border-strong: #a8afa9;
+
+    --accent-primary: #f05f5e;
+    --accent-steel: #4f5b67;
+    --accent-earth: #cdb58d;
+    --accent-green: #5d7e69;
+
+    --background: 42 29% 96%;
+    --foreground: 220 12% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 12% 10%;
+    --primary: 0 82% 66%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 29% 90%;
+    --secondary-foreground: 220 12% 16%;
+    --muted: 40 20% 92%;
+    --muted-foreground: 220 8% 42%;
+    --accent: 0 82% 66%;
+    --accent-foreground: 0 0% 100%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    border-color: var(--border-subtle);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    background-image:
+      radial-gradient(circle at top left, rgba(240, 95, 94, 0.08), transparent 24rem),
+      radial-gradient(circle at bottom right, rgba(205, 181, 141, 0.16), transparent 24rem);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+
+  a {
+    text-decoration: none;
+  }
 }
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-tccg-blue to-tccg-green;
+    background: linear-gradient(135deg, var(--accent-primary), #ff8a5a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  
-  .card-hover {
-    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.74);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .tccg-panel {
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+    box-shadow: 0 20px 60px rgba(17, 19, 23, 0.08);
   }
 }
