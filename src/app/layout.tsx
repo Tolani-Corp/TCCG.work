@@ -10,18 +10,18 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "TC Construction Group | Smart HVAC, ESG, and Commercial Delivery",
+  title: "TCCG Work | Construction Operations Platform",
   description:
-    "TC Construction Group delivers smart HVAC modernization, ESG-aligned construction, and disciplined commercial execution across the Tolani ecosystem.",
+    "A construction operations platform for TCCG open jobs, DAO tasks, BIM coordination, smart HVAC delivery, field crews, safety, and ESG closeout.",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "TC Construction Group | Building Beyond",
+    title: "TCCG Work | Construction Operations Platform",
     description:
-      "Official TC Construction Group site for smart HVAC, ESG construction, and commercial delivery.",
+      "Dynamic work board for TCCG smart HVAC, BIM, ESG, and construction field execution.",
     type: "website",
   },
 };

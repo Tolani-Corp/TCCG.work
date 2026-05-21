@@ -7,33 +7,33 @@
     --font-heading: var(--font-sans);
     --font-sans: 'Inter', system-ui, sans-serif;
 
-    --bg-page: #f6f4ef;
+    --bg-page: #f4f6f5;
     --bg-surface: #ffffff;
-    --bg-surface-hover: #f0ece5;
-    --bg-strong: #111317;
-    --bg-muted: #e7e1d5;
+    --bg-surface-hover: #eef2f1;
+    --bg-strong: #10151b;
+    --bg-muted: #e2e8e6;
 
     --text-primary: #17191c;
     --text-secondary: #5f6670;
     --text-inverse: #f8f6f1;
 
-    --border-subtle: #d8d2c8;
-    --border-strong: #a8afa9;
+    --border-subtle: #d8dfdc;
+    --border-strong: #9aa8a2;
 
     --accent-primary: #f05f5e;
     --accent-steel: #4f5b67;
     --accent-earth: #cdb58d;
     --accent-green: #5d7e69;
 
-    --background: 42 29% 96%;
+    --background: 150 10% 96%;
     --foreground: 220 12% 10%;
     --card: 0 0% 100%;
     --card-foreground: 220 12% 10%;
     --primary: 0 82% 66%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 40 29% 90%;
+    --secondary: 160 12% 91%;
     --secondary-foreground: 220 12% 16%;
-    --muted: 40 20% 92%;
+    --muted: 150 12% 92%;
     --muted-foreground: 220 8% 42%;
     --accent: 0 82% 66%;
     --accent-foreground: 0 0% 100%;
@@ -54,9 +54,8 @@
     background-color: var(--bg-page);
     color: var(--text-primary);
     font-family: var(--font-sans);
-    background-image:
-      radial-gradient(circle at top left, rgba(240, 95, 94, 0.08), transparent 24rem),
-      radial-gradient(circle at bottom right, rgba(205, 181, 141, 0.16), transparent 24rem);
+    background-image: linear-gradient(180deg, #f4f6f5 0%, #eef2f1 100%);
+    background-attachment: fixed;
   }
 
   h1,
@@ -66,7 +65,7 @@
   h5,
   h6 {
     font-family: var(--font-heading);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
   }
 
   a {

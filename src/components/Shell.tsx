@@ -5,9 +5,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const navLinks = [
-  { href: '/#services', label: 'Services' },
-  { href: '/#projects', label: 'Projects' },
-  { href: '/#contact', label: 'Contact' },
+  { href: '/#operations', label: 'Operations' },
+  { href: '/#work', label: 'Work Board' },
+  { href: '/#pipeline', label: 'Pipeline' },
+  { href: '/#contact', label: 'Crew Intake' },
   { href: 'https://tolanicorp.us/communications', label: 'HQ Network', external: true },
 ]
 
@@ -15,7 +16,7 @@ function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-[var(--border-subtle)] bg-[rgba(246,244,239,0.88)] backdrop-blur-md">
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-[var(--border-subtle)] bg-[rgba(244,246,245,0.9)] backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" aria-label="TC Construction Group" className="flex items-center gap-3">
@@ -23,7 +24,7 @@ function Header() {
             <div className="hidden sm:block">
               <Image src="/logo.svg" alt="TC Construction Group" width={170} height={52} className="h-8 w-auto" priority />
               <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--text-secondary)]">
-                Smart HVAC and ESG delivery
+                Construction operations
               </p>
             </div>
           </Link>
@@ -55,13 +56,13 @@ function Header() {
           <div className="flex items-center gap-3">
             <Link
               href="/#contact"
-              className="hidden lg:inline-flex items-center gap-2 rounded-full bg-[var(--accent-primary)] px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 hover:shadow-md"
+              className="hidden lg:inline-flex items-center gap-2 rounded-lg bg-[var(--accent-primary)] px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 hover:shadow-md"
             >
-              Request consultation <span aria-hidden="true">&rarr;</span>
+              Add work <span aria-hidden="true">&rarr;</span>
             </Link>
             <button
               type="button"
-              className="lg:hidden -m-2.5 p-2.5 text-[var(--text-secondary)]"
+              className="md:hidden -m-2.5 p-2.5 text-[var(--text-secondary)]"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               <span className="sr-only">Toggle menu</span>
@@ -78,7 +79,7 @@ function Header() {
       </div>
 
       {mobileOpen && (
-        <div className="lg:hidden border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+        <div className="md:hidden border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]">
           <div className="space-y-1 px-6 py-4">
             {navLinks.map((link) =>
               link.external ? (
@@ -108,7 +109,7 @@ function Header() {
               className="mt-3 block rounded-lg bg-[var(--accent-primary)] px-4 py-3 text-center text-sm font-semibold text-white"
               onClick={() => setMobileOpen(false)}
             >
-              Request consultation
+              Add work
             </Link>
           </div>
         </div>
@@ -119,25 +120,25 @@ function Header() {
 
 function Footer() {
   return (
-    <footer className="mt-24 rounded-t-[2rem] border-t border-[var(--border-subtle)] bg-[var(--bg-strong)] py-16 text-[var(--text-inverse)] sm:mt-32 sm:py-24">
+    <footer className="mt-16 border-t border-[var(--border-subtle)] bg-[var(--bg-strong)] py-16 text-[var(--text-inverse)] sm:py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr]">
           <div>
             <Image src="/logo.svg" alt="TC Construction Group" width={220} height={68} className="h-10 w-auto brightness-0 invert" />
             <p className="mt-5 max-w-md text-sm leading-7 text-white/65">
-              TC Construction Group delivers smart HVAC modernization, ESG-aligned commercial work,
-              and disciplined execution for facilities that need real performance, not generic
-              contracting language.
+              TC Construction Group runs smart HVAC modernization, BIM-supported delivery,
+              ESG documentation, service tickets, and field execution through a construction
+              operations workflow.
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
               <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/75">
-                Smart HVAC
+                Open jobs
               </span>
               <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/75">
-                ESG delivery
+                DAO tasks
               </span>
               <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/75">
-                Commercial execution
+                Field crews
               </span>
             </div>
           </div>
@@ -145,9 +146,10 @@ function Footer() {
           <div>
             <h3 className="text-sm font-semibold leading-6 text-white">Navigate</h3>
             <ul role="list" className="mt-6 space-y-4">
-              <li><Link href="/#services" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Services</Link></li>
-              <li><Link href="/#projects" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Projects</Link></li>
-              <li><Link href="/#contact" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Contact</Link></li>
+              <li><Link href="/#operations" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Operations</Link></li>
+              <li><Link href="/#work" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Work Board</Link></li>
+              <li><Link href="/#pipeline" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Pipeline</Link></li>
+              <li><Link href="/#contact" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Crew Intake</Link></li>
             </ul>
           </div>
 
