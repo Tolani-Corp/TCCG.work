@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { FormEvent, useMemo, useState } from "react";
 
+import { versionedAsset } from "@/lib/brandAssets";
+
 type LaneId =
   | "intake"
   | "estimating"
@@ -298,8 +300,6 @@ export function ConstructionOpsPlatform() {
   const [newClient, setNewClient] = useState("");
   const [newTrade, setNewTrade] = useState("Smart HVAC");
 
-  const selected = items.find((item) => item.id === selectedId) ?? items[0];
-
   const trades = useMemo(
     () => ["All", ...Array.from(new Set(items.map((item) => item.trade)))],
     [items],
@@ -336,13 +336,23 @@ export function ConstructionOpsPlatform() {
     });
   }, [items, query, tradeFilter, kindFilter]);
 
+  const selected =
+    visibleItems.find((item) => item.id === selectedId) ??
+    visibleItems[0] ??
+    items[0] ??
+    null;
+  const hasVisibleItems = visibleItems.length > 0;
+
   const metrics = useMemo(() => {
     const activeValue = items.reduce((total, item) => total + item.value, 0);
     const critical = items.filter((item) => item.priority === "Critical").length;
     const assigned = items.filter((item) => item.crew !== "Unassigned").length;
-    const avgProgress = Math.round(
-      items.reduce((total, item) => total + item.progress, 0) / items.length,
-    );
+    const avgProgress = items.length
+      ? Math.round(
+          items.reduce((total, item) => total + item.progress, 0) /
+            items.length,
+        )
+      : 0;
 
     return [
       { label: "Active work value", value: formatCurrency(activeValue) },
@@ -354,6 +364,10 @@ export function ConstructionOpsPlatform() {
   }, [items]);
 
   function advanceSelected() {
+    if (!selected) {
+      return;
+    }
+
     setItems((currentItems) =>
       currentItems.map((item) =>
         item.id === selected.id
@@ -368,6 +382,10 @@ export function ConstructionOpsPlatform() {
   }
 
   function assignCrew() {
+    if (!selected) {
+      return;
+    }
+
     const availableCrew =
       crews.find((crew) => crew.discipline === selected.trade) ?? crews[0];
 
@@ -386,6 +404,10 @@ export function ConstructionOpsPlatform() {
   }
 
   function flagRisk() {
+    if (!selected) {
+      return;
+    }
+
     setItems((currentItems) =>
       currentItems.map((item) =>
         item.id === selected.id
@@ -445,25 +467,26 @@ export function ConstructionOpsPlatform() {
     <div className="bg-[var(--bg-page)]">
       <section
         id="operations"
-        className="border-b border-[var(--border-subtle)] bg-[var(--bg-page)]"
+        className="scroll-mt-24 border-b border-[var(--border-subtle)] bg-[var(--bg-page)]"
       >
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[90rem] px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-lg border border-slate-200 bg-white shadow-sm">
+              <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-slate-200 bg-white shadow-sm">
                 <Image
-                  src="/icon.svg"
+                  src={versionedAsset("/icon.png")}
                   alt="TC Construction Group"
-                  width={44}
-                  height={44}
+                  width={48}
+                  height={48}
                   priority
+                  className="h-12 w-12"
                 />
               </div>
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
                   TCCG Operations Platform
                 </p>
-                <h1 className="mt-1 text-2xl font-semibold text-[var(--text-primary)] sm:text-3xl">
+                <h1 className="mt-1 text-3xl font-semibold text-[var(--text-primary)] sm:text-4xl">
                   Construction work command center
                 </h1>
               </div>
@@ -491,7 +514,7 @@ export function ConstructionOpsPlatform() {
             </div>
           </div>
 
-          <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
+          <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
             <div className="space-y-6">
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
                 {metrics.map((metric) => (
@@ -511,7 +534,7 @@ export function ConstructionOpsPlatform() {
 
               <div
                 id="work"
-                className="rounded-lg border border-slate-200 bg-white shadow-sm"
+                className="scroll-mt-24 rounded-lg border border-slate-200 bg-white shadow-sm"
               >
                 <div className="border-b border-slate-200 p-4">
                   <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
@@ -525,7 +548,7 @@ export function ConstructionOpsPlatform() {
                       </p>
                     </div>
 
-                    <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_11rem_10rem] xl:w-[44rem]">
+                    <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_11rem_10rem] xl:w-[40rem]">
                       <label className="sr-only" htmlFor="work-search">
                         Search work
                       </label>
@@ -573,7 +596,7 @@ export function ConstructionOpsPlatform() {
                 </div>
 
                 <div className="overflow-x-auto">
-                  <div className="grid min-w-[72rem] grid-cols-6 gap-px bg-slate-200">
+                  <div className="grid min-w-[54rem] grid-cols-6 gap-px bg-slate-200 2xl:min-w-0">
                     {lanes.map((lane) => {
                       const laneItems = visibleItems.filter(
                         (item) => item.lane === lane.id,
@@ -606,7 +629,12 @@ export function ConstructionOpsPlatform() {
                           </div>
 
                           <div className="space-y-3">
-                            {laneItems.map((item) => (
+                            {laneItems.length === 0 ? (
+                              <div className="rounded-lg border border-dashed border-slate-300 bg-white/70 p-3 text-xs leading-5 text-slate-500">
+                                No work matches this lane.
+                              </div>
+                            ) : (
+                              laneItems.map((item) => (
                               <button
                                 key={item.id}
                                 type="button"
@@ -639,7 +667,7 @@ export function ConstructionOpsPlatform() {
                                 </div>
                                 <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100">
                                   <div
-                                    className="h-full rounded-full bg-slate-900"
+                                    className="h-full rounded-full bg-[var(--accent-primary)]"
                                     style={{ width: `${item.progress}%` }}
                                   />
                                 </div>
@@ -648,7 +676,8 @@ export function ConstructionOpsPlatform() {
                                   <span>{item.progress}%</span>
                                 </div>
                               </button>
-                            ))}
+                              ))
+                            )}
                           </div>
                         </div>
                       );
@@ -659,155 +688,182 @@ export function ConstructionOpsPlatform() {
             </div>
 
             <aside className="space-y-4">
-              <div className="sticky top-24 rounded-lg border border-slate-200 bg-white shadow-sm">
-                <div className="border-b border-slate-200 p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                        Selected work item
-                      </p>
-                      <h2 className="mt-2 text-xl font-semibold leading-7 text-slate-950">
-                        {selected.title}
-                      </h2>
+              <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-sm">
+                {selected && hasVisibleItems ? (
+                  <>
+                    <div className="border-b border-slate-200 p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                            Selected work item
+                          </p>
+                          <h2 className="mt-2 text-xl font-semibold leading-7 text-slate-950">
+                            {selected.title}
+                          </h2>
+                        </div>
+                        <span
+                          className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${priorityClasses(
+                            selected.priority,
+                          )}`}
+                        >
+                          {selected.priority}
+                        </span>
+                      </div>
+                      <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                          <p className="text-xs text-slate-500">Client</p>
+                          <p className="font-semibold text-slate-950">
+                            {selected.client}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500">Value</p>
+                          <p className="font-semibold text-slate-950">
+                            {formatCurrency(selected.value)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500">Due</p>
+                          <p className="font-semibold text-slate-950">
+                            {selected.due}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500">Crew</p>
+                          <p className="font-semibold text-slate-950">
+                            {selected.crew}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <span
-                      className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${priorityClasses(
-                        selected.priority,
-                      )}`}
-                    >
-                      {selected.priority}
-                    </span>
-                  </div>
-                  <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                    <div>
-                      <p className="text-xs text-slate-500">Client</p>
-                      <p className="font-semibold text-slate-950">
-                        {selected.client}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-slate-500">Value</p>
-                      <p className="font-semibold text-slate-950">
-                        {formatCurrency(selected.value)}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-slate-500">Due</p>
-                      <p className="font-semibold text-slate-950">
-                        {selected.due}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-slate-500">Crew</p>
-                      <p className="font-semibold text-slate-950">
-                        {selected.crew}
-                      </p>
-                    </div>
-                  </div>
-                </div>
 
-                <div className="space-y-5 p-4">
-                  <div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-medium text-slate-700">
-                        Progress
-                      </span>
-                      <span className="font-semibold text-slate-950">
-                        {selected.progress}%
-                      </span>
-                    </div>
-                    <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
-                      <div
-                        className="h-full rounded-full bg-emerald-600"
-                        style={{ width: `${selected.progress}%` }}
-                      />
-                    </div>
-                  </div>
+                    <div className="space-y-5 p-4">
+                      <div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="font-medium text-slate-700">
+                            Progress
+                          </span>
+                          <span className="font-semibold text-slate-950">
+                            {selected.progress}%
+                          </span>
+                        </div>
+                        <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
+                          <div
+                            className="h-full rounded-full bg-[var(--accent-primary)]"
+                            style={{ width: `${selected.progress}%` }}
+                          />
+                        </div>
+                      </div>
 
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-950">
-                      Scope
-                    </h3>
-                    <p className="mt-2 text-sm leading-6 text-slate-600">
-                      {selected.scope}
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-950">
+                          Scope
+                        </h3>
+                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                          {selected.scope}
+                        </p>
+                      </div>
+
+                      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+                        <div>
+                          <h3 className="text-sm font-semibold text-slate-950">
+                            Deliverables
+                          </h3>
+                          <ul className="mt-2 space-y-2 text-sm text-slate-600">
+                            {selected.deliverables.map((deliverable) => (
+                              <li key={deliverable} className="flex gap-2">
+                                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                <span>{deliverable}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <h3 className="text-sm font-semibold text-slate-950">
+                            Blockers
+                          </h3>
+                          <ul className="mt-2 space-y-2 text-sm text-slate-600">
+                            {selected.blockers.map((blocker) => (
+                              <li key={blocker} className="flex gap-2">
+                                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-amber-500" />
+                                <span>{blocker}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+                        <p>
+                          <span className="font-semibold text-slate-950">
+                            Risk:
+                          </span>{" "}
+                          {selected.risk}
+                        </p>
+                        <p className="mt-2">
+                          <span className="font-semibold text-slate-950">
+                            ESG:
+                          </span>{" "}
+                          {selected.esgImpact}
+                        </p>
+                        <p className="mt-2">
+                          <span className="font-semibold text-slate-950">
+                            HVAC:
+                          </span>{" "}
+                          {selected.hvacImpact}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          type="button"
+                          onClick={assignCrew}
+                          className="min-h-11 rounded-lg bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+                        >
+                          Assign
+                        </button>
+                        <button
+                          type="button"
+                          onClick={advanceSelected}
+                          className="min-h-11 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
+                        >
+                          Advance
+                        </button>
+                        <button
+                          type="button"
+                          onClick={flagRisk}
+                          className="min-h-11 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100"
+                        >
+                          Risk
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="p-5">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Selected work item
                     </p>
-                  </div>
-
-                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-950">
-                        Deliverables
-                      </h3>
-                      <ul className="mt-2 space-y-2 text-sm text-slate-600">
-                        {selected.deliverables.map((deliverable) => (
-                          <li key={deliverable} className="flex gap-2">
-                            <span className="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                            <span>{deliverable}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-950">
-                        Blockers
-                      </h3>
-                      <ul className="mt-2 space-y-2 text-sm text-slate-600">
-                        {selected.blockers.map((blocker) => (
-                          <li key={blocker} className="flex gap-2">
-                            <span className="mt-2 h-1.5 w-1.5 rounded-full bg-amber-500" />
-                            <span>{blocker}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-                    <p>
-                      <span className="font-semibold text-slate-950">
-                        Risk:
-                      </span>{" "}
-                      {selected.risk}
+                    <h2 className="mt-2 text-xl font-semibold leading-7 text-slate-950">
+                      No matching work item
+                    </h2>
+                    <p className="mt-3 text-sm leading-6 text-slate-600">
+                      Adjust the current filters to return work to the board.
                     </p>
-                    <p className="mt-2">
-                      <span className="font-semibold text-slate-950">
-                        ESG:
-                      </span>{" "}
-                      {selected.esgImpact}
-                    </p>
-                    <p className="mt-2">
-                      <span className="font-semibold text-slate-950">
-                        HVAC:
-                      </span>{" "}
-                      {selected.hvacImpact}
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-2">
                     <button
                       type="button"
-                      onClick={assignCrew}
-                      className="min-h-11 rounded-lg bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+                      onClick={() => {
+                        setQuery("");
+                        setTradeFilter("All");
+                        setKindFilter("All");
+                      }}
+                      className="mt-5 min-h-11 rounded-lg bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
                     >
-                      Assign
-                    </button>
-                    <button
-                      type="button"
-                      onClick={advanceSelected}
-                      className="min-h-11 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
-                    >
-                      Advance
-                    </button>
-                    <button
-                      type="button"
-                      onClick={flagRisk}
-                      className="min-h-11 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100"
-                    >
-                      Risk
+                      Clear filters
                     </button>
                   </div>
-                </div>
+                )}
               </div>
             </aside>
           </div>
@@ -816,9 +872,9 @@ export function ConstructionOpsPlatform() {
 
       <section
         id="pipeline"
-        className="border-b border-[var(--border-subtle)] bg-white"
+        className="scroll-mt-24 border-b border-[var(--border-subtle)] bg-white"
       >
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_24rem] lg:px-8">
+        <div className="mx-auto grid max-w-[90rem] gap-6 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_24rem] lg:px-8 lg:py-12">
           <div className="rounded-lg border border-slate-200 bg-white shadow-sm">
             <div className="flex items-center justify-between border-b border-slate-200 p-4">
               <div>
@@ -889,9 +945,9 @@ export function ConstructionOpsPlatform() {
 
       <section
         id="contact"
-        className="bg-[var(--bg-page)] px-4 py-8 sm:px-6 lg:px-8"
+        className="scroll-mt-24 bg-[var(--bg-page)] px-4 py-10 sm:px-6 lg:px-8 lg:py-12"
       >
-        <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
+        <div className="mx-auto grid max-w-[90rem] gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
           <div className="grid gap-3 sm:grid-cols-3">
             {crews.map((crew) => (
               <div

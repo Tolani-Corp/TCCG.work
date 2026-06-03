@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "generate:brand-assets": "node scripts/generate-brand-assets.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

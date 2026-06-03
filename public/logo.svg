@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" width="889px" height="500px" viewBox="0 0 889 500" preserveAspectRatio="xMidYMid meet">
- <g fill="#000000">
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="260" viewBox="300 185 280 135" preserveAspectRatio="xMidYMid meet">
+<g fill="#000000">
   <path d="M 391.08 262.24 c -0.67 -0.67 -0.67 -3.96 0.04 -4.12 0.25 -0.08 15.82 -0.12 34.56 -0.04 l 34.02 0.12 0 1.83 0 1.87 -32.69 0 c -21.53 0 -32.69 0.12 -32.69 0.42 0 0.58 -2.66 0.50 -3.25 -0.08 z "/>
  </g>
  <g fill="#ffffff">

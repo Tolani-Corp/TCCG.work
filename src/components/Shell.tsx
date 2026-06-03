@@ -3,6 +3,7 @@
 import { type ReactNode, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { versionedAsset } from '@/lib/brandAssets'
 
 const navLinks = [
   { href: '/#operations', label: 'Operations' },
@@ -16,13 +17,13 @@ function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-[var(--border-subtle)] bg-[rgba(244,246,245,0.9)] backdrop-blur-md">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-[var(--border-subtle)] bg-[rgba(248,246,241,0.92)] backdrop-blur-md">
+      <div className="mx-auto max-w-[90rem] px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" aria-label="TC Construction Group" className="flex items-center gap-3">
-            <Image src="/icon.svg" alt="TC Construction Group" width={44} height={44} className="h-11 w-11" priority />
+            <Image src={versionedAsset("/icon.png")} alt="TC Construction Group" width={44} height={44} className="h-11 w-11" priority />
             <div className="hidden sm:block">
-              <Image src="/logo.svg" alt="TC Construction Group" width={170} height={52} className="h-8 w-auto" priority />
+              <Image src={versionedAsset("/logo.svg")} alt="TC Construction Group" width={180} height={73} className="h-9 w-auto" priority />
               <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--text-secondary)]">
                 Construction operations
               </p>
@@ -121,10 +122,18 @@ function Header() {
 function Footer() {
   return (
     <footer className="mt-16 border-t border-[var(--border-subtle)] bg-[var(--bg-strong)] py-16 text-[var(--text-inverse)] sm:py-20">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-[90rem] px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr]">
           <div>
-            <Image src="/logo.svg" alt="TC Construction Group" width={220} height={68} className="h-10 w-auto brightness-0 invert" />
+            <div className="inline-flex rounded-lg bg-white p-2">
+              <Image
+                src={versionedAsset("/logo.svg")}
+                alt="TC Construction Group"
+                width={260}
+                height={106}
+                className="h-20 w-auto"
+              />
+            </div>
             <p className="mt-5 max-w-md text-sm leading-7 text-white/65">
               TC Construction Group runs smart HVAC modernization, BIM-supported delivery,
               ESG documentation, service tickets, and field execution through a construction
@@ -177,7 +186,7 @@ function Footer() {
 
 export function Shell({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-full bg-[var(--bg-page)] text-[var(--text-primary)] antialiased" style={{ fontFamily: 'var(--font-sans)' }}>
+    <div className="min-h-screen bg-[var(--bg-page)] text-[var(--text-primary)] antialiased" style={{ fontFamily: 'var(--font-sans)' }}>
       <Header />
       <main className="isolate pt-16">{children}</main>
       <Footer />
