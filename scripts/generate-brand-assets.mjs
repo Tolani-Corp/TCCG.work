@@ -1,4 +1,5 @@
-import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { homedir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -18,9 +19,7 @@ const registryBrandDir = path.join(
 const localBrandDir = path.join(publicDir, "TCCG Branding_Final");
 const brandDir = await resolveBrandDir();
 const officialFaviconPng = path.join(
-  root,
-  "..",
-  "..",
+  homedir(),
   "OneDrive",
   "Desktop",
   "Tolani Corp",
@@ -37,8 +36,6 @@ const iconSource = path.join(
   brandDir,
   "TC CONSTRUCTION GROUP (icon_trans) (no slogan 2).svg",
 );
-const logoSource = path.join(brandDir, "TC CONSTRUCTION GROUP (trans).svg");
-
 const brandVersion = await readBrandVersion();
 const colors = {
   dark: "#10151B",
@@ -104,7 +101,7 @@ const icoBuffers = await Promise.all(
 await writeFile(path.join(publicDir, "favicon.ico"), createIco(icoBuffers));
 
 console.log(
-  `Generated TCCG browser brand assets from old branding with version ${brandVersion}`,
+  `Generated TCCG browser brand assets from official no-slogan branding with version ${brandVersion}`,
 );
 console.log(`Brand SVG source: ${brandDir}`);
 console.log(`Official favicon PNG source: ${faviconSource}`);
@@ -200,14 +197,13 @@ async function renderOgImage(outputPath) {
       <rect width="1200" height="630" fill="${colors.page}"/>
       <rect x="72" y="78" width="1060" height="452" rx="28" fill="#ffffff" stroke="#D8DFDC" stroke-width="2"/>
       <text x="144" y="454" fill="#696969" font-family="Arial, sans-serif" font-size="24" font-weight="700">TC CONSTRUCTION GROUP</text>
-      <text x="230" y="486" fill="${colors.red}" font-family="Arial, sans-serif" font-size="21">Building Beyond</text>
       <text x="568" y="184" fill="${colors.dark}" font-family="Arial, sans-serif" font-size="52" font-weight="700">TCCG Work</text>
-      <text x="572" y="244" fill="${colors.steel}" font-family="Arial, sans-serif" font-size="25">Construction operations command center</text>
-      <text x="572" y="300" fill="${colors.red}" font-family="Arial, sans-serif" font-size="23" font-weight="700">Smart HVAC | BIM | ESG | Field crews</text>
+      <text x="572" y="244" fill="${colors.steel}" font-family="Arial, sans-serif" font-size="25">Work board + capture management</text>
+      <text x="572" y="300" fill="${colors.red}" font-family="Arial, sans-serif" font-size="23" font-weight="700">Smart HVAC | BIM | ESG | Funding capture</text>
       <rect x="572" y="362" width="140" height="42" rx="10" fill="#EEF2F1"/>
       <rect x="730" y="362" width="142" height="42" rx="10" fill="#EEF2F1"/>
       <text x="596" y="390" fill="${colors.dark}" font-family="Arial, sans-serif" font-size="18" font-weight="700">Open jobs</text>
-      <text x="754" y="390" fill="${colors.dark}" font-family="Arial, sans-serif" font-size="18" font-weight="700">Crew intake</text>
+      <text x="766" y="390" fill="${colors.dark}" font-family="Arial, sans-serif" font-size="18" font-weight="700">Capture</text>
       <text x="572" y="468" fill="${colors.steel}" font-family="Arial, sans-serif" font-size="24" font-weight="700">tccg.work</text>
     </svg>
   `);
@@ -264,15 +260,20 @@ ${body.trim()}
 }
 
 async function createCroppedLogoSvg() {
-  const logoSvg = await readFile(logoSource, "utf8");
-  const body = logoSvg
+  const iconSvg = await readFile(iconSource, "utf8");
+  const body = iconSvg
     .replace(/<\?xml[^>]*>\s*/i, "")
     .replace(/<svg[^>]*>/i, "")
-    .replace(/<\/svg>\s*$/i, "");
+    .replace(/<\/svg>\s*$/i, "")
+    .replace(/\s*<g fill="#ffffff">[\s\S]*?<\/g>/i, "");
 
   return `<?xml version="1.0" encoding="utf-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="260" viewBox="300 185 280 135" preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="180" viewBox="0 0 920 180" preserveAspectRatio="xMidYMid meet">
+  <svg x="0" y="18" width="144" height="144" viewBox="150 135 200 200" preserveAspectRatio="xMidYMid meet">
 ${body.trim()}
+    <polygon points="302,282 337,282 319.5,250" fill="${colors.red}"/>
+  </svg>
+  <text x="164" y="108" fill="#646464" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700" letter-spacing="1.2">TC CONSTRUCTION GROUP</text>
 </svg>
 `;
 }
@@ -296,7 +297,7 @@ function siteManifest() {
       name: "TCCG Work",
       short_name: "TCCG",
       description:
-        "Construction operations command center for TC Construction Group.",
+        "Work management and capture platform for TC Construction Group.",
       id: "/",
       start_url: "/",
       scope: "/",

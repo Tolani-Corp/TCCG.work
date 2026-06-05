@@ -21,14 +21,23 @@ function Header() {
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-[var(--border-subtle)] bg-[rgba(248,246,241,0.92)] backdrop-blur-md">
       <div className="mx-auto max-w-[90rem] px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" aria-label="TC Construction Group" className="flex items-center gap-3">
-            <Image src={versionedAsset("/icon.png")} alt="TC Construction Group" width={44} height={44} className="h-11 w-11" priority />
-            <div className="hidden sm:block">
-              <Image src={versionedAsset("/logo.svg")} alt="TC Construction Group" width={180} height={73} className="h-9 w-auto" priority />
-              <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--text-secondary)]">
-                Construction operations
-              </p>
-            </div>
+          <Link href="/" aria-label="TC Construction Group" className="flex items-center">
+            <Image
+              src={versionedAsset("/logo.svg")}
+              alt="TC Construction Group"
+              width={204}
+              height={40}
+              className="hidden h-10 w-auto sm:block"
+              priority
+            />
+            <Image
+              src={versionedAsset("/icon.png")}
+              alt="TC Construction Group"
+              width={44}
+              height={44}
+              className="h-11 w-11 sm:hidden"
+              priority
+            />
           </Link>
 
           <div className="hidden md:flex md:gap-x-8">
@@ -130,9 +139,9 @@ function Footer() {
               <Image
                 src={versionedAsset("/logo.svg")}
                 alt="TC Construction Group"
-                width={260}
-                height={106}
-                className="h-20 w-auto"
+                width={306}
+                height={60}
+                className="h-12 w-auto"
               />
             </div>
             <p className="mt-5 max-w-md text-sm leading-7 text-white/65">

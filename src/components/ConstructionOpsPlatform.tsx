@@ -487,7 +487,7 @@ export function ConstructionOpsPlatform() {
                   TCCG Operations Platform
                 </p>
                 <h1 className="mt-1 text-3xl font-semibold text-[var(--text-primary)] sm:text-4xl">
-                  Construction work command center
+                  Construction operations command center
                 </h1>
               </div>
             </div>

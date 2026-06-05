@@ -440,7 +440,7 @@ export function CaptureManagementWorkspace() {
           <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
-                Source truth: tccg.capture_management.v1
+                TCCG Work Capture
               </p>
               <h1 className="mt-2 text-3xl font-semibold text-[var(--text-primary)] sm:text-4xl">
                 Capture management workspace
@@ -457,6 +457,9 @@ export function CaptureManagementWorkspace() {
                 </span>
                 <span className="rounded-full border border-slate-200 bg-white px-3 py-1">
                   Public sector
+                </span>
+                <span className="rounded-full border border-slate-200 bg-white px-3 py-1">
+                  Source: tccg.capture_management.v1
                 </span>
               </div>
             </div>

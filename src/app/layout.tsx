@@ -14,11 +14,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://tccg.work"),
   applicationName: "TCCG Work",
   title: {
-    default: "TCCG Work | Construction Operations Platform",
+    default: "TCCG Work | TC Construction Group",
     template: "%s | TCCG Work",
   },
   description:
-    "A construction operations platform for TCCG open jobs, DAO tasks, BIM coordination, smart HVAC delivery, field crews, safety, and ESG closeout.",
+    "Work management and capture platform for TC Construction Group smart HVAC, BIM, ESG, and field delivery.",
   icons: {
     icon: [
       { url: versionedAsset("/favicon.ico") },
@@ -54,9 +54,9 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "TCCG Work | Construction Operations Platform",
+    title: "TCCG Work | TC Construction Group",
     description:
-      "Dynamic work board for TCCG smart HVAC, BIM, ESG, and construction field execution.",
+      "Dynamic work board and capture workspace for TCCG smart HVAC, BIM, ESG, and field execution.",
     url: "https://tccg.work",
     siteName: "TCCG Work",
     images: [
@@ -64,16 +64,16 @@ export const metadata: Metadata = {
         url: versionedAsset("/og-image.png"),
         width: 1200,
         height: 630,
-        alt: "TCCG Work construction operations platform",
+        alt: "TCCG Work platform for TC Construction Group",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "TCCG Work | Construction Operations Platform",
+    title: "TCCG Work | TC Construction Group",
     description:
-      "Dynamic work board for TCCG smart HVAC, BIM, ESG, and construction field execution.",
+      "Dynamic work board and capture workspace for TCCG smart HVAC, BIM, ESG, and field execution.",
     images: [versionedAsset("/og-image.png")],
   },
   other: {

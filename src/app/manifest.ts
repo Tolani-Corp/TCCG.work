@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "TCCG Work",
     short_name: "TCCG",
     description:
-      "Construction operations command center for TC Construction Group.",
+      "Work management and capture platform for TC Construction Group.",
     id: "/",
     start_url: "/",
     scope: "/",
