@@ -6,11 +6,11 @@ import Link from 'next/link'
 import { versionedAsset } from '@/lib/brandAssets'
 
 const navLinks = [
-  { href: '/#operations', label: 'Operations' },
-  { href: '/#work', label: 'Work Board' },
-  { href: '/#pipeline', label: 'Pipeline' },
+  { href: '/operations', label: 'Operations' },
+  { href: '/operations#work', label: 'Work Board' },
+  { href: '/operations#pipeline', label: 'Pipeline' },
   { href: '/capture', label: 'Capture' },
-  { href: '/#contact', label: 'Crew Intake' },
+  { href: '/#contact', label: 'Project Review' },
   { href: 'https://tolanicorp.us/communications', label: 'HQ Network', external: true },
 ]
 
@@ -66,10 +66,10 @@ function Header() {
 
           <div className="flex items-center gap-3">
             <Link
-              href="/capture"
+              href="/#contact"
               className="hidden lg:inline-flex items-center gap-2 rounded-lg bg-[var(--accent-primary)] px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 hover:shadow-md"
             >
-              Source work <span aria-hidden="true">&rarr;</span>
+              Request review <span aria-hidden="true">&rarr;</span>
             </Link>
             <button
               type="button"
@@ -116,11 +116,11 @@ function Header() {
               )
             )}
             <Link
-              href="/capture"
+              href="/#contact"
               className="mt-3 block rounded-lg bg-[var(--accent-primary)] px-4 py-3 text-center text-sm font-semibold text-white"
               onClick={() => setMobileOpen(false)}
             >
-              Source work
+              Request review
             </Link>
           </div>
         </div>
@@ -165,11 +165,11 @@ function Footer() {
           <div>
             <h3 className="text-sm font-semibold leading-6 text-white">Navigate</h3>
             <ul role="list" className="mt-6 space-y-4">
-              <li><Link href="/#operations" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Operations</Link></li>
-              <li><Link href="/#work" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Work Board</Link></li>
-              <li><Link href="/#pipeline" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Pipeline</Link></li>
+              <li><Link href="/operations" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Operations</Link></li>
+              <li><Link href="/operations#work" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Work Board</Link></li>
+              <li><Link href="/operations#pipeline" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Pipeline</Link></li>
               <li><Link href="/capture" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Capture</Link></li>
-              <li><Link href="/#contact" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Crew Intake</Link></li>
+              <li><Link href="/#contact" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Project Review</Link></li>
             </ul>
           </div>
 
