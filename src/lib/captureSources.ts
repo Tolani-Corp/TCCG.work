@@ -159,6 +159,7 @@ interface SamGovOpportunity {
   data?: {
     award?: { amount?: number | string };
   };
+  award?: { amount?: number | string };
 }
 
 interface RawCaptureLead {
@@ -469,6 +470,10 @@ async function scanSamGov(
     url.searchParams.set("title", keyword);
 
     const response = await fetch(url, { signal: AbortSignal.timeout(20_000) });
+    if (response.status === 404) {
+      continue;
+    }
+
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
@@ -490,6 +495,7 @@ async function scanSamGov(
         record.placeOfPerformance?.state?.code ??
         record.placeOfPerformance?.state?.name;
       const city = record.placeOfPerformance?.city?.name;
+      const awardAmount = record.data?.award?.amount ?? record.award?.amount;
 
       results.push({
         sourceId: record.noticeId
@@ -507,8 +513,8 @@ async function scanSamGov(
           normalizeDateLabel(record.responseDeadLine ?? record.reponseDeadLine) ??
           "Unknown",
         postedDate: normalizeDateLabel(record.postedDate),
-        value: record.data?.award?.amount
-          ? `$${Number(record.data.award.amount).toLocaleString()}`
+        value: awardAmount
+          ? `$${Number(awardAmount).toLocaleString()}`
           : "Unknown",
         agency: record.organizationName ?? record.fullParentPathName,
         location: [city, state].filter(Boolean).join(", ") || "Place of performance TBD",
