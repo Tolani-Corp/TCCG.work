@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 
 import { CaptureManagementWorkspace } from "@/components/CaptureManagementWorkspace";
+import { requireTccgPortalAccess } from "@/lib/portalAccess";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Protected Capture Management",
@@ -8,6 +11,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false, nocache: true },
 };
 
-export default function CapturePage() {
+export default async function CapturePage() {
+  await requireTccgPortalAccess();
   return <CaptureManagementWorkspace />;
 }
