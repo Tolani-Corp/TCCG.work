@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { CaptureManagementWorkspace } from "@/components/CaptureManagementWorkspace";
 
 export const metadata: Metadata = {
-  title: "Capture Management",
-  description:
-    "TCCG capture management workspace for Grants.gov, SAM.gov, public-sector pursuits, go/no-go controls, and proposal workflow.",
+  title: "Protected Capture Management",
+  description: "Authenticated TC Construction Group public-sector capture workspace.",
+  robots: { index: false, follow: false, nocache: true },
 };
 
 export default function CapturePage() {
