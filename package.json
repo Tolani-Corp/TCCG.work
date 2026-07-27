@@ -1,10 +1,11 @@
 {
   "name": "tccg-work",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "TC Construction Group commercial building modernization and project operations platform",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3002",
+    "preview:local": "next dev -p 3002",
     "generate:brand-assets": "node scripts/generate-brand-assets.mjs",
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
     "build": "next build",
