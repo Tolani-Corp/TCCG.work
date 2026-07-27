@@ -1,75 +1,80 @@
 # TC Construction Group (TCCG)
 
-**Building Beyond** - Smart HVAC & ESG Construction Solutions
+Commercial building modernization, HVAC and controls coordination, BIM and MEP support, project planning, smart-building integration, and public-sector opportunity review.
 
-[![Website](https://img.shields.io/badge/Website-tccg.work-blue)](https://tccg.work)
-[![Tolani Corp](https://img.shields.io/badge/Ecosystem-Tolani%20Corp-red)](https://tolanicorp.us)
+- Website: [tccg.work](https://tccg.work)
+- Parent company: [Tolani Corp](https://tolanicorp.us)
+- Project line: [(754) 350-9675](tel:+17543509675)
+- Email: [info@tccg.work](mailto:info@tccg.work)
 
-## Overview
+## Product surfaces
 
-TC Construction Group delivers cutting-edge smart HVAC installations and ESG-compliant construction services. We're Building Beyond traditional methods with Web3-enabled contract monitoring and sustainable practices.
+- **Public website:** services, sectors, delivery process, project qualification, safety boundaries, legal notices, and qualified intake.
+- **Operations workspace:** protected work board, pipeline, crews, risks, and delivery controls.
+- **Capture workspace:** protected Grants.gov and SAM.gov opportunity review, go/no-go controls, teaming, and proposal workflow.
 
-**Part of the [Tolani Corp](https://tolanicorp.us) Ecosystem**
-
-## Services
-
-| Service | Description |
-|---------|-------------|
-| **Smart HVAC Systems** | Next-gen HVAC with IoT sensors, real-time monitoring, AI-driven optimization |
-| **ESG Construction** | Sustainable building practices with full ESG compliance documentation |
-| **Commercial Construction** | Full-service from planning to completion |
-| **Design Partnership** | BIM modeling & Revit integration via Tolani Labs |
-| **Performance Monitoring** | Web3-enabled dashboards for ESG metrics & energy tracking |
-| **Maintenance Programs** | Preventive maintenance & emergency response |
-
-## Stats
-
-- 🏗️ **500+** Projects Completed
-- 🌿 **98%** ESG Compliance Rate
-- ⚡ **40%** Average Energy Savings
-- 📅 **15+** Years Experience
-
-## Certifications
-
-- ✅ EPA Certified
-- ✅ LEED Partner
-- ✅ Web3 Enabled
-
-## Tech Stack
-
-- **Framework**: Next.js 15
-- **Styling**: Tailwind CSS
-- **Deployment**: Vercel
-- **Domain**: tccg.work
-
-## Tolani Ecosystem
-
-| Company | Purpose |
-|---------|---------|
-| [Tolani Corp](https://tolanicorp.us) | Parent DAO LLC (Wyoming) |
-| [Tolani Labs](https://tolanilabs.io) | Education & Design Services |
-| [TCCG](https://tccg.work) | Construction & HVAC |
-| [Tolani Foundation](https://tolanifoundation.org) | Nonprofit arm |
+Protected routes fail closed when Clerk production credentials are unavailable.
 
 ## Development
 
 ```bash
-# Install dependencies
-pnpm install
-
-# Run development server
+pnpm install --frozen-lockfile
 pnpm dev
-
-# Build for production
-pnpm build
 ```
 
-## Contact
+## Verification
 
-- 📧 [info@tccg.work](mailto:info@tccg.work)
-- 📞 (800) TCCG-BUILD
-- 🌐 [tccg.work](https://tccg.work)
+```bash
+pnpm typecheck
+pnpm build
+pnpm audit:prod
+pnpm production:verify
+```
 
----
+The production verifier checks:
 
-© 2026 TC Construction Group. A [Tolani Corp](https://tolanicorp.us) Company.
+- `https://tccg.work`
+- `https://www.tccg.work` redirect behavior
+- `/api/health`
+- `/privacy`
+- `/terms`
+- `/robots.txt`
+- `/sitemap.xml`
+- anonymous access controls for `/operations` and `/capture`
+- the assigned `(754) 350-9675` number
+- removal of public mock pipeline metrics
+
+## Production environment
+
+Copy the required values from `.env.example` into the Vercel Production environment. Do not commit credentials.
+
+Required for public intake:
+
+```env
+TCCG_INTAKE_WEBHOOK_URL="https://approved-https-endpoint.example/path"
+TCCG_INTAKE_WEBHOOK_SECRET="server-only-secret"
+```
+
+Required for protected workspaces:
+
+```env
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_live_..."
+CLERK_SECRET_KEY="sk_live_..."
+NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
+NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
+```
+
+Optional capture sources:
+
+```env
+SAM_GOV_API_KEY=""
+CANDID_API_KEY=""
+CAPTURE_KEYWORDS="smart HVAC,HVAC controls,building automation,energy efficiency retrofit,indoor air quality,construction workforce,BIM,green building"
+CAPTURE_SOURCE_LIMIT="5"
+```
+
+## Operating boundary
+
+Website content does not constitute a construction proposal, work authorization, engineering opinion, safety determination, license representation, price guarantee, permit guarantee, or schedule commitment. Service availability is confirmed only after scope, jurisdiction, contracting structure, capacity, and commercial review.
+
+© 2026 TC Construction Group. A Tolani Corp company.
