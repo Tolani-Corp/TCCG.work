@@ -3,9 +3,10 @@ import type { Metadata } from "next";
 import { MarketingLandingPage } from "@/components/MarketingLandingPage";
 
 export const metadata: Metadata = {
-  title: "TCCG Operations Platform",
+  title: "Commercial Building Modernization, HVAC and BIM Coordination",
   description:
-    "Sales-forward TCCG Work landing page for smart HVAC, BIM, ESG, public-sector capture, and construction operations.",
+    "TC Construction Group reviews commercial building modernization, HVAC, controls, BIM and MEP coordination, renovation, smart-building, and public-sector opportunities.",
+  alternates: { canonical: "https://tccg.work" },
 };
 
 export default function Home() {

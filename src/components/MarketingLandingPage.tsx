@@ -1,383 +1,247 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
 
+import { ProjectIntakeForm } from "@/components/ProjectIntakeForm";
 import { versionedAsset } from "@/lib/brandAssets";
+import { TCCG_CONTACT } from "@/lib/contact";
 
-type BuyerKey = "owners" | "builders" | "public";
+const services = [
+  {
+    number: "01",
+    title: "Facility modernization",
+    description:
+      "Condition discovery, phased retrofit planning, occupied-facility coordination, and owner-ready scope development for buildings that need measurable improvement.",
+    outcomes: ["Existing-condition review", "Phasing and access planning", "Decision-ready project scope"],
+  },
+  {
+    number: "02",
+    title: "HVAC and building controls",
+    description:
+      "Replacement, controls, indoor-air-quality, and energy-improvement opportunities coordinated around operational continuity, constructability, and documentation.",
+    outcomes: ["Equipment and controls review", "Operational-risk planning", "Commissioning and closeout support"],
+  },
+  {
+    number: "03",
+    title: "BIM and MEP coordination",
+    description:
+      "Model-supported coordination, clash and access review, RFI discipline, and field handoff for general contractors, owners, and specialty-trade teams.",
+    outcomes: ["Coordination issue tracking", "Model and field alignment", "Clear responsibility and handoff"],
+  },
+  {
+    number: "04",
+    title: "Commercial project support",
+    description:
+      "Renovation, tenant-improvement, project-planning, subcontracting, and closeout support structured around scope clarity and accountable execution.",
+    outcomes: ["Preconstruction support", "Schedule and risk visibility", "Owner-facing records"],
+  },
+  {
+    number: "05",
+    title: "Public-sector opportunity review",
+    description:
+      "Go/no-go analysis, teaming support, compliance review, schedule assessment, and proposal-to-delivery planning for qualified government opportunities.",
+    outcomes: ["Solicitation and scope review", "Partner and capacity assessment", "Compliance-aware pursuit plan"],
+  },
+  {
+    number: "06",
+    title: "Smart-building integration",
+    description:
+      "Technology, controls, low-voltage, monitoring, and data requirements coordinated with the physical building work rather than treated as an afterthought.",
+    outcomes: ["Integration requirements", "Vendor coordination", "Operations and data handoff"],
+  },
+] as const;
 
-type BuyerProfile = {
-  id: BuyerKey;
-  label: string;
-  title: string;
-  summary: string;
-  fit: string;
-  priority: string;
-  primaryCta: string;
-  metrics: Array<{ label: string; value: string }>;
-  pipeline: Array<{
-    title: string;
-    stage: string;
-    value: string;
-    next: string;
-    tone: string;
-  }>;
-};
+const sectors = [
+  {
+    title: "Facility owners and operators",
+    detail: "Occupied buildings, portfolio upgrades, deferred maintenance, comfort complaints, energy initiatives, and capital-planning decisions.",
+  },
+  {
+    title: "General contractors and developers",
+    detail: "MEP coordination, specialty scopes, renovation support, schedule-sensitive packages, field issue resolution, and clean closeout.",
+  },
+  {
+    title: "Commercial and institutional clients",
+    detail: "Offices, retail, multifamily common areas, warehouses, schools, healthcare-adjacent facilities, and community infrastructure.",
+  },
+  {
+    title: "Public-sector and prime partners",
+    detail: "Government facility work, subcontracting, teaming, grant-supported modernization, compliance-heavy pursuits, and mission support.",
+  },
+] as const;
 
-const buyerProfiles: BuyerProfile[] = [
-  {
-    id: "owners",
-    label: "Facility owners",
-    title: "Modernization programs that sell through comfort, cost, and evidence.",
-    summary:
-      "Position TCCG around HVAC controls, retrofit planning, energy reporting, and closeout records that make ownership decisions easier to approve.",
-    fit: "Best for occupied facilities, portfolio upgrades, IAQ calls, and owner-direct service work.",
-    priority: "Move from site discovery to priced scope with a documented operating case.",
-    primaryCta: "Request owner review",
-    metrics: [
-      { label: "Qualified scopes", value: "14" },
-      { label: "Avg cycle", value: "19d" },
-      { label: "Evidence packs", value: "8" },
-    ],
-    pipeline: [
-      {
-        title: "Library controls retrofit",
-        stage: "Field ready",
-        value: "$124K",
-        next: "Cutover plan",
-        tone: "bg-emerald-500",
-      },
-      {
-        title: "Warehouse ESG closeout",
-        stage: "Inspection",
-        value: "$46K",
-        next: "Evidence binder",
-        tone: "bg-sky-500",
-      },
-      {
-        title: "Clinic AHU replacement",
-        stage: "Estimating",
-        value: "$88K",
-        next: "Permit package",
-        tone: "bg-amber-500",
-      },
-    ],
-  },
-  {
-    id: "builders",
-    label: "GC partners",
-    title: "A trade partner front door for BIM, MEP coordination, and clean handoff.",
-    summary:
-      "Sell TCCG as a disciplined construction partner that can enter fast, document decisions, and keep field work tied to owner-ready deliverables.",
-    fit: "Best for tenant improvements, renovation support, coordination rescue, and schedule-sensitive trade packages.",
-    priority: "Convert project noise into priced work, responsible owners, and visible blockers.",
-    primaryCta: "Build partner package",
-    metrics: [
-      { label: "Active bids", value: "11" },
-      { label: "Coordination lanes", value: "5" },
-      { label: "RFI risks", value: "12" },
-    ],
-    pipeline: [
-      {
-        title: "Tenant improvement BIM",
-        stage: "Scheduled",
-        value: "$32K",
-        next: "RFI set",
-        tone: "bg-sky-500",
-      },
-      {
-        title: "Airport controls upgrade",
-        stage: "Shortlist",
-        value: "$420K",
-        next: "Prime review",
-        tone: "bg-emerald-500",
-      },
-      {
-        title: "School IAQ response",
-        stage: "Service",
-        value: "$14K",
-        next: "After-hours access",
-        tone: "bg-red-500",
-      },
-    ],
-  },
-  {
-    id: "public",
-    label: "Public sector",
-    title: "Capture-ready pursuit operations for grants, RFPs, and compliance-heavy work.",
-    summary:
-      "Blend funding discovery, go-no-go discipline, source evidence, risk planning, and field readiness into one capture-to-delivery path.",
-    fit: "Best for SAM.gov opportunities, grants, municipal facilities, school systems, and public procurement teaming.",
-    priority: "Keep source truth, shortfalls, deadlines, partners, and proposal actions in one operating rhythm.",
-    primaryCta: "Open capture desk",
-    metrics: [
-      { label: "Capture value", value: "$765K" },
-      { label: "Review queue", value: "9" },
-      { label: "Risk gates", value: "4" },
-    ],
-    pipeline: [
-      {
-        title: "Airport terminal controls",
-        stage: "Qualify",
-        value: "$420K",
-        next: "SAM package",
-        tone: "bg-emerald-500",
-      },
-      {
-        title: "Energy retrofit grant",
-        stage: "Go/No-Go",
-        value: "$250K",
-        next: "Partner MOU",
-        tone: "bg-amber-500",
-      },
-      {
-        title: "K-12 BIM and IAQ",
-        stage: "Source",
-        value: "$95K",
-        next: "Deadline check",
-        tone: "bg-sky-500",
-      },
-    ],
-  },
-];
+const process = [
+  { step: "01", title: "Discover", detail: "Define the facility, business need, current conditions, urgency, decision makers, and desired outcome." },
+  { step: "02", title: "Qualify", detail: "Review scope fit, jurisdiction, access, documentation, schedule, budget posture, safety, and delivery constraints." },
+  { step: "03", title: "Plan", detail: "Establish the appropriate assessment, estimating, coordination, procurement, permitting, and communication path." },
+  { step: "04", title: "Deliver", detail: "Execute approved work through accountable owners, visible risks, controlled changes, and field-ready information." },
+  { step: "05", title: "Verify", detail: "Close with inspections, records, training, deficiencies, warranties, and owner-ready evidence appropriate to the scope." },
+] as const;
 
-const offerCards = [
+const faqs = [
   {
-    title: "Commercial front door",
-    detail:
-      "A sharper route for owners, builders, and public-sector partners to understand TCCG capability and start a real review.",
+    question: "What types of projects should I submit?",
+    answer:
+      "Submit commercial or institutional modernization, HVAC, controls, BIM/MEP coordination, renovation, smart-building, public-sector, or qualified subcontracting opportunities. Residential or specialty work is reviewed by location, scope, licensure, and capacity.",
   },
   {
-    title: "Operations proof",
-    detail:
-      "The marketing page points into the live TCCG Operations Platform instead of stopping at brochure copy.",
+    question: "Can TCCG provide a price over the phone?",
+    answer:
+      "A reliable construction price depends on scope, plans, selections, existing conditions, access, permitting, schedule, material availability, and contract terms. Sona or the intake team can qualify the request, but pricing is issued only through an authorized estimate or proposal.",
   },
   {
-    title: "Capture motion",
-    detail:
-      "Funding, RFP, and grant opportunities route into the capture workspace for source truth, shortfalls, and next actions.",
+    question: "Does submitting the form schedule a site visit?",
+    answer:
+      "No. Submission creates a project-review request. The team will determine whether the next step should be a phone consultation, document review, site visit, service request, teaming discussion, or decline notice.",
   },
   {
-    title: "Delivery narrative",
-    detail:
-      "HVAC, BIM, ESG, service, and closeout work are packaged as a sales story with operational evidence behind it.",
+    question: "Do you handle urgent hazards?",
+    answer:
+      "TCCG is not an emergency-dispatch service. For fire, gas odor, electrical arcing, structural instability, serious flooding, injury, or immediate danger, move away from the hazard and contact emergency services or the appropriate utility provider first.",
   },
-];
+  {
+    question: "Where does TCCG operate?",
+    answer:
+      "The primary intake line supports South Florida and reviews commercial, institutional, and public-sector opportunities in other markets. Final service availability depends on jurisdiction, licensing, contract structure, partners, scope, and capacity.",
+  },
+] as const;
 
-const processSteps = [
-  {
-    step: "01",
-    title: "Source demand",
-    detail: "Direct inquiries, partners, SAM.gov, Grants.gov, and market signals enter the same review rhythm.",
-  },
-  {
-    step: "02",
-    title: "Qualify fit",
-    detail: "TCCG filters by scope, owner urgency, trade fit, compliance needs, site access, and response calendar.",
-  },
-  {
-    step: "03",
-    title: "Package proof",
-    detail: "The platform turns value, risk, evidence, crew fit, ESG notes, and blockers into a buyer-ready packet.",
-  },
-  {
-    step: "04",
-    title: "Move to work",
-    detail: "Approved pursuits become work-board items with owners, lanes, next actions, and delivery status.",
-  },
-];
+function ArrowIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 20 20" className="h-4 w-4 fill-none stroke-current stroke-2">
+      <path d="M4 10h11M11 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 20 20" className="mt-0.5 h-4 w-4 shrink-0 fill-none stroke-current stroke-2">
+      <path d="m4 10 4 4 8-9" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 export function MarketingLandingPage() {
-  const [activeBuyer, setActiveBuyer] = useState<BuyerKey>("owners");
-  const profile = useMemo(
-    () => buyerProfiles.find((buyer) => buyer.id === activeBuyer) ?? buyerProfiles[0],
-    [activeBuyer],
-  );
-
   return (
-    <div className="bg-[var(--bg-page)]">
-      <HeroSection />
+    <main className="bg-white text-slate-950">
+      <section className="relative isolate overflow-hidden bg-slate-950 text-white">
+        <Image src={versionedAsset("/marketing/tccg-operations-hero.png")} alt="Commercial mechanical equipment and building operations" fill sizes="100vw" className="-z-30 object-cover opacity-55" priority />
+        <div className="absolute inset-0 -z-20 bg-gradient-to-r from-slate-950 via-slate-950/95 to-slate-950/45" />
+        <div className="absolute inset-0 -z-10 opacity-[0.09] [background-image:linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] [background-size:48px_48px]" />
 
-      <section id="offers" className="border-b border-[var(--border-subtle)] bg-white">
-        <div className="mx-auto max-w-[90rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-          <div className="grid gap-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-end">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--accent-primary)]">
-                Sales motion
-              </p>
-              <h2 className="mt-3 max-w-xl text-3xl font-semibold text-slate-950 sm:text-4xl">
-                Sell the platform, then prove delivery inside the platform.
-              </h2>
+        <div className="mx-auto grid max-w-7xl gap-14 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,1.15fr)_minmax(21rem,0.85fr)] lg:px-8 lg:py-32">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-red-400/25 bg-red-400/10 px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-red-200">
+              TC Construction Group
             </div>
-            <p className="max-w-3xl text-base leading-8 text-[var(--text-secondary)] lg:ml-auto">
-              The landing page gives prospects a clean commercial story while the operations
-              workspace gives TCCG the internal control needed to qualify, price, pursue, and
-              deliver the work.
+            <h1 className="mt-7 max-w-4xl text-4xl font-black leading-[1.03] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
+              Modernize buildings. Coordinate the work. Deliver proof.
+            </h1>
+            <p className="mt-7 max-w-3xl text-lg leading-8 text-white/72 sm:text-xl">
+              TCCG helps owners, contractors, institutions, and public-sector partners turn facility needs into defined scopes, coordinated execution, and owner-ready closeout.
+            </p>
+
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link href="/#contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-red-600 px-6 py-3 text-sm font-black text-white transition hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                Request project review <ArrowIcon />
+              </Link>
+              <a href={TCCG_CONTACT.phone.telHref} className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-3 text-sm font-black text-white transition hover:bg-white/10">
+                Call {TCCG_CONTACT.phone.display}
+              </a>
+            </div>
+
+            <div className="mt-10 grid gap-3 text-sm font-bold text-white/75 sm:grid-cols-3">
+              {["Commercial and institutional focus", "Scope-first project review", "Field and closeout accountability"].map((item) => (
+                <div key={item} className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-3">
+                  <span className="text-red-300"><CheckIcon /></span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <aside className="self-end rounded-3xl border border-white/12 bg-white/[0.08] p-6 shadow-2xl backdrop-blur sm:p-8">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-red-200">Start with the right next step</p>
+            <h2 className="mt-3 text-2xl font-black text-white">Every request is qualified before a price or schedule is promised.</h2>
+            <div className="mt-7 grid gap-4">
+              {[
+                ["Project need", "What problem, improvement, or opportunity must be addressed?"],
+                ["Facility conditions", "What is known about location, access, occupancy, plans, and current systems?"],
+                ["Delivery constraints", "What timeline, procurement, permit, compliance, and coordination requirements apply?"],
+                ["Decision path", "Who approves scope, budget, schedule, and the next project action?"],
+              ].map(([title, detail], index) => (
+                <div key={title} className="flex gap-4 rounded-2xl border border-white/10 bg-slate-950/40 p-4">
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-red-600 text-xs font-black text-white">{index + 1}</span>
+                  <div>
+                    <h3 className="text-sm font-black text-white">{title}</h3>
+                    <p className="mt-1 text-sm leading-6 text-white/60">{detail}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section className="border-b border-slate-200 bg-slate-50">
+        <div className="mx-auto grid max-w-7xl gap-5 px-4 py-7 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+          {[
+            ["Scope", "Define before pricing"],
+            ["Coordination", "Align design and field"],
+            ["Risk", "Surface constraints early"],
+            ["Closeout", "Deliver usable records"],
+          ].map(([label, detail]) => (
+            <div key={label} className="border-l-4 border-red-600 pl-4">
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">{label}</p>
+              <p className="mt-1 text-sm font-black text-slate-950">{detail}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="services" className="scroll-mt-24 px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="max-w-3xl">
+            <p className="text-sm font-black uppercase tracking-[0.16em] text-red-700">Capabilities</p>
+            <h2 className="mt-3 text-3xl font-black tracking-[-0.035em] sm:text-5xl">Building work organized around owner outcomes.</h2>
+            <p className="mt-5 text-lg leading-8 text-slate-600">
+              TCCG combines construction planning, technical coordination, project controls, and closeout discipline so the physical work and the operating record move together.
             </p>
           </div>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {offerCards.map((card) => (
-              <article key={card.title} className="rounded-lg border border-slate-200 bg-slate-50 p-5">
-                <h3 className="text-base font-semibold text-slate-950">{card.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">{card.detail}</p>
+          <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {services.map((service) => (
+              <article key={service.number} className="flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_16px_45px_rgba(15,23,42,0.06)] sm:p-7">
+                <span className="text-4xl font-black text-slate-100">{service.number}</span>
+                <h3 className="mt-5 text-xl font-black text-slate-950">{service.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-slate-600">{service.description}</p>
+                <ul className="mt-6 grid gap-2 border-t border-slate-200 pt-5 text-sm font-semibold text-slate-700">
+                  {service.outcomes.map((outcome) => (
+                    <li key={outcome} className="flex gap-2"><span className="text-red-600"><CheckIcon /></span>{outcome}</li>
+                  ))}
+                </ul>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="platform" className="border-b border-[var(--border-subtle)] bg-[var(--bg-page)]">
-        <div className="mx-auto max-w-[90rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-          <div className="grid gap-8 lg:grid-cols-[24rem_minmax(0,1fr)]">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--accent-primary)]">
-                Buyer route
-              </p>
-              <h2 className="mt-3 text-3xl font-semibold text-slate-950 sm:text-4xl">
-                Dynamic sales positioning by audience.
-              </h2>
-
-              <div className="mt-7 grid gap-2 rounded-lg border border-slate-200 bg-white p-2 shadow-sm">
-                {buyerProfiles.map((buyer) => (
-                  <button
-                    key={buyer.id}
-                    type="button"
-                    aria-pressed={buyer.id === activeBuyer}
-                    onClick={() => setActiveBuyer(buyer.id)}
-                    className={`rounded-lg px-4 py-3 text-left text-sm font-semibold transition ${
-                      buyer.id === activeBuyer
-                        ? "bg-[var(--bg-strong)] text-white"
-                        : "text-slate-700 hover:bg-slate-100"
-                    }`}
-                  >
-                    {buyer.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="mt-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
-                  Best fit
-                </p>
-                <p className="mt-3 text-sm leading-7 text-slate-700">{profile.fit}</p>
-                <p className="mt-4 text-sm font-semibold text-slate-950">{profile.priority}</p>
-              </div>
-            </div>
-
-            <div className="rounded-lg border border-slate-200 bg-white shadow-sm">
-              <div className="border-b border-slate-200 p-5">
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
-                      TCCG Operations Platform
-                    </p>
-                    <h3 className="mt-2 max-w-3xl text-2xl font-semibold text-slate-950">
-                      {profile.title}
-                    </h3>
-                    <p className="mt-3 max-w-4xl text-sm leading-7 text-[var(--text-secondary)]">
-                      {profile.summary}
-                    </p>
-                  </div>
-                  <Link
-                    href={profile.id === "public" ? "/capture" : "/operations"}
-                    className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--accent-primary)] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
-                  >
-                    {profile.primaryCta}
-                  </Link>
-                </div>
-
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  {profile.metrics.map((metric) => (
-                    <div key={metric.label} className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
-                      <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
-                        {metric.label}
-                      </p>
-                      <p className="mt-2 text-2xl font-semibold text-slate-950">{metric.value}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="grid gap-4 p-5 xl:grid-cols-[minmax(0,1fr)_18rem]">
-                <div className="space-y-3">
-                  {profile.pipeline.map((item) => (
-                    <div
-                      key={item.title}
-                      className="grid gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 sm:grid-cols-[minmax(0,1fr)_7rem_7rem]"
-                    >
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className={`h-2.5 w-2.5 rounded-full ${item.tone}`} />
-                          <p className="truncate text-sm font-semibold text-slate-950">{item.title}</p>
-                        </div>
-                        <p className="mt-2 text-xs font-medium text-[var(--text-secondary)]">
-                          Next: {item.next}
-                        </p>
-                      </div>
-                      <p className="text-sm font-semibold text-slate-700">{item.stage}</p>
-                      <p className="text-sm font-semibold text-slate-950">{item.value}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="rounded-lg border border-slate-200 bg-[var(--bg-strong)] p-4 text-white">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-white/50">
-                    Operating packet
-                  </p>
-                  <div className="mt-5 space-y-4">
-                    <PacketLine label="Source" value="Lead + funding + referral" />
-                    <PacketLine label="Proof" value="Scope, risk, evidence" />
-                    <PacketLine label="Move" value="Operations lane + owner" />
-                    <PacketLine label="Close" value="Proposal or field handoff" />
-                  </div>
-                  <div className="mt-6 flex flex-col gap-2">
-                    <Link
-                      href="/operations"
-                      className="inline-flex min-h-10 items-center justify-center rounded-lg bg-white px-3 py-2 text-sm font-semibold text-slate-950 transition hover:bg-white/90"
-                    >
-                      Open platform
-                    </Link>
-                    <Link
-                      href="/capture"
-                      className="inline-flex min-h-10 items-center justify-center rounded-lg border border-white/20 px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
-                    >
-                      View capture desk
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="proof" className="border-b border-[var(--border-subtle)] bg-white">
-        <div className="mx-auto max-w-[90rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--accent-primary)]">
-                Lead to delivery
-              </p>
-              <h2 className="mt-3 text-3xl font-semibold text-slate-950 sm:text-4xl">
-                A sales page that creates operational next actions.
-              </h2>
-              <p className="mt-5 max-w-xl text-base leading-8 text-[var(--text-secondary)]">
-                Prospects see a clear offer. TCCG sees the internal route from inquiry to pursuit,
-                from pursuit to work board, and from work board to closeout evidence.
+      <section id="sectors" className="scroll-mt-24 border-y border-slate-200 bg-slate-50 px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <div className="lg:sticky lg:top-28">
+              <p className="text-sm font-black uppercase tracking-[0.16em] text-red-700">Who we serve</p>
+              <h2 className="mt-3 text-3xl font-black tracking-[-0.035em] sm:text-5xl">One disciplined intake path for different buyers.</h2>
+              <p className="mt-5 text-lg leading-8 text-slate-600">
+                The project language changes by audience, but the fundamentals stay consistent: scope, conditions, constraints, authority, schedule, risk, and evidence.
               </p>
             </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              {processSteps.map((step) => (
-                <article key={step.step} className="rounded-lg border border-slate-200 bg-slate-50 p-5">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-[var(--accent-primary)]">
-                    {step.step}
-                  </p>
-                  <h3 className="mt-3 text-lg font-semibold text-slate-950">{step.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">{step.detail}</p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {sectors.map((sector, index) => (
+                <article key={sector.title} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-slate-950 text-sm font-black text-red-300">{index + 1}</span>
+                  <h3 className="mt-6 text-xl font-black text-slate-950">{sector.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">{sector.detail}</p>
                 </article>
               ))}
             </div>
@@ -385,133 +249,88 @@ export function MarketingLandingPage() {
         </div>
       </section>
 
-      <section id="contact" className="bg-[var(--bg-strong)] text-white">
-        <div className="mx-auto grid max-w-[90rem] gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_28rem] lg:px-8 lg:py-20">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-white/50">
-              Sales ready
+      <section id="process" className="scroll-mt-24 bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="max-w-3xl">
+            <p className="text-sm font-black uppercase tracking-[0.16em] text-red-300">Delivery process</p>
+            <h2 className="mt-3 text-3xl font-black tracking-[-0.035em] sm:text-5xl">A controlled path from request to verified closeout.</h2>
+            <p className="mt-5 text-lg leading-8 text-white/65">
+              The exact contract model depends on the opportunity, but every qualified engagement should move through an understandable decision and delivery sequence.
             </p>
-            <h2 className="mt-3 max-w-3xl text-3xl font-semibold sm:text-4xl">
-              Start with a project review, capture review, or partner package.
-            </h2>
-            <p className="mt-5 max-w-3xl text-base leading-8 text-white/65">
-              TCCG can route commercial work, public-sector opportunities, BIM coordination,
-              smart HVAC modernization, and ESG closeout into one operating system.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="mailto:info@tccg.work?subject=TCCG%20project%20review"
-                className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--accent-primary)] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-              >
-                Request project review
-              </a>
-              <Link
-                href="/operations"
-                className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-              >
-                Enter operations
-              </Link>
-            </div>
           </div>
+          <div className="mt-12 grid gap-4 md:grid-cols-5">
+            {process.map((item) => (
+              <article key={item.step} className="rounded-2xl border border-white/10 bg-white/[0.05] p-5">
+                <p className="text-sm font-black text-red-300">{item.step}</p>
+                <h3 className="mt-5 text-lg font-black text-white">{item.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-white/58">{item.detail}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <div className="rounded-lg border border-white/10 bg-white/5 p-5">
-            <p className="text-sm font-semibold text-white">Review packet</p>
-            <div className="mt-5 space-y-3">
-              {["Scope fit", "Funding route", "Crew capacity", "Risk controls", "Closeout proof"].map((item) => (
-                <div key={item} className="flex items-center justify-between gap-4 border-b border-white/10 pb-3 last:border-b-0 last:pb-0">
-                  <span className="text-sm text-white/65">{item}</span>
-                  <span className="text-sm font-semibold text-white">Ready</span>
+      <section className="px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <div>
+            <p className="text-sm font-black uppercase tracking-[0.16em] text-red-700">Risk and trust</p>
+            <h2 className="mt-3 text-3xl font-black tracking-[-0.035em] sm:text-5xl">Clear boundaries protect the owner and the project.</h2>
+            <p className="mt-5 text-lg leading-8 text-slate-600">
+              A website request is the beginning of qualification—not a contract, emergency dispatch, engineering conclusion, permit approval, or guarantee of price and availability.
+            </p>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              {["No unsupported price promises", "No hidden scope assumptions", "No declaration that a hazard is safe", "No work authorization without agreement", "No guarantee of permit or inspection approval", "No collection of passwords or payment-card details"].map((item) => (
+                <div key={item} className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold text-slate-700">
+                  <span className="text-red-600"><CheckIcon /></span>{item}
                 </div>
               ))}
             </div>
           </div>
+          <aside className="rounded-3xl border border-red-200 bg-red-50 p-6 sm:p-8">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-red-700">Immediate hazards</p>
+            <h3 className="mt-3 text-2xl font-black text-slate-950">Move away from danger and contact the proper emergency authority first.</h3>
+            <p className="mt-4 text-sm leading-7 text-slate-700">
+              Fire, smoke, gas odor, electrical arcing, structural instability, serious flooding, injury, and immediate threats to occupants require emergency services or the appropriate utility provider. Do not touch exposed wiring, enter an unstable area, or attempt hazardous repairs.
+            </p>
+          </aside>
         </div>
       </section>
-    </div>
-  );
-}
 
-function HeroSection() {
-  return (
-    <section className="relative isolate overflow-hidden bg-[var(--bg-strong)] text-white">
-      <Image
-        src={versionedAsset("/marketing/tccg-operations-hero.png")}
-        alt="Mechanical facility and operations platform background"
-        fill
-        sizes="100vw"
-        className="object-cover"
-        priority
-      />
-      <div className="absolute inset-0 bg-[rgba(5,12,18,0.3)]" />
-
-      <div className="relative mx-auto flex min-h-[calc(100svh-10rem)] max-w-[90rem] flex-col justify-center px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div className="max-w-4xl">
-          <Image
-            src={versionedAsset("/logo.svg")}
-            alt="TC Construction Group"
-            width={306}
-            height={60}
-            className="h-11 w-auto brightness-0 invert"
-            priority
-          />
-          <p className="mt-10 text-xs font-semibold uppercase tracking-[0.28em] text-white/65">
-            TC Construction Group
-          </p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-normal text-white sm:text-6xl lg:text-7xl">
-            TCCG Operations Platform
-          </h1>
-          <p className="mt-6 max-w-3xl text-base leading-8 text-white/75 sm:text-lg">
-            A sales-forward front door for smart HVAC, BIM coordination, ESG closeout,
-            public-sector capture, and field execution. The buyer story connects directly to the
-            operating system that moves work.
-          </p>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="mailto:info@tccg.work?subject=TCCG%20project%20review"
-              className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--accent-primary)] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
-            >
-              Request project review
-            </a>
-            <Link
-              href="/operations"
-              className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15"
-            >
-              Open operations platform
-            </Link>
-            <Link
-              href="/capture"
-              className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-            >
-              View capture desk
-            </Link>
+      <section id="faq" className="scroll-mt-24 border-y border-slate-200 bg-slate-50 px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.72fr_1.28fr]">
+          <div>
+            <p className="text-sm font-black uppercase tracking-[0.16em] text-red-700">FAQ</p>
+            <h2 className="mt-3 text-3xl font-black tracking-[-0.035em] sm:text-5xl">Before you submit.</h2>
+          </div>
+          <div className="grid gap-3">
+            {faqs.map((item) => (
+              <details key={item.question} className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm open:border-slate-300">
+                <summary className="cursor-pointer list-none pr-8 text-base font-black text-slate-950 marker:hidden">{item.question}</summary>
+                <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600">{item.answer}</p>
+              </details>
+            ))}
           </div>
         </div>
+      </section>
 
-        <dl className="mt-10 hidden max-w-5xl grid-cols-3 gap-6 border-y border-white/15 py-5 sm:grid">
-          <HeroMetric value="HVAC + BIM" label="Commercial work lanes" />
-          <HeroMetric value="Grant + RFP" label="Capture-ready sourcing" />
-          <HeroMetric value="Ops board" label="Delivery proof system" />
-        </dl>
-      </div>
-    </section>
-  );
-}
-
-function HeroMetric({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <dt className="text-sm text-white/55">{label}</dt>
-      <dd className="mt-1 text-lg font-semibold text-white">{value}</dd>
-    </div>
-  );
-}
-
-function PacketLine({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="border-b border-white/10 pb-3 last:border-b-0 last:pb-0">
-      <p className="text-xs font-semibold uppercase tracking-wide text-white/45">{label}</p>
-      <p className="mt-1 text-sm font-semibold text-white">{value}</p>
-    </div>
+      <section id="contact" className="scroll-mt-24 bg-slate-100 px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
+          <div className="lg:sticky lg:top-28">
+            <p className="text-sm font-black uppercase tracking-[0.16em] text-red-700">Project review</p>
+            <h2 className="mt-3 text-3xl font-black tracking-[-0.035em] sm:text-5xl">Give the team enough information to make the next conversation useful.</h2>
+            <p className="mt-5 text-lg leading-8 text-slate-600">
+              Include the facility, requested outcome, current conditions, project type, timing, documents available, access constraints, and the decision you need from TCCG.
+            </p>
+            <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-5">
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">Direct contact</p>
+              <a href={TCCG_CONTACT.phone.telHref} className="mt-2 block text-2xl font-black text-slate-950 hover:text-red-700">{TCCG_CONTACT.phone.display}</a>
+              <a href={`mailto:${TCCG_CONTACT.email}`} className="mt-1 block text-sm font-bold text-slate-600 hover:text-slate-950">{TCCG_CONTACT.email}</a>
+              <p className="mt-4 text-sm leading-6 text-slate-500">{TCCG_CONTACT.serviceArea}</p>
+            </div>
+          </div>
+          <ProjectIntakeForm />
+        </div>
+      </section>
+    </main>
   );
 }
