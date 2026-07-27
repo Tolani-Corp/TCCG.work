@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { ConstructionOpsPlatform } from "@/components/ConstructionOpsPlatform";
 
 export const metadata: Metadata = {
-  title: "Operations Platform",
-  description:
-    "Live TCCG Operations Platform for work board, pipeline, crews, risks, and field execution.",
+  title: "Protected Operations Platform",
+  description: "Authenticated TC Construction Group operations workspace.",
+  robots: { index: false, follow: false, nocache: true },
 };
 
 export default function OperationsPage() {
