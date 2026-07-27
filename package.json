@@ -1,6 +1,6 @@
 {
   "name": "tccg-work",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "TC Construction Group commercial building modernization and project operations platform",
   "private": true,
   "scripts": {
@@ -34,7 +34,8 @@
     "typescript": "^5.7.0"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.12.0",
+    "pnpm": ">=11.15.1"
   },
-  "packageManager": "pnpm@9.15.0"
+  "packageManager": "pnpm@11.15.1"
 }
