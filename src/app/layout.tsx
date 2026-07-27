@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 
 import "./globals.css";
+import { AuthProvider } from "@/components/AuthProvider";
 import { Shell } from "@/components/Shell";
 import { versionedAsset } from "@/lib/brandAssets";
 import { TCCG_CONTACT } from "@/lib/contact";
@@ -116,7 +117,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <Shell>{children}</Shell>
+        <AuthProvider>
+          <Shell>{children}</Shell>
+        </AuthProvider>
       </body>
     </html>
   );
