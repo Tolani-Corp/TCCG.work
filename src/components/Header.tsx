@@ -7,8 +7,9 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 const navigation = [
   { name: "Services", href: "/services" },
   { name: "Projects", href: "/projects" },
+  { name: "Operations", href: "/operations" },
+  { name: "Digital Launch", href: "/digital-launch" },
   { name: "Careers", href: "/careers" },
-  { name: "ESG Dashboard", href: "/dashboard" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
 ];
@@ -20,22 +21,20 @@ export function Header() {
     <header className="bg-tccg-slate sticky top-0 z-50">
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <img src="/icon.svg" alt="TC Logo" className="w-10 h-10 object-contain" />
+            <img src="/icon.svg" alt="TC Construction Group" className="h-10 w-10 object-contain" />
             <div className="hidden sm:block">
-              <span className="text-white font-bold text-lg">TC Construction</span>
-              <span className="text-gray-400 text-xs block -mt-1">BUILDING BEYOND</span>
+              <span className="text-lg font-bold text-white">TC Construction</span>
+              <span className="-mt-1 block text-xs text-gray-400">BUILDING BEYOND</span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden items-center gap-4 lg:flex">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
+                className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
               >
                 {item.name}
               </Link>
@@ -43,7 +42,7 @@ export function Header() {
 
             <SignedOut>
               <SignInButton mode="modal">
-                <button className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
+                <button className="text-sm font-medium text-gray-300 transition-colors hover:text-white">
                   Sign In
                 </button>
               </SignInButton>
@@ -54,49 +53,57 @@ export function Header() {
 
             <Link
               href="/contact"
-              className="bg-tccg-orange hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              className="rounded-lg bg-tccg-orange px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-orange-600"
             >
               Get a Quote
             </Link>
           </div>
 
-          {/* Mobile menu button */}
           <button
             type="button"
-            className="md:hidden text-gray-300 hover:text-white"
+            className="text-gray-300 hover:text-white lg:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle mobile menu"
+            aria-expanded={mobileMenuOpen}
           >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
               {mobileMenuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5m-16.5 5.25h16.5m-16.5 5.25h16.5" />
               )}
             </svg>
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-700">
+          <div className="border-t border-gray-700 py-4 lg:hidden">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="block py-2 text-gray-300 hover:text-white transition-colors"
+                className="block py-2 text-gray-300 transition-colors hover:text-white"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
-            <Link
-              href="/contact"
-              className="block mt-4 bg-tccg-orange text-white px-4 py-2 rounded-lg text-center font-medium"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Get a Quote
-            </Link>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="block w-full py-2 text-left text-gray-300 transition-colors hover:text-white">
+                  Sign In
+                </button>
+              </SignInButton>
+            </SignedOut>
+            <div className="mt-4">
+              <Link
+                href="/contact"
+                className="block rounded-lg bg-tccg-orange px-4 py-2 text-center font-medium text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Get a Quote
+              </Link>
+            </div>
           </div>
         )}
       </nav>
