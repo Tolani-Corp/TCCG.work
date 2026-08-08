@@ -52,15 +52,25 @@ jobs:
           test -f src/app/about/page.tsx
           test -f src/app/contact/page.tsx
           test -f docs/digital-launch/TCCG_DIGITAL_LAUNCH_PLAYBOOK.md
+          test -f docs/digital-launch/TCCG_CDE_IMPLEMENTATION_PLAN.md
           test -f docs/growth/TCCG_CAPABILITIES_STATEMENT.md
           test -f docs/procurement/VENDOR_RELATIONSHIP_PLAN.md
           test -f docs/risk/TCCG_BONDING_INSURANCE_READINESS.md
           test -f agents/construction-staff/manifest.json
           test -f db/schema.sql
+          test -f scripts/create-project-workspace.mjs
 
       - name: Validate JSON manifests
         run: |
           node -e "JSON.parse(require('fs').readFileSync('agents/construction-staff/manifest.json','utf8'))"
+
+      - name: Smoke test project template generator
+        run: |
+          pnpm tccg:project -- --project CI-001 --name "Digital Launch CI" --template commercial-gc --output .tccg-projects/ci-001
+          test -f .tccg-projects/ci-001/project.manifest.json
+          test -f .tccg-projects/ci-001/05_PROCUREMENT/04_Long_Lead/LONG_LEAD_REGISTER.csv
+          test -f .tccg-projects/ci-001/07_QUALITY/01_ITPs_Checklists/QC_INSPECTION_REGISTER.csv
+          test -f .tccg-projects/ci-001/08_HSE/03_Observations/HSE_OBSERVATION_REGISTER.csv
 
       - name: Build production application
         run: pnpm build
