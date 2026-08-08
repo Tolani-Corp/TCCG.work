@@ -1,75 +1,104 @@
 # TC Construction Group (TCCG)
 
-**Building Beyond** - Smart HVAC & ESG Construction Solutions
+**Building Beyond** — technology-forward construction, HVAC, BIM/VDC and building-performance delivery.
 
 [![Website](https://img.shields.io/badge/Website-tccg.work-blue)](https://tccg.work)
 [![Tolani Corp](https://img.shields.io/badge/Ecosystem-Tolani%20Corp-red)](https://tolanicorp.us)
 
 ## Overview
 
-TC Construction Group delivers cutting-edge smart HVAC installations and ESG-compliant construction services. We're Building Beyond traditional methods with Web3-enabled contract monitoring and sustainable practices.
+TCCG is developing an evidence-first digital construction operating model that connects preconstruction, estimating, BIM/VDC, procurement, field execution, quality, safety, owner reporting, closeout and workforce development.
 
-**Part of the [Tolani Corp](https://tolanicorp.us) Ecosystem**
+**Part of the [Tolani Corp](https://tolanicorp.us) ecosystem.**
 
-## Services
+## Digital Launch Phase
 
-| Service | Description |
-|---------|-------------|
-| **Smart HVAC Systems** | Next-gen HVAC with IoT sensors, real-time monitoring, AI-driven optimization |
-| **ESG Construction** | Sustainable building practices with full ESG compliance documentation |
-| **Commercial Construction** | Full-service from planning to completion |
-| **Design Partnership** | BIM modeling & Revit integration via Tolani Labs |
-| **Performance Monitoring** | Web3-enabled dashboards for ESG metrics & energy tracking |
-| **Maintenance Programs** | Preventive maintenance & emergency response |
+The Digital Launch baseline is implemented in this repository and includes:
 
-## Stats
+- BIM standards and BIM Execution Plan rules;
+- Common Data Environment information-state and metadata controls;
+- TCCG cost-code taxonomy;
+- estimating assemblies with quote-provenance requirements;
+- subcontractor prequalification registry;
+- procurement and long-lead workflow;
+- quality-control and HSE workflows;
+- owner-dashboard data contract;
+- commercial GC, HVAC, BIM/VDC and federal-small-works project templates;
+- preconstruction bid/no-bid through award-turnover workflow;
+- controlled capabilities-statement source;
+- evidence-gated portfolio policy;
+- Tolani Labs training pipeline;
+- 14 governed construction staff-agent prototypes;
+- vendor relationship targets;
+- bonding/insurance readiness controls;
+- federal government registration/readiness register.
 
-- 🏗️ **500+** Projects Completed
-- 🌿 **98%** ESG Compliance Rate
-- ⚡ **40%** Average Energy Savings
-- 📅 **15+** Years Experience
+### Routes
 
-## Certifications
+| Route | Purpose |
+|---|---|
+| `/` | Public TCCG website |
+| `/operations` | Construction operations platform |
+| `/digital-launch` | Digital Launch command center |
+| `/api/digital-launch` | Machine-readable Digital Launch registry |
 
-- ✅ EPA Certified
-- ✅ LEED Partner
-- ✅ Web3 Enabled
+The API accepts a `section` query parameter for individual registries, for example `/api/digital-launch?section=costCodes`.
 
-## Tech Stack
+## Operating controls
 
-- **Framework**: Next.js 15
-- **Styling**: Tailwind CSS
-- **Deployment**: Vercel
-- **Domain**: tccg.work
+This repository does **not** treat placeholders as facts. TCCG must verify the following before external representation:
 
-## Tolani Ecosystem
+- project counts, values, dates and client references;
+- licenses and certifications;
+- SAM/UEI/CAGE status;
+- SBA certification status;
+- bonding capacity;
+- insurance limits;
+- vendor/channel relationships;
+- subcontractor qualification status;
+- current supplier pricing.
 
-| Company | Purpose |
-|---------|---------|
-| [Tolani Corp](https://tolanicorp.us) | Parent DAO LLC (Wyoming) |
-| [Tolani Labs](https://tolanilabs.io) | Education & Design Services |
-| [TCCG](https://tccg.work) | Construction & HVAC |
-| [Tolani Foundation](https://tolanifoundation.org) | Nonprofit arm |
+See:
+
+- `docs/digital-launch/TCCG_DIGITAL_LAUNCH_PLAYBOOK.md`
+- `docs/growth/TCCG_CAPABILITIES_STATEMENT.md`
+
+## Core service architecture
+
+| Service line | Digital support |
+|---|---|
+| Commercial construction | Preconstruction, project controls, procurement, QC/HSE, owner reporting |
+| HVAC / controls | Estimating assemblies, long-lead tracking, commissioning and owner training |
+| BIM / VDC | ISO 19650-aligned information-management baseline and CDE workflow |
+| Government construction | Registration, compliance, bonding and proposal-readiness gates |
+| Digital delivery | Controlled dashboards, evidence registries and AI-assisted staff workflows |
+
+## Technology stack
+
+- **Framework:** Next.js 15
+- **UI:** React 19 + Tailwind CSS
+- **Identity:** Clerk
+- **Deployment target:** Vercel-compatible Next.js deployment
+- **Package manager:** pnpm 9.15
+- **Runtime:** Node.js 20+
 
 ## Development
 
 ```bash
-# Install dependencies
 pnpm install
-
-# Run development server
 pnpm dev
-
-# Build for production
 pnpm build
 ```
 
+## Verification
+
+Pull requests targeting `master` run `.github/workflows/digital-launch-ci.yml`, which installs with the lockfile, confirms Digital Launch source artifacts are present and runs the production Next.js build.
+
 ## Contact
 
-- 📧 [info@tccg.work](mailto:info@tccg.work)
-- 📞 (800) TCCG-BUILD
-- 🌐 [tccg.work](https://tccg.work)
+- **Website:** https://tccg.work
+- **Email:** info@tccg.work
 
 ---
 
-© 2026 TC Construction Group. A [Tolani Corp](https://tolanicorp.us) Company.
+© 2026 TC Construction Group. A Tolani Corp company.
