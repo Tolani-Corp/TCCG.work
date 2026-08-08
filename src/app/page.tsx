@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
-import { MarketingLandingPage } from "@/components/MarketingLandingPage";
+import { PublicMarketingSite } from "@/components/PublicMarketingSite";
 
 export const metadata: Metadata = {
-  title: "TCCG Operations Platform",
+  title: "TC Construction Group | Building Beyond",
   description:
-    "Sales-forward TCCG Work landing page for smart HVAC, BIM, ESG, public-sector capture, and construction operations.",
+    "Technology-forward construction, HVAC, BIM/VDC, project controls, quality, safety and digital owner reporting from TC Construction Group.",
 };
 
 export default function Home() {
-  return <MarketingLandingPage />;
+  return <PublicMarketingSite />;
 }
