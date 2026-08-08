@@ -1,6 +1,7 @@
 name: TCCG Digital Launch CI
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - master
@@ -39,10 +40,27 @@ jobs:
         run: |
           test -f src/lib/digitalLaunch.ts
           test -f src/components/DigitalLaunchCommandCenter.tsx
+          test -f src/components/PublicMarketingSite.tsx
+          test -f src/components/OwnerDashboardReadiness.tsx
           test -f src/app/digital-launch/page.tsx
+          test -f src/app/owner-dashboard/page.tsx
           test -f src/app/api/digital-launch/route.ts
+          test -f src/app/services/page.tsx
+          test -f src/app/projects/page.tsx
+          test -f src/app/capabilities/page.tsx
+          test -f src/app/careers/page.tsx
+          test -f src/app/about/page.tsx
+          test -f src/app/contact/page.tsx
           test -f docs/digital-launch/TCCG_DIGITAL_LAUNCH_PLAYBOOK.md
           test -f docs/growth/TCCG_CAPABILITIES_STATEMENT.md
+          test -f docs/procurement/VENDOR_RELATIONSHIP_PLAN.md
+          test -f docs/risk/TCCG_BONDING_INSURANCE_READINESS.md
+          test -f agents/construction-staff/manifest.json
+          test -f db/schema.sql
+
+      - name: Validate JSON manifests
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('agents/construction-staff/manifest.json','utf8'))"
 
       - name: Build production application
         run: pnpm build
