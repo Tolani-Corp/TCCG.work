@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "package": "tccg.construction-staff",
-  "version": "2026.1.0",
+  "version": "2026.2.0",
   "status": "prototype",
   "owner": "Tolani Labs",
   "productOwner": "TC Construction Group",
@@ -21,7 +21,10 @@
     "promptVersionRequired": true,
     "toolVersionRequired": true,
     "sensitiveDataRule": "Use only project-approved systems and permissions. Do not move controlled information into public or unapproved model/tool contexts.",
-    "abstainRule": "If required evidence is missing, conflicting, obsolete or outside granted permissions, return an evidence gap instead of guessing."
+    "abstainRule": "If required evidence is missing, conflicting, obsolete or outside granted permissions, return an evidence gap instead of guessing.",
+    "researchLessonAuthorityRule": "Research lessons must arrive as Z4-approved lesson/evidence identifiers. Raw URLs, videos, articles, transcripts or model summaries are not authoritative project guidance.",
+    "programDesignRule": "A lesson that proposes substantial software, workflow-policy or controlled-standard changes must reference an approved Tolani Program Design bundle before implementation may begin.",
+    "humanComprehensionRule": "Medium/high-risk digital-process changes require passing Tolani Human Comprehension evidence before release review; this evidence never grants release authority."
   },
   "commonInputs": [
     "project metadata",
@@ -152,10 +155,10 @@
     {
       "id": "AG-LESSON",
       "name": "Lessons Agent",
-      "mission": "Convert validated project outcomes into reusable organizational-learning candidates.",
-      "reads": ["closeout", "owner feedback", "incidents", "NCRs", "estimate actuals", "schedule outcomes"],
-      "tools": ["lesson-extractor", "taxonomy-classifier", "duplicate-checker"],
-      "outputs": ["lesson candidate", "standard-update candidate", "training-update recommendation"],
+      "mission": "Convert validated project outcomes and Z4-approved research lessons into evidence-backed organizational-learning candidates without granting project or release authority.",
+      "reads": ["closeout", "owner feedback", "incidents", "NCRs", "estimate actuals", "schedule outcomes", "approved Z4 research lessons", "program design evidence", "human comprehension evidence"],
+      "tools": ["lesson-extractor", "taxonomy-classifier", "duplicate-checker", "lesson-admission-gate", "impact-classifier", "program-design-requirement-check"],
+      "outputs": ["lesson candidate", "standard-update candidate", "training-update recommendation", "impact proposal", "program-design requirement", "comprehension requirement"],
       "approval": "functional owner/Tolani Labs"
     }
   ],
@@ -167,7 +170,13 @@
       "permission denial",
       "normal case",
       "high-risk case",
-      "abstention case"
+      "abstention case",
+      "unavailable research source",
+      "unresolved lesson conflict",
+      "superseded lesson",
+      "raw external content denial",
+      "program-design denial",
+      "human-comprehension denial"
     ],
     "requiredMeasures": [
       "source-grounding accuracy",

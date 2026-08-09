@@ -1,0 +1,45 @@
+name: TCCG Lessons Governance
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - agent/tccg-research-lessons-program-design
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable pnpm with Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.15.0 --activate
+          pnpm --version
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate AG-LESSON manifest JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('agents/construction-staff/manifest.json','utf8'))"
+
+      - name: Validate lesson governance fixtures
+        run: pnpm tccg:lessons:validate
+
+      - name: Build production application
+        run: pnpm build
