@@ -1,0 +1,75 @@
+name: TCCG Digital Launch CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - agent/digital-launch-phase
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable pnpm with Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.15.0 --activate
+          pnpm --version
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate digital launch source files
+        run: |
+          test -f src/lib/digitalLaunch.ts
+          test -f src/components/DigitalLaunchCommandCenter.tsx
+          test -f src/components/PublicMarketingSite.tsx
+          test -f src/components/OwnerDashboardReadiness.tsx
+          test -f src/app/digital-launch/page.tsx
+          test -f src/app/owner-dashboard/page.tsx
+          test -f src/app/api/digital-launch/route.ts
+          test -f src/app/services/page.tsx
+          test -f src/app/projects/page.tsx
+          test -f src/app/capabilities/page.tsx
+          test -f src/app/careers/page.tsx
+          test -f src/app/about/page.tsx
+          test -f src/app/contact/page.tsx
+          test -f docs/digital-launch/TCCG_DIGITAL_LAUNCH_PLAYBOOK.md
+          test -f docs/digital-launch/TCCG_CDE_IMPLEMENTATION_PLAN.md
+          test -f docs/growth/TCCG_CAPABILITIES_STATEMENT.md
+          test -f docs/procurement/VENDOR_RELATIONSHIP_PLAN.md
+          test -f docs/risk/TCCG_BONDING_INSURANCE_READINESS.md
+          test -f agents/construction-staff/manifest.json
+          test -f db/schema.sql
+          test -f scripts/create-project-workspace.mjs
+
+      - name: Validate JSON manifests
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('agents/construction-staff/manifest.json','utf8'))"
+
+      - name: Smoke test project template generator
+        run: |
+          pnpm tccg:project -- --project CI-001 --name "Digital Launch CI" --template commercial-gc --output .tccg-projects/ci-001
+          test -f .tccg-projects/ci-001/project.manifest.json
+          test -f .tccg-projects/ci-001/05_PROCUREMENT/04_Long_Lead/LONG_LEAD_REGISTER.csv
+          test -f .tccg-projects/ci-001/07_QUALITY/01_ITPs_Checklists/QC_INSPECTION_REGISTER.csv
+          test -f .tccg-projects/ci-001/08_HSE/03_Observations/HSE_OBSERVATION_REGISTER.csv
+
+      - name: Build production application
+        run: pnpm build
