@@ -8,6 +8,7 @@
     "generate:brand-assets": "node scripts/generate-brand-assets.mjs",
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
     "tccg:project": "node scripts/create-project-workspace.mjs",
+    "tccg:lessons:validate": "node --experimental-strip-types scripts/validate-lesson-governance.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
