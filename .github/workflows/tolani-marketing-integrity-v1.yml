@@ -1,0 +1,28 @@
+name: Tolani Marketing Integrity v1
+on:
+  pull_request:
+    paths: ['config/**','client/src/**','src/**','app/**','pages/**','.github/workflows/tolani-marketing-integrity-v1.yml']
+  push:
+    paths: ['config/**','client/src/**','src/**','app/**','pages/**']
+permissions:
+  contents: read
+jobs:
+  marketing-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: marketing:check
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs=require('fs'),path=require('path'),f=[]; const file='config/public-product-context.json'; let c={};
+          if(!fs.existsSync(file))f.push('missing public-product-context'); else try{c=JSON.parse(fs.readFileSync(file,'utf8'))}catch(e){f.push('invalid context JSON')}
+          for(const k of ['schemaVersion','entityId','classification','publicStatus','commercialAuthority','primaryCTA','operationalHandoff','analytics','contentOwner','evidenceOwner'])if(!c[k])f.push(`missing ${k}`);
+          if(!['G0','G1','G2','G3','G4'].includes(c.publicStatus))f.push('invalid publicStatus'); if(c.canonicalDomain&&!String(c.canonicalDomain).startsWith('https://'))f.push('canonicalDomain must use https'); if(c.reviewExpiresAt&&Date.parse(c.reviewExpiresAt)<Date.now())f.push('context review expired');
+          for(const x of [...(c.approvedClaims||[]),...(c.conditionalClaims||[])]){if(['approved','approved_with_qualifier'].includes(x.status)&&!x.evidenceRef)f.push(`${x.id||'claim'} missing evidenceRef`);if(x.expiresAt&&Date.parse(x.expiresAt)<Date.now())f.push(`${x.id||'claim'} expired`)}
+          if(!c.primaryCTA?.owner||!c.primaryCTA?.downstreamState||!c.primaryCTA?.event)f.push('primary CTA missing operational binding'); if(c.publicStatus==='G0'){if(c.canonicalDomain)f.push('G0 may not declare public domain');for(const o of c.offers||[])if(o.status!=='internal_only')f.push(`G0 offer ${o.id} not internal_only`)}
+          const blocked=['lorem ipsum','example page','example button','placehold.co','join millions']; if(c.publicStatus!=='G0'){const walk=d=>{if(!fs.existsSync(d))return;for(const e of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,e.name);if(e.isDirectory())walk(p);else if(/\.(tsx|jsx|html|mdx)$/i.test(e.name)){const t=fs.readFileSync(p,'utf8').toLowerCase();for(const b of blocked)if(t.includes(b))f.push(`${p}: blocked '${b}'`)}}};['client/src','src','app','pages'].forEach(walk)}
+          if(f.length){console.error('marketing:check failed');f.forEach(x=>console.error('- '+x));process.exit(1)} console.log('marketing:check passed');
+          NODE
