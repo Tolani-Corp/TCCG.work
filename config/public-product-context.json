@@ -6,6 +6,7 @@
   "classification": "operating_company",
   "publicStatus": "G2",
   "commercialAuthority": "local_with_portfolio_governance",
+  "inheritsProtocolFrom": "Tolani-Corp/TolaniCorp-HQ:tolani.portfolio.commercial_context.v1",
   "audiences": [
     {
       "id": "owners_facility_teams",
