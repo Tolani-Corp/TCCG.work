@@ -15,6 +15,7 @@ const contact = read("src/components/ContactIntake.tsx");
 const analytics = read("src/lib/publicConversionAnalytics.ts");
 const tracker = read("src/components/PublicConversionClient.tsx");
 const contextContract = read("src/lib/publicProductContext.ts");
+const commercialContext = read("docs/COMMERCIAL_CONTEXT.md");
 const packageSource = read("package.json");
 const workflow = read(".github/workflows/digital-launch-ci.yml");
 
@@ -24,6 +25,7 @@ if (context.canonicalDomain !== "tccg.work") fail("canonical domain drifted");
 if (context.classification !== "operating_company") fail("classification drifted");
 if (context.publicStatus !== "G2") fail(`public status must remain G2; found ${context.publicStatus}`);
 if (context.commercialAuthority !== "local_with_portfolio_governance") fail("commercial authority drifted");
+if (context.inheritsProtocolFrom !== "Tolani-Corp/TolaniCorp-HQ:tolani.portfolio.commercial_context.v1") fail("central Commercial Context Plane inheritance drifted");
 if (context.primaryCTA?.route !== "/contact") fail("primary CTA must route to /contact");
 if (context.secondaryCTA?.route !== "/capabilities") fail("secondary CTA must route to /capabilities");
 if (context.operationalHandoff?.system !== "mailto:info@tccg.work") fail("handoff must remain the truthful mailto path until a governed server-side intake exists");
@@ -110,6 +112,17 @@ for (const boundary of [
   if (!homepage.includes(boundary)) fail(`homepage is missing qualification boundary: ${boundary}`);
 }
 
+for (const token of [
+  "Tolani-Corp/TolaniCorp-HQ",
+  "config/public-product-context.json",
+  "Request project review",
+  "TCCG Growth / Preconstruction",
+  "project_review_email_prepared",
+  "mailto:info@tccg.work",
+]) {
+  if (!commercialContext.includes(token)) fail(`commercial context documentation lost governed contract token: ${token}`);
+}
+
 if (!packageSource.includes('"marketing:check"')) fail("package.json must expose marketing:check");
 if (!packageSource.includes("validate-public-conversion.mjs")) fail("marketing validator is not wired into package scripts");
 if (!workflow.includes("pnpm marketing:check")) fail("digital-launch CI must execute marketing:check");
@@ -118,6 +131,7 @@ console.log(JSON.stringify({
   valid: true,
   entityId: context.entityId,
   publicStatus: context.publicStatus,
+  inheritsProtocolFrom: context.inheritsProtocolFrom,
   primaryRoute: context.primaryCTA.route,
   secondaryRoute: context.secondaryCTA.route,
   handoffSystem: context.operationalHandoff.system,
