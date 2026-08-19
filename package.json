@@ -8,7 +8,10 @@
     "generate:brand-assets": "node scripts/generate-brand-assets.mjs",
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
     "tccg:project": "node scripts/create-project-workspace.mjs",
+    "marketing:check": "node scripts/validate-public-conversion.mjs",
+    "test": "tsc --noEmit",
     "build": "next build",
+    "verify": "pnpm marketing:check && pnpm test && pnpm build",
     "start": "next start",
     "lint": "next lint"
   },
