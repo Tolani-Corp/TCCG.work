@@ -1,0 +1,39 @@
+name: SignalOS Capture Validation
+
+on:
+  pull_request:
+    paths:
+      - "src/lib/signalosCapture.ts"
+      - "scripts/signalos-capture-smoke.mjs"
+      - ".github/workflows/signalos-capture-validation.yml"
+  push:
+    branches:
+      - master
+      - "agent/**"
+    paths:
+      - "src/lib/signalosCapture.ts"
+      - "scripts/signalos-capture-smoke.mjs"
+      - ".github/workflows/signalos-capture-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-capture-consumer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Run SignalOS fail-closed capture smoke test
+        run: node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/signalos-capture-smoke.mjs
+      - name: Verify production build compatibility
+        run: pnpm build
