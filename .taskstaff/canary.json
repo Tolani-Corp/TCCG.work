@@ -13,7 +13,12 @@
   "hqAuthority": {
     "repository": "Tolani-Corp/TolaniCorp-HQ",
     "canaryV1_1Acceptance": "PR #74",
-    "signingModel": "HQ Ed25519 private signer; TaskStaff public-key verifier only"
+    "signingModel": "HQ Ed25519 private signer; TaskStaff public-key verifier only",
+    "previewGatewayIntegrated": true,
+    "vercelPreviewDeployment": "dpl_EfrGVuPCCAsqHsM9VTedsvAhpYn9",
+    "vercelPreviewDeploymentStatus": "READY",
+    "githubActionsSigningSecretStatus": "MISSING",
+    "vercelPreviewSigningSecretStatus": "UNVERIFIED_BEHIND_DEPLOYMENT_PROTECTION"
   },
   "previewInvocation": {
     "v1": {
@@ -64,62 +69,70 @@
   },
   "v1_1CurrentEvidence": {
     "taskStaffPr": 70,
-    "taskStaffHead": "22eb4b057cef9be030fc9d20058baebb800c003b",
-    "taskStaffDependencyReviewRun": 409,
+    "taskStaffHead": "337df06563ae566d4e9a8251425f10ade4e9fcd0",
+    "taskStaffDependencyReviewRun": 410,
     "taskStaffDependencyReviewStatus": "PASS",
-    "taskStaffStagingRun": 6,
+    "taskStaffCiRun": 461,
+    "taskStaffCiStatus": "PASS",
+    "taskStaffApiTests": "38/38 PASS",
+    "taskStaffStagingRun": 7,
+    "taskStaffStagingRunId": 32428158962,
     "taskStaffStagingRunStatus": "BLOCKED_EXTERNAL_IDENTITY",
+    "taskStaffStagingEvidenceArtifactId": 9428152785,
+    "taskStaffStagingEvidenceArtifactSha256": "b82d457e9db831b734c297854307c88bc174ee0960c994211820a4c5d4c9a7e8",
     "taskStaffStagingDeploymentPerformed": false,
     "taskStaffProviderEgressPerformed": false,
+    "cloudflareWorkerBindingsInspected": true,
     "hqPr": 74,
-    "hqHead": "98035618a07ff3fc2e74c7cecfcccada8d87ecf9",
-    "hqAcceptanceRun": 1,
-    "hqAcceptanceStatus": "BLOCKED_SIGNING_IDENTITY",
+    "hqHead": "9d64fcdaa02729b9bc04ebc1d664d56b9ad1bbd6",
+    "hqGitHubAcceptanceStatus": "BLOCKED_SIGNING_IDENTITY",
     "hqSignedReceiptIssued": false,
+    "hqVercelPreviewBuildStatus": "PASS",
     "productionDeploymentPerformed": false
   },
   "v1_1Blockers": [
     {
-      "system": "TaskStaff GitHub protected staging environment",
+      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
       "missing": "AUTODESK_CANARY_ACCESS_TOKEN"
     },
     {
-      "system": "TaskStaff GitHub protected staging environment",
+      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
       "missing": "AUTODESK_CANARY_HUB_ID"
     },
     {
-      "system": "TaskStaff GitHub protected staging environment",
+      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
       "missing": "AUTODESK_CANARY_PROJECT_ID"
     },
     {
-      "system": "TaskStaff GitHub protected staging environment",
+      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
       "missing": "PRIMAVERA_CANARY_BASE_URL"
     },
     {
-      "system": "TaskStaff GitHub protected staging environment",
+      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
       "missing": "PRIMAVERA_CANARY_ACCESS_TOKEN"
     },
     {
-      "system": "TaskStaff GitHub protected staging environment",
+      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
       "missing": "PRIMAVERA_CANARY_PROJECT_ID"
     },
     {
       "system": "TolaniCorp-HQ GitHub protected Preview environment",
-      "missing": "ENTERPRISE_PREVIEW_PRIVATE_KEY_PKCS8_B64"
+      "missing": "ENTERPRISE_PREVIEW_PRIVATE_KEY_PKCS8_B64",
+      "note": "The HQ Vercel Preview signer path is deployed but its secret-presence diagnostic could not be read through Vercel deployment protection in this execution context."
     }
   ],
   "v1_1RerunOrder": [
     "provision TaskStaff staging Autodesk and Primavera sandbox bindings",
-    "provision or restore HQ Preview Ed25519 private signing key paired to TaskStaff staging verifier",
     "rerun TaskStaff PR #70 TCCG Staffing Canary v1.1 Staging gate",
     "require staging deploy, health smoke and provider mapping PASS",
-    "rerun HQ PR #74 TCCG Staffing Canary v1.1 Acceptance gate",
+    "use the deployed HQ Preview gateway signer if its Preview key/scope status is confirmed; otherwise restore the HQ Preview Ed25519 private signing key",
+    "rerun HQ PR #74 signed acceptance or invoke the authenticated HQ Preview gateway",
     "require signed receipt, live HTTP/MCP, digest/context/replay/revocation/audit/benchmark PASS",
-    "update this adoption record with immutable evidence IDs and audit root",
+    "update this adoption record with final live evidence IDs and audit root",
     "keep real project activation disabled pending explicit Canary v2 release"
   ],
   "realProjectActivation": {
     "allowed": false,
-    "reason": "Canary v1.1 has not yet produced real signed staging and construction-provider evidence because required protected identities are absent."
+    "reason": "Canary v1.1 code gates pass, but real Autodesk/Primavera staging identities are absent and no signed live adapter transaction has completed."
   }
 }
