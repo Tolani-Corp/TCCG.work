@@ -112,15 +112,15 @@ function validUrl(value: string): boolean {
 
 function validateSignal(signal: TccgSignalOsCommercialSignal): string[] {
   const reasons: string[] = [];
-  if (signal?.schema !== "tolani.signalos.commercial-signal.v1") reasons.push("Unsupported SignalOS schema.");
-  if (signal?.status !== "advisory-evidence-only") reasons.push("Signal must remain advisory-evidence-only.");
-  if (signal?.tenantId !== "tolani-corp") reasons.push("Signal tenant is not Tolani Corp.");
-  if (!Array.isArray(signal?.portfolioRoute) || !signal.portfolioRoute.includes("tccg")) reasons.push("Signal is not routed to TCCG.");
-  if (!TCCG_PRODUCT_FAMILIES.has(signal?.commercialization?.productFamily)) reasons.push("Signal product family is not approved for TCCG capture review.");
-  if (!Number.isFinite(signal?.score) || signal.score < 0 || signal.score > 100) reasons.push("Signal score is outside the allowed range.");
-  if (!DIGEST_PATTERN.test(signal?.evidenceDigestSha256 ?? "")) reasons.push("Evidence digest is invalid.");
-  if (!DIGEST_PATTERN.test(signal?.sourcePolicyDigestSha256 ?? "")) reasons.push("Source-policy digest is invalid.");
-  if (!Array.isArray(signal?.evidence) || signal.evidence.length === 0) {
+  if (signal.schema !== "tolani.signalos.commercial-signal.v1") reasons.push("Unsupported SignalOS schema.");
+  if (signal.status !== "advisory-evidence-only") reasons.push("Signal must remain advisory-evidence-only.");
+  if (signal.tenantId !== "tolani-corp") reasons.push("Signal tenant is not Tolani Corp.");
+  if (!Array.isArray(signal.portfolioRoute) || !signal.portfolioRoute.includes("tccg")) reasons.push("Signal is not routed to TCCG.");
+  if (!TCCG_PRODUCT_FAMILIES.has(signal.commercialization?.productFamily ?? "")) reasons.push("Signal product family is not approved for TCCG capture review.");
+  if (!Number.isFinite(signal.score) || signal.score < 0 || signal.score > 100) reasons.push("Signal score is outside the allowed range.");
+  if (!DIGEST_PATTERN.test(signal.evidenceDigestSha256 ?? "")) reasons.push("Evidence digest is invalid.");
+  if (!DIGEST_PATTERN.test(signal.sourcePolicyDigestSha256 ?? "")) reasons.push("Source-policy digest is invalid.");
+  if (!Array.isArray(signal.evidence) || signal.evidence.length === 0) {
     reasons.push("Signal has no source evidence.");
   } else {
     for (const evidence of signal.evidence) {
@@ -130,11 +130,11 @@ function validateSignal(signal: TccgSignalOsCommercialSignal): string[] {
       if (!Number.isFinite(evidence.confidence) || evidence.confidence < 0 || evidence.confidence > 1) reasons.push("Evidence confidence is outside the allowed range.");
     }
   }
-  if (signal?.authority?.automaticPublish !== false) reasons.push("Signal attempts to grant publication authority.");
-  if (signal?.authority?.automaticSpend !== false) reasons.push("Signal attempts to grant spending authority.");
-  if (signal?.authority?.automaticCapitalAllocation !== false) reasons.push("Signal attempts to grant capital-allocation authority.");
-  if (signal?.authority?.automaticCapabilityActivation !== false) reasons.push("Signal attempts to grant capability-activation authority.");
-  if (signal?.authority?.humanApprovalRequired !== true) reasons.push("Signal must require human approval.");
+  if (signal.authority?.automaticPublish !== false) reasons.push("Signal attempts to grant publication authority.");
+  if (signal.authority?.automaticSpend !== false) reasons.push("Signal attempts to grant spending authority.");
+  if (signal.authority?.automaticCapitalAllocation !== false) reasons.push("Signal attempts to grant capital-allocation authority.");
+  if (signal.authority?.automaticCapabilityActivation !== false) reasons.push("Signal attempts to grant capability-activation authority.");
+  if (signal.authority?.humanApprovalRequired !== true) reasons.push("Signal must require human approval.");
   return [...new Set(reasons)];
 }
 
@@ -153,8 +153,8 @@ export function evaluateSignalOsForTccg(
   if (validationReasons.length > 0) {
     return {
       schema: "tccg.signalos.capture-consumer.v1",
-      signalId: signal?.signalId ?? "invalid-signal",
-      productFamily: signal?.commercialization?.productFamily ?? "unknown",
+      signalId: signal.signalId || "invalid-signal",
+      productFamily: signal.commercialization?.productFamily ?? "unknown",
       decision: "reject",
       captureStage: "source",
       captureDecision: "review",
