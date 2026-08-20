@@ -1,0 +1,107 @@
+{
+  "schema": "tccg.taskstaff-staffing-execution-canary.v1",
+  "canaryId": "tccg-staffing-execution-canary-v1",
+  "status": "synthetic_preview_pending_acceptance",
+  "productionEnabled": false,
+  "taskStaffAuthority": {
+    "repository": "Tolani-Corp/taskstaff.io",
+    "capabilityBaseline": "merged PR #68",
+    "canaryImplementation": "PR #69",
+    "package": "tapf.construction-staff.v1"
+  },
+  "syntheticProject": {
+    "type": "commercial_hvac_replacement_and_controls_upgrade",
+    "risk": "high",
+    "realProjectDataAllowed": false,
+    "commercialRateClaimsAllowed": false
+  },
+  "transaction": [
+    "tccg_project_demand",
+    "taskstaff_mission_plan",
+    "human_ai_candidate_pool",
+    "competency_credential_validation",
+    "availability_cost_capacity_match",
+    "backup_coverage",
+    "assignment_recommendation",
+    "independent_human_approval",
+    "fourteen_agent_phase_activation",
+    "autodesk_primavera_synthetic_sandbox_context",
+    "staffing_readiness_receipt",
+    "taskstaff_work_evidence",
+    "z4_preview_evaluation",
+    "tolani_labs_training_gap_feedback"
+  ],
+  "requiredNegativeProofs": [
+    {
+      "id": "missing-pm",
+      "condition": "Required Project Manager authority absent",
+      "expected": "NOT_READY"
+    },
+    {
+      "id": "expired-safety",
+      "condition": "Safety authority credential expired",
+      "expected": "NOT_READY"
+    },
+    {
+      "id": "unavailable-qc",
+      "condition": "QC authority unavailable",
+      "expected": "NOT_READY"
+    },
+    {
+      "id": "revoked-actor",
+      "condition": "Previously qualified Schedule Agent revoked",
+      "expected": "NOT_READY"
+    },
+    {
+      "id": "training-gap",
+      "condition": "Drawing Agent missing OpenBIM/IFC competency",
+      "expected": "NOT_READY",
+      "downstream": "Tolani Labs training-gap feedback candidate"
+    }
+  ],
+  "criticalHumanBackups": [
+    "project-manager",
+    "superintendent",
+    "safety-authority",
+    "quality-control-manager"
+  ],
+  "sandboxContext": {
+    "mode": "synthetic_fixture_only",
+    "externalCallsPerformed": false,
+    "credentialsConfigured": false,
+    "writesEnabled": false,
+    "adapters": [
+      "autodesk.forma-data",
+      "autodesk.model-coordination",
+      "oracle.primavera-cloud"
+    ]
+  },
+  "evidenceOutputs": [
+    "taskstaff.enterprise.mission-plan-preview.v1",
+    "taskstaff.tccg-assignment-recommendation.preview.v1",
+    "taskstaff.tccg-staffing-human-approval-preview.v1",
+    "taskstaff.tccg-staffing-readiness-receipt.v1",
+    "taskstaff.tccg-staffing-work-evidence-preview.v1",
+    "z4.tccg-staffing-canary-evaluation.preview.v1",
+    "tolani-labs.training-gap-feedback.preview.v1"
+  ],
+  "z4ExpectedReleaseRecommendation": "RETAIN_PREVIEW_ONLY",
+  "promotionGates": [
+    "TaskStaff canary CI passes on current head",
+    "all PM/Safety/QC/revocation negative tests fail closed",
+    "all fourteen agents appear across phase activation union",
+    "synthetic cost/capacity gate passes",
+    "human approval receipt exists and grants no production authority",
+    "Autodesk sandbox authentication and project mapping later proven with approved credentials",
+    "Primavera sandbox authentication and baseline-change denial later proven with approved credentials",
+    "tenant and project isolation proven on actual API path",
+    "live credential provenance, expiration, suspension and revocation proven",
+    "idempotency, replay and audit reconstruction proven",
+    "human-only vs agent-assisted vs hybrid-team benchmark completed",
+    "explicit TCCG production release authorization"
+  ],
+  "realProjectActivation": {
+    "allowed": false,
+    "reason": "Synthetic canary evidence cannot establish live project, credential, adapter or field authority."
+  }
+}
