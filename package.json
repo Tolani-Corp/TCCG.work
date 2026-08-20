@@ -1,12 +1,13 @@
 {
   "name": "tccg-work",
   "version": "1.0.0",
-  "description": "TC Construction Group - Smart HVAC & ESG Construction Solutions",
+  "description": "TC Construction Group digital construction operating platform",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "generate:brand-assets": "node scripts/generate-brand-assets.mjs",
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
+    "tccg:project": "node scripts/create-project-workspace.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
