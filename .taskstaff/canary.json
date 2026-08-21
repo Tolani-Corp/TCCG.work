@@ -1,7 +1,7 @@
 {
   "schema": "tccg.taskstaff-staffing-execution-canary.v1-1",
   "canaryId": "tccg-staffing-execution-canary-v1",
-  "status": "v1_synthetic_passed_v1_1_blocked_external_identity",
+  "status": "v1_synthetic_passed_v1_1_aps_identity_onboarding_pending",
   "productionEnabled": false,
   "taskStaffAuthority": {
     "repository": "Tolani-Corp/taskstaff.io",
@@ -37,6 +37,25 @@
       "callerSuppliedProviderCredentialsAllowed": false
     }
   },
+  "autodeskPlatformServices": {
+    "officialOverview": "https://www.autodesk.com/products/autodesk-platform-services/overview",
+    "developerOnboarding": "https://get-started.aps.autodesk.com/",
+    "applicationType": "Server-to-Server App",
+    "authorizationModel": "APS Developer Hub app authorized as a Forma/Autodesk Construction Cloud Custom Integration",
+    "oauthFlow": "client_credentials",
+    "tokenEndpoint": "https://developer.api.autodesk.com/authentication/v2/token",
+    "requestedScope": "data:read",
+    "runtimeTokenMinting": true,
+    "longLivedAccessTokenSecretAllowed": false,
+    "accessTokenRetained": false,
+    "constructionDataWriteScopesAllowed": false,
+    "requiredBindings": [
+      "AUTODESK_CANARY_CLIENT_ID",
+      "AUTODESK_CANARY_CLIENT_SECRET",
+      "AUTODESK_CANARY_HUB_ID",
+      "AUTODESK_CANARY_PROJECT_ID"
+    ]
+  },
   "syntheticProject": {
     "type": "commercial_hvac_replacement_and_controls_upgrade",
     "risk": "high",
@@ -51,6 +70,7 @@
     "prove_tenant_mission_binding",
     "prove_receipt_replay_rejection",
     "prove_revoked_actor_api_rejection_before_provider_egress",
+    "mint_autodesk_server_to_server_data_read_token_at_runtime",
     "autodesk_read_only_project_mapping",
     "primavera_read_only_project_and_schedule_mapping",
     "deny_provider_writes_before_network",
@@ -63,68 +83,78 @@
     "realInfrastructureEvidenceRequired": true,
     "rawProviderResponsesRetained": false,
     "providerCredentialsRetained": false,
+    "autodeskAccessTokenRetained": false,
     "prohibitedWritesMustBeDeniedBeforeNetwork": true,
     "auditEvidenceTarget": "TaskStaff staging R2 EVIDENCE_BUCKET",
     "benchmarkBasis": "deterministic readiness controls, not productivity or ROI claims"
   },
   "v1_1CurrentEvidence": {
     "taskStaffPr": 70,
-    "taskStaffHead": "337df06563ae566d4e9a8251425f10ade4e9fcd0",
-    "taskStaffDependencyReviewRun": 410,
+    "taskStaffOauthRefactorHead": "8d0be7077837b1214fad32450f61790487b31edf",
+    "taskStaffDependencyReviewRun": 418,
     "taskStaffDependencyReviewStatus": "PASS",
-    "taskStaffCiRun": 461,
-    "taskStaffCiStatus": "PASS",
-    "taskStaffApiTests": "38/38 PASS",
-    "taskStaffStagingRun": 7,
-    "taskStaffStagingRunId": 32428158962,
-    "taskStaffStagingRunStatus": "BLOCKED_EXTERNAL_IDENTITY",
-    "taskStaffStagingEvidenceArtifactId": 9428152785,
-    "taskStaffStagingEvidenceArtifactSha256": "b82d457e9db831b734c297854307c88bc174ee0960c994211820a4c5d4c9a7e8",
+    "taskStaffCiRun": 469,
+    "taskStaffCiStatus": "PENDING",
+    "taskStaffStagingRun": 15,
+    "taskStaffStagingRunStatus": "PENDING",
+    "previousStagingRunId": 32428158962,
+    "previousStagingEvidenceArtifactId": 9428152785,
+    "previousStagingEvidenceArtifactSha256": "b82d457e9db831b734c297854307c88bc174ee0960c994211820a4c5d4c9a7e8",
+    "previousStagingFindingSupersededByOauthRefactor": true,
     "taskStaffStagingDeploymentPerformed": false,
     "taskStaffProviderEgressPerformed": false,
-    "cloudflareWorkerBindingsInspected": true,
     "hqPr": 74,
-    "hqHead": "9d64fcdaa02729b9bc04ebc1d664d56b9ad1bbd6",
-    "hqGitHubAcceptanceStatus": "BLOCKED_SIGNING_IDENTITY",
-    "hqSignedReceiptIssued": false,
     "hqVercelPreviewBuildStatus": "PASS",
     "productionDeploymentPerformed": false
   },
   "v1_1Blockers": [
     {
-      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
-      "missing": "AUTODESK_CANARY_ACCESS_TOKEN"
+      "system": "Autodesk Platform Services / TCCG Autodesk account",
+      "missing": "APS Developer Hub Server-to-Server application and authorized ACC/Forma Custom Integration"
     },
     {
-      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
+      "system": "TaskStaff Cloudflare staging Worker or protected GitHub staging fallback",
+      "missing": "AUTODESK_CANARY_CLIENT_ID"
+    },
+    {
+      "system": "TaskStaff Cloudflare staging Worker or protected GitHub staging fallback",
+      "missing": "AUTODESK_CANARY_CLIENT_SECRET"
+    },
+    {
+      "system": "TaskStaff Cloudflare staging Worker or protected GitHub staging fallback",
       "missing": "AUTODESK_CANARY_HUB_ID"
     },
     {
-      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
+      "system": "TaskStaff Cloudflare staging Worker or protected GitHub staging fallback",
       "missing": "AUTODESK_CANARY_PROJECT_ID"
     },
     {
-      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
+      "system": "TaskStaff Cloudflare staging Worker or protected GitHub staging fallback",
       "missing": "PRIMAVERA_CANARY_BASE_URL"
     },
     {
-      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
+      "system": "TaskStaff Cloudflare staging Worker or protected GitHub staging fallback",
       "missing": "PRIMAVERA_CANARY_ACCESS_TOKEN"
     },
     {
-      "system": "TaskStaff Cloudflare staging Worker and protected GitHub staging fallback",
+      "system": "TaskStaff Cloudflare staging Worker or protected GitHub staging fallback",
       "missing": "PRIMAVERA_CANARY_PROJECT_ID"
     },
     {
       "system": "TolaniCorp-HQ GitHub protected Preview environment",
       "missing": "ENTERPRISE_PREVIEW_PRIVATE_KEY_PKCS8_B64",
-      "note": "The HQ Vercel Preview signer path is deployed but its secret-presence diagnostic could not be read through Vercel deployment protection in this execution context."
+      "note": "The HQ Vercel Preview signer path is deployed but its secret-presence diagnostic remains unverified through deployment protection in this execution context."
     }
   ],
   "v1_1RerunOrder": [
-    "provision TaskStaff staging Autodesk and Primavera sandbox bindings",
+    "create or select the TCCG APS Developer Hub",
+    "create a Server-to-Server APS application with Data Management access",
+    "authorize its Client ID as a Custom Integration in the selected non-production ACC/Forma hub",
+    "select the non-production hub and project used for the canary",
+    "provision AUTODESK_CANARY_CLIENT_ID, AUTODESK_CANARY_CLIENT_SECRET, AUTODESK_CANARY_HUB_ID and AUTODESK_CANARY_PROJECT_ID to TaskStaff staging",
+    "provision the three Primavera sandbox bindings",
     "rerun TaskStaff PR #70 TCCG Staffing Canary v1.1 Staging gate",
-    "require staging deploy, health smoke and provider mapping PASS",
+    "require runtime APS OAuth, staging deploy, health smoke and provider mapping PASS",
     "use the deployed HQ Preview gateway signer if its Preview key/scope status is confirmed; otherwise restore the HQ Preview Ed25519 private signing key",
     "rerun HQ PR #74 signed acceptance or invoke the authenticated HQ Preview gateway",
     "require signed receipt, live HTTP/MCP, digest/context/replay/revocation/audit/benchmark PASS",
@@ -133,6 +163,6 @@
   ],
   "realProjectActivation": {
     "allowed": false,
-    "reason": "Canary v1.1 code gates pass, but real Autodesk/Primavera staging identities are absent and no signed live adapter transaction has completed."
+    "reason": "Canary v1.1 code uses durable APS runtime OAuth, but the real APS app/hub/project and Primavera sandbox identities are not yet provisioned and no signed live adapter transaction has completed."
   }
 }
