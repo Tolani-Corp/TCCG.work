@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "1.0.0",
+  "entityId": "tccg.work",
+  "canonicalRepo": "Tolani-Corp/TCCG.work",
+  "canonicalDomain": "tccg.work",
+  "classification": "operating_company",
+  "publicStatus": "G2",
+  "commercialAuthority": "local_with_portfolio_governance",
+  "inheritsProtocolFrom": "Tolani-Corp/TolaniCorp-HQ:tolani.portfolio.commercial_context.v1",
+  "audiences": [
+    {
+      "id": "owners_facility_teams",
+      "jobToBeDone": "Determine whether TCCG is a fit for a construction, modernization, HVAC, BIM/VDC, project-controls or owner-reporting need without assuming unverified qualification or availability."
+    },
+    {
+      "id": "general_contractors_teaming_partners",
+      "jobToBeDone": "Evaluate TCCG for opportunity-specific teaming, BIM/VDC, HVAC, project-controls or specialty delivery support."
+    },
+    {
+      "id": "public_sector_buyers",
+      "jobToBeDone": "Review TCCG's controlled capture and qualification process before relying on registrations, licenses, bonding, certifications or past-performance claims."
+    }
+  ],
+  "offers": [
+    {
+      "id": "opportunity_specific_project_review",
+      "status": "beta",
+      "description": "A structured review of scope, location, schedule, procurement method, delivery requirements and documentary qualification gates before TCCG represents fit or availability."
+    },
+    {
+      "id": "opportunity_specific_qualification_package",
+      "status": "evidence_gated",
+      "description": "A qualification package assembled from current verified identifiers, licenses, insurance, bonding, certifications and relevant past-performance evidence when available for the specific opportunity."
+    }
+  ],
+  "valueProposition": "A construction delivery organization built around scope discipline, controlled project information and opportunity-specific qualification review.",
+  "differentiators": [
+    "Evidence-first qualification before commitments",
+    "Digital project-delivery standards and controlled information workflows",
+    "Structured continuity from preconstruction through owner turnover"
+  ],
+  "approvedClaims": [
+    "TCCG maintains implemented Digital Launch standards, workflows, project templates and governance artifacts in its authoritative repository.",
+    "Material project decisions remain human-approved when AI-assisted construction-agent prototypes are used.",
+    "TCCG's public intake process asks for scope, location, schedule, procurement and qualification requirements before representing project fit."
+  ],
+  "conditionalClaims": [
+    "Current contractor-license authority and geographic scope must be verified for each marketed opportunity.",
+    "Insurance limits and bonding capacity require current documentary evidence before external use.",
+    "SAM, UEI, CAGE, VetCert/SDVOSB and other government-registration or certification claims require current verification before external use.",
+    "Past performance, case studies, partner relationships, supplier pricing and project availability require current evidence and authorization."
+  ],
+  "prohibitedClaims": [
+    "Unverified contractor-license or certification claims",
+    "Unverified bonding capacity or insurance limits",
+    "Unverified SAM, UEI, CAGE, VetCert or SDVOSB status",
+    "Unverified client, project-value, case-study, savings or past-performance claims",
+    "Internal structural-readiness percentages presented as customer traction or operating capacity",
+    "Prototype agent capability presented as autonomous project authority"
+  ],
+  "proof": [
+    "src/lib/digitalLaunch.ts",
+    "docs/digital-launch/TCCG_DIGITAL_LAUNCH_PLAYBOOK.md",
+    "docs/growth/TCCG_CAPABILITIES_STATEMENT.md",
+    "docs/risk/TCCG_BONDING_INSURANCE_READINESS.md",
+    "issues/4"
+  ],
+  "primaryCTA": {
+    "label": "Request project review",
+    "route": "/contact",
+    "owner": "TCCG Growth / Preconstruction",
+    "downstreamState": "project_review_email_prepared",
+    "event": "tccg_project_review_started"
+  },
+  "secondaryCTA": {
+    "label": "Review qualification controls",
+    "route": "/capabilities",
+    "owner": "TCCG Growth / Compliance",
+    "downstreamState": "qualification_controls_reviewed",
+    "event": "tccg_qualification_review_started"
+  },
+  "operationalHandoff": {
+    "owner": "TCCG Growth / Preconstruction",
+    "state": "project_review_email_prepared",
+    "system": "mailto:info@tccg.work"
+  },
+  "pricing": null,
+  "serviceArea": null,
+  "legalAndCompliance": {
+    "rule": "Do not represent location, license, capacity, bonding, insurance, certification, partner, past-performance or project-availability authority until current opportunity-specific evidence is verified."
+  },
+  "seo": {
+    "title": "TC Construction Group | Governed Project Review",
+    "description": "Construction, HVAC, BIM/VDC and digital project-delivery review with opportunity-specific qualification controls."
+  },
+  "analytics": {
+    "events": [
+      "public_page_viewed",
+      "tccg_project_review_started",
+      "tccg_qualification_review_started",
+      "tccg_intake_email_prepared"
+    ],
+    "funnel": [
+      "visitor",
+      "project_review_started",
+      "project_review_email_prepared",
+      "opportunity_specific_qualification_review"
+    ]
+  },
+  "contentOwner": "TCCG Growth",
+  "evidenceOwner": "TCCG Operations / Compliance",
+  "reviewedAt": "2026-08-19T20:00:00Z",
+  "reviewExpiresAt": "2026-11-19T20:00:00Z"
+}
