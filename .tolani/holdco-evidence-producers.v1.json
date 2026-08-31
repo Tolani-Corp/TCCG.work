@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "tolani.holdco.evidence-producers.v1",
+  "holdcoAuthority": "Tolani-Corp/TolaniCorp-HQ:governance/holdco/operating-evidence-adapters.v1.json",
+  "repository": "Tolani-Corp/TCCG.work",
+  "portfolioId": "tccg",
+  "defaultDeny": true,
+  "emission": {
+    "enabled": false,
+    "liveDispatch": false,
+    "automaticVerification": false,
+    "automaticScoringWrite": false,
+    "automaticCapitalAction": false,
+    "automaticAutonomyAction": false
+  },
+  "producers": [
+    {
+      "id": "tccg-operations",
+      "authorityClass": "portfolio-operator",
+      "recordSchema": "tolani.tccg.operating-evidence.v1",
+      "subjectScope": "self-only",
+      "claims": {
+        "capital": ["executionReadiness", "sharedPlatformReuse"],
+        "sharedPlatformValue": ["portfolioAdoption"]
+      },
+      "requiredClaimFields": ["sourceTimestamp", "contentDigest", "evidenceRefs"],
+      "forbiddenClaims": [
+        "revenueCustomerTraction",
+        "grossMarginQuality",
+        "cashConversionRunwayImpact",
+        "roicReturnPotential",
+        "customerConcentrationResilience",
+        "capitalIntensityReversibility",
+        "capital-release",
+        "autonomy-promotion",
+        "production-authority",
+        "payment-authority",
+        "contract-authority"
+      ]
+    }
+  ]
+}
