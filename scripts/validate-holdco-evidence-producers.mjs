@@ -3,6 +3,7 @@ import fs from "node:fs";
 const manifest = JSON.parse(fs.readFileSync(".tolani/holdco-evidence-producers.v1.json", "utf8"));
 const errors = [];
 const fail = (message) => errors.push(message);
+const producerPattern = /^tolani\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\.[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
 
 if (manifest.schemaVersion !== "tolani.holdco.evidence-producers.v1") fail("schemaVersion invalid");
 if (manifest.repository !== "Tolani-Corp/TCCG.work") fail("repository binding invalid");
@@ -11,7 +12,8 @@ if (manifest.defaultDeny !== true) fail("default deny required");
 for (const [key, value] of Object.entries(manifest.emission ?? {})) if (value !== false) fail(`emission.${key} must remain false`);
 if (manifest.producers?.length !== 1) fail("exactly one TCCG producer expected");
 const producer = manifest.producers?.[0] ?? {};
-if (producer.id !== "tccg-operations") fail("producer id must remain tccg-operations");
+if (producer.id !== "tolani.tccg.operations" || !producerPattern.test(producer.id)) fail("producer id must remain canonical tolani.tccg.operations");
+if (JSON.stringify(producer.legacyIds ?? []) !== JSON.stringify(["tccg-operations"])) fail("legacy producer mapping must remain explicit and narrow");
 if (producer.authorityClass !== "portfolio-operator") fail("authority class must remain portfolio-operator");
 if (producer.subjectScope !== "self-only") fail("TCCG evidence must remain self-only");
 const allowedCapital = new Set(["executionReadiness", "sharedPlatformReuse"]);
@@ -27,4 +29,4 @@ if (errors.length) {
   errors.forEach((error) => console.error(`- ${error}`));
   process.exit(1);
 }
-console.log("TCCG HoldCo evidence producer validated: disabled-by-default, self-only, non-financial operating evidence only.");
+console.log("TCCG HoldCo evidence producer validated: canonical producer ID, explicit legacy alias, disabled-by-default, self-only, non-financial operating evidence only.");
