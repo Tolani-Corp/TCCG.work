@@ -14,7 +14,8 @@
   },
   "producers": [
     {
-      "id": "tccg-operations",
+      "id": "tolani.tccg.operations",
+      "legacyIds": ["tccg-operations"],
       "authorityClass": "portfolio-operator",
       "recordSchema": "tolani.tccg.operating-evidence.v1",
       "subjectScope": "self-only",
