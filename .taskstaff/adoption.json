@@ -1,0 +1,377 @@
+{
+  "schema": "taskstaff.adoption.v1",
+  "repository": "Tolani-Corp/TCCG.work",
+  "productName": "TC Construction Group",
+  "domain": "construction",
+  "tier": "tier_1_operational_pilot",
+  "status": "pilot",
+  "evidenceLevel": "repository_reviewed",
+  "reviewedRef": "master@2026-07-30",
+  "reviewedAt": "2026-07-31T01:15:00.000Z",
+  "systemOfRecordFor": [
+    "construction and HVAC project records",
+    "field schedules and native work execution evidence",
+    "IoT and ESG performance records",
+    "native contractor and project source documents"
+  ],
+  "taskstaffAuthorityFor": [
+    "project workforce requirements and assignments",
+    "credential and availability readiness",
+    "construction QA/QC roles and controls",
+    "nonconformance, commissioning, and work acceptance authority",
+    "permit jurisdiction research and permit matrix readiness",
+    "official permit form versioning and application package readiness",
+    "permit submission evidence, correction routing, inspection coordination, and closeout tracking"
+  ],
+  "nonAuthoritativeFor": [
+    "licensed design decisions",
+    "governmental permit approval or issuance",
+    "official code interpretation or inspection authority",
+    "architectural or engineering signatures and seals",
+    "contractor, owner, or professional attestations",
+    "contracting officer or owner legal authority",
+    "native project accounting"
+  ],
+  "missions": [
+    {
+      "id": "tccg.controlled-project-delivery",
+      "name": "Controlled construction and HVAC delivery",
+      "objective": "Convert project requirements into qualified field teams, controlled work packages, inspection evidence, nonconformance closure, commissioning, and authorized owner acceptance.",
+      "why": "Construction readiness depends on more than a schedule: the correct licensed, trained, supervised, and independent quality personnel must be available at each control phase with usable evidence.",
+      "sourceRecords": [
+        "contract requirement",
+        "project scope",
+        "submittal or approved procedure",
+        "work package",
+        "inspection or test result",
+        "commissioning record",
+        "owner acceptance record"
+      ],
+      "lifecycle": [
+        "project_intake",
+        "requirements_validated",
+        "staffing",
+        "preparatory_review",
+        "initial_control",
+        "follow_up_control",
+        "inspection_testing",
+        "correction",
+        "commissioning",
+        "acceptance",
+        "closed"
+      ],
+      "roles": [
+        {
+          "code": "project_manager",
+          "title": "Project manager",
+          "responsibility": "Own scope, schedule, staffing coordination, client decisions, and escalation of project gaps.",
+          "authorityCodes": ["approve_project_plan", "route_change", "escalate_gap"],
+          "evidenceRequired": ["project plan", "approved scope", "staffing plan"],
+          "backupRequired": true
+        },
+        {
+          "code": "quality_control_manager",
+          "title": "Quality control manager",
+          "responsibility": "Plan and govern preparatory, initial, follow-up, inspection, test, nonconformance, and acceptance controls independently from production pressure.",
+          "authorityCodes": ["release_control_point", "open_nonconformance", "recommend_acceptance"],
+          "evidenceRequired": ["quality plan", "qualification evidence", "inspection record"],
+          "backupRequired": true
+        },
+        {
+          "code": "trade_foreman",
+          "title": "Trade foreman",
+          "responsibility": "Lead the assigned trade crew, confirm daily readiness, execute the approved work method, and provide completion evidence.",
+          "authorityCodes": ["accept_trade_assignment", "report_completion"],
+          "evidenceRequired": ["trade qualification", "daily plan", "completion evidence"],
+          "backupRequired": true
+        },
+        {
+          "code": "commissioning_acceptance_authority",
+          "title": "Commissioning and acceptance authority",
+          "responsibility": "Verify system performance and independently accept, conditionally accept, reject, or require correction.",
+          "authorityCodes": ["accept_work", "reject_work", "require_correction"],
+          "evidenceRequired": ["commissioning test", "open-item review", "acceptance criteria"],
+          "backupRequired": false
+        }
+      ],
+      "controls": [
+        {
+          "code": "qualified_trade_coverage",
+          "title": "Qualified trade coverage",
+          "controlType": "qualification",
+          "description": "Require current role-specific licensing, certification, training, availability, and backup coverage before a controlled work package is Ready.",
+          "evidenceTypes": ["license", "certification", "training", "assignment"],
+          "humanAuthorityRequired": true
+        },
+        {
+          "code": "three_phase_quality_control",
+          "title": "Three-phase quality control",
+          "controlType": "quality_control",
+          "description": "Require preparatory, initial, and follow-up controls with assigned performers, verifiers, criteria, evidence, and release authority.",
+          "evidenceTypes": ["preparatory record", "initial inspection", "follow-up record"],
+          "humanAuthorityRequired": true
+        },
+        {
+          "code": "commissioning_acceptance",
+          "title": "Commissioning and work acceptance",
+          "controlType": "acceptance",
+          "description": "Prevent closure until tests, nonconformances, completion items, turnover records, and authorized acceptance are complete.",
+          "evidenceTypes": ["test report", "closed nonconformance", "turnover packet", "acceptance record"],
+          "humanAuthorityRequired": true
+        }
+      ],
+      "expectedShortfalls": [
+        "A licensed or certified trade role may be unavailable for the required work window.",
+        "The project may lack independent quality or commissioning coverage.",
+        "A critical control point may have incomplete or expired evidence."
+      ],
+      "resultingGaps": [
+        "Work may proceed without qualified supervision or required inspection.",
+        "Defects, rework, safety exposure, or schedule delay may increase.",
+        "The owner cannot confidently accept or operate the completed system."
+      ],
+      "integrationEvents": [
+        "project.requirement_created",
+        "crew.readiness_assessed",
+        "quality.control_completed",
+        "nonconformance.opened",
+        "commissioning.completed",
+        "work.accepted"
+      ],
+      "prohibitedAutomation": [
+        "No agent may represent itself as a licensed contractor, engineer, inspector, safety authority, or owner acceptance authority.",
+        "No work package may be accepted from photos, sensor output, or an AI summary alone."
+      ],
+      "kpis": [
+        "qualified crew coverage",
+        "critical trade backup coverage",
+        "control phase completion",
+        "inspection pass rate",
+        "nonconformance age",
+        "rework rate",
+        "commissioning readiness",
+        "acceptance cycle time"
+      ]
+    },
+    {
+      "id": "tccg.permit-operations",
+      "name": "Governed local and state building permit operations",
+      "objective": "Identify the correct authorities having jurisdiction, determine permit requirements, prepare current official forms and attachment packages, route signatures and professional certifications, submit only when authorized, process comments, coordinate inspections, and register official closeout evidence.",
+      "why": "Construction and HVAC work can be delayed, stopped, rejected, or exposed to legal and financial risk when the wrong jurisdiction, outdated forms, missing licenses, incomplete plans, unsupported attestations, unpaid fees, unresolved comments, or missing inspections are not detected before work begins.",
+      "sourceRecords": [
+        "project address and parcel record",
+        "official jurisdiction and building department source",
+        "adopted code edition and local amendment",
+        "official permit form and checksum",
+        "contractor license record",
+        "design professional credential",
+        "plan and attachment manifest",
+        "portal submission receipt",
+        "official review comment",
+        "official inspection result",
+        "issued permit or certificate"
+      ],
+      "lifecycle": [
+        "project_identified",
+        "jurisdiction_research",
+        "permit_matrix_drafted",
+        "requirements_verified",
+        "application_preparation",
+        "package_qa",
+        "professional_review",
+        "applicant_approval",
+        "submission_authorized",
+        "submitted",
+        "plan_review",
+        "corrections",
+        "resubmitted",
+        "permit_issued",
+        "inspections",
+        "certificate_closeout",
+        "closed"
+      ],
+      "roles": [
+        {
+          "code": "permit_coordinator",
+          "title": "Permit coordinator",
+          "responsibility": "Coordinate jurisdiction research, form versioning, permit matrices, application preparation, attachment control, submission readiness, comments, inspections, and closeout evidence.",
+          "authorityCodes": ["prepare_permit_matrix", "prepare_application", "route_review", "request_inspection"],
+          "evidenceRequired": ["official source", "form checksum", "attachment manifest", "submission receipt"],
+          "backupRequired": true
+        },
+        {
+          "code": "licensed_contractor",
+          "title": "Licensed contractor",
+          "responsibility": "Verify contractor scope, provide required contractor information and attestations, review the application package, and authorize contractor-controlled submissions where permitted.",
+          "authorityCodes": ["verify_contractor_scope", "approve_contractor_fields", "authorize_submission"],
+          "evidenceRequired": ["license verification", "scope review", "contractor attestation"],
+          "backupRequired": false
+        },
+        {
+          "code": "design_professional",
+          "title": "Responsible design professional",
+          "responsibility": "Provide and approve professional calculations, drawings, certifications, responses, signatures, and seals within the professional's lawful scope.",
+          "authorityCodes": ["approve_professional_document", "sign_professional_field", "apply_professional_seal", "approve_comment_response"],
+          "evidenceRequired": ["professional credential", "sealed plan", "calculation", "approved response"],
+          "backupRequired": false
+        },
+        {
+          "code": "authorized_permit_submitter",
+          "title": "Authorized permit submitter",
+          "responsibility": "Perform or explicitly authorize the irreversible submission through the official portal, email, or manual channel after all readiness gates pass.",
+          "authorityCodes": ["authorize_submission", "submit_application", "register_receipt"],
+          "evidenceRequired": ["applicant authority", "portal account authority", "submission receipt"],
+          "backupRequired": true
+        },
+        {
+          "code": "financial_approver",
+          "title": "Permit fee financial approver",
+          "responsibility": "Verify budget availability and approve permit, plan-review, inspection, reinspection, utility, and related fees without delegating payment release to the permit agent.",
+          "authorityCodes": ["approve_permit_fee", "approve_reinspection_fee"],
+          "evidenceRequired": ["budget decision", "fee schedule", "payment receipt"],
+          "backupRequired": true
+        }
+      ],
+      "controls": [
+        {
+          "code": "verified_jurisdiction_and_form",
+          "title": "Verified jurisdiction and current form",
+          "controlType": "regulatory_submission",
+          "description": "Require official sources, verified authority having jurisdiction, current code edition, local amendments, current official form, retrieval timestamp, and checksum before an application may be prepared for submission.",
+          "evidenceTypes": ["official jurisdiction source", "code reference", "form URL", "form checksum"],
+          "humanAuthorityRequired": true
+        },
+        {
+          "code": "permit_package_completeness",
+          "title": "Permit application package completeness",
+          "controlType": "quality_assurance",
+          "description": "Require complete and verified fields, plans, calculations, energy forms, product approvals, owner authorization, licenses, insurance, signatures, seals, and other jurisdiction-specific attachments.",
+          "evidenceTypes": ["field completion report", "attachment manifest", "license evidence", "signature evidence", "seal evidence"],
+          "humanAuthorityRequired": true
+        },
+        {
+          "code": "human_submission_authority",
+          "title": "Human submission authorization",
+          "controlType": "approval",
+          "description": "Prevent irreversible portal, email, or manual submission until the authorized applicant or submitter confirms the final package and all attestations.",
+          "evidenceTypes": ["applicant authority", "submission authorization", "portal receipt"],
+          "humanAuthorityRequired": true
+        },
+        {
+          "code": "professional_judgment_boundary",
+          "title": "Professional judgment boundary",
+          "controlType": "legal_review",
+          "description": "Route design changes, code interpretations, calculations, certifications, signatures, seals, and professional review comments to the responsible licensed professional.",
+          "evidenceTypes": ["professional credential", "approved calculation", "signed response", "sealed document"],
+          "humanAuthorityRequired": true
+        },
+        {
+          "code": "permit_fee_control",
+          "title": "Permit fee financial control",
+          "controlType": "financial_control",
+          "description": "Require an approved budget decision before fees are paid or a fee-required submission is recorded.",
+          "evidenceTypes": ["fee schedule", "budget approval", "payment receipt"],
+          "humanAuthorityRequired": true
+        },
+        {
+          "code": "official_closeout_evidence",
+          "title": "Official inspection and certificate closeout",
+          "controlType": "acceptance",
+          "description": "Prevent permit closeout from supporting project acceptance until official inspections, correction closure, commissioning records, and issued permit or certificate evidence are registered.",
+          "evidenceTypes": ["inspection result", "closed correction", "commissioning report", "permit", "certificate"],
+          "humanAuthorityRequired": true
+        }
+      ],
+      "expectedShortfalls": [
+        "The project address or parcel may map to the wrong permitting authority.",
+        "The application form or portal requirements may be outdated or unverified.",
+        "Required contractor licenses, professional credentials, signatures, seals, plans, calculations, or attachments may be missing.",
+        "Permit fees may not have an approved budget or payment authority.",
+        "Review comments may lack a responsible professional or response deadline.",
+        "The work package may not be ready for a requested inspection."
+      ],
+      "resultingGaps": [
+        "The permit application may be rejected, delayed, or submitted to the wrong authority.",
+        "Construction may begin without lawful authorization or may be subject to a stop-work order.",
+        "Professional, contractor, owner, or financial liability may be created by unsupported attestations.",
+        "Failed inspections and unresolved comments may delay commissioning, occupancy, payment, and owner acceptance."
+      ],
+      "integrationEvents": [
+        "permit.project_created",
+        "permit.jurisdiction_verified",
+        "permit.matrix_verified",
+        "permit.form_verified_current",
+        "permit.application_prepared",
+        "permit.package_assessed",
+        "permit.submission_authorized",
+        "permit.submitted",
+        "permit.comment_received",
+        "permit.resubmitted",
+        "permit.inspection_recorded",
+        "permit.certificate_registered",
+        "permit.closed"
+      ],
+      "prohibitedAutomation": [
+        "No agent may sign or fabricate an owner, contractor, or professional attestation.",
+        "No agent may create or apply an architect or engineer seal.",
+        "No agent may claim to approve, issue, inspect, certify, or close a permit on behalf of a governmental authority.",
+        "No agent may bypass CAPTCHA, anti-bot, payment, signature, or irreversible portal controls.",
+        "No agent may state that a permit is not required without official authority confirmation.",
+        "No permit fee may be paid without separate FinOps approval and authorized external payment execution."
+      ],
+      "kpis": [
+        "jurisdiction verification cycle time",
+        "permit matrix completeness",
+        "first-submission package completeness",
+        "application rejection rate",
+        "review comment response cycle time",
+        "resubmission count",
+        "inspection readiness rate",
+        "failed inspection rate",
+        "permit and certificate closeout cycle time",
+        "permit-related project delay days"
+      ]
+    }
+  ],
+  "marketingProof": {
+    "caseStudyEligible": false,
+    "proofStatement": "Demonstrate a traceable chain from project requirement through permit jurisdiction, current official forms, qualified workforce, application package, authorized submission, quality controls, inspections, commissioning evidence, permit closeout, and owner acceptance.",
+    "baselineEvidence": [
+      "sample project staffing plan",
+      "sample quality plan and inspection records",
+      "baseline nonconformance and commissioning cycle",
+      "sample permit matrix and application checklist",
+      "baseline permit comment and inspection cycle"
+    ],
+    "targetEvidence": [
+      "validated qualified-crew readiness scenario",
+      "three-phase control records",
+      "nonconformance correction and reinspection",
+      "verified jurisdiction and official permit form versions",
+      "complete synthetic permit application package",
+      "authorized synthetic submission receipt",
+      "review comment response matrix",
+      "official synthetic inspection and certificate evidence",
+      "authorized acceptance record"
+    ],
+    "proofGates": [
+      "Use synthetic project and permit data until data-classification, portal, customer, and authority approvals are complete.",
+      "Construction authority, permit authority, license, professional credential, signature, and seal evidence must be independently verified.",
+      "A production permit case study requires an actual authorized project, official submission receipt, issued permit, official inspections, closeout certificate, and project-owner approval.",
+      "Outcome claims require an approved baseline and project-owner acceptance."
+    ],
+    "prohibitedClaims": [
+      "Do not claim OSHA, code, permit, LEED, contract, or licensing compliance from software use alone.",
+      "Do not claim that TaskStaff approves permits or replaces licensed professionals or building officials.",
+      "Do not claim faster permit issuance, reduced defects, lower cost, or shorter schedule without outcome-verified project records."
+    ]
+  },
+  "implementation": {
+    "mode": "manifest_only",
+    "taskstaffEndpoint": null,
+    "authentication": "not_configured",
+    "dataClassification": "confidential",
+    "realDataAllowed": false,
+    "nextAction": "Run a synthetic commercial HVAC replacement scenario through jurisdiction resolution, permit matrix, official form registration, application preparation, signatures and seals, fee approval, authorized submission, comments, inspections, commissioning, certificate closeout, and owner acceptance."
+  }
+}
