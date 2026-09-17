@@ -1,6 +1,6 @@
 # TC Construction Group (TCCG)
 
-Commercial building modernization, HVAC and controls coordination, BIM and MEP support, project planning, smart-building integration, and public-sector opportunity review.
+**Building Beyond** — technology-forward construction, HVAC, BIM/VDC and building-performance delivery.
 
 - Website: [tccg.work](https://tccg.work)
 - Parent company: [Tolani Corp](https://tolanicorp.us)
@@ -9,71 +9,97 @@ Commercial building modernization, HVAC and controls coordination, BIM and MEP s
 
 ## Product surfaces
 
-- **Public website:** services, sectors, delivery process, project qualification, safety boundaries, legal notices, and qualified intake.
-- **Operations workspace:** protected work board, pipeline, crews, risks, and delivery controls.
-- **Capture workspace:** protected Grants.gov and SAM.gov opportunity review, go/no-go controls, teaming, and proposal workflow.
+TCCG is developing an evidence-first digital construction operating model that connects preconstruction, estimating, BIM/VDC, procurement, field execution, quality, safety, owner reporting, closeout and workforce development.
 
-Protected routes fail closed when Clerk production credentials are unavailable.
+**Part of the [Tolani Corp](https://tolanicorp.us) ecosystem.**
 
-## Development
+## Digital Launch Phase
+
+The Digital Launch baseline is implemented in this repository and includes:
+
+- BIM standards and BIM Execution Plan rules;
+- Common Data Environment information-state and metadata controls;
+- TCCG cost-code taxonomy;
+- estimating assemblies with quote-provenance requirements;
+- subcontractor prequalification registry;
+- procurement and long-lead workflow;
+- quality-control and HSE workflows;
+- owner-dashboard data contract;
+- commercial GC, HVAC, BIM/VDC and federal-small-works project templates;
+- preconstruction bid/no-bid through award-turnover workflow;
+- controlled capabilities-statement source;
+- evidence-gated portfolio policy;
+- Tolani Labs training pipeline;
+- 14 governed construction staff-agent prototypes;
+- vendor relationship targets;
+- bonding/insurance readiness controls;
+- federal government registration/readiness register.
+
+### Routes
+
+| Route | Purpose |
+|---|---|
+| `/` | Public TCCG website |
+| `/operations` | Construction operations platform |
+| `/digital-launch` | Digital Launch command center |
+| `/api/digital-launch` | Machine-readable Digital Launch registry |
+
+The API accepts a `section` query parameter for individual registries, for example `/api/digital-launch?section=costCodes`.
+
+## Operating controls
+
+This repository does **not** treat placeholders as facts. TCCG must verify the following before external representation:
+
+- project counts, values, dates and client references;
+- licenses and certifications;
+- SAM/UEI/CAGE status;
+- SBA certification status;
+- bonding capacity;
+- insurance limits;
+- vendor/channel relationships;
+- subcontractor qualification status;
+- current supplier pricing.
+
+See:
+
+- `docs/digital-launch/TCCG_DIGITAL_LAUNCH_PLAYBOOK.md`
+- `docs/growth/TCCG_CAPABILITIES_STATEMENT.md`
+
+## Core service architecture
+
+| Service line | Digital support |
+|---|---|
+| Commercial construction | Preconstruction, project controls, procurement, QC/HSE, owner reporting |
+| HVAC / controls | Estimating assemblies, long-lead tracking, commissioning and owner training |
+| BIM / VDC | ISO 19650-aligned information-management baseline and CDE workflow |
+| Government construction | Registration, compliance, bonding and proposal-readiness gates |
+| Digital delivery | Controlled dashboards, evidence registries and AI-assisted staff workflows |
+
+## Technology stack
+
+- **Framework:** Next.js 15
+- **UI:** React 19 + Tailwind CSS
+- **Identity:** Clerk
+- **Deployment target:** Vercel-compatible Next.js deployment
+- **Package manager:** pnpm 9.15
+- **Runtime:** Node.js 20+
+
+Required for protected workspaces:
 
 ```bash
-pnpm install --frozen-lockfile
+pnpm install
 pnpm dev
+pnpm build
 ```
 
 ## Verification
 
-```bash
-pnpm typecheck
-pnpm build
-pnpm audit:prod
-pnpm production:verify
-```
+Pull requests targeting `master` run `.github/workflows/digital-launch-ci.yml`, which installs with the lockfile, confirms Digital Launch source artifacts are present and runs the production Next.js build.
 
-The production verifier checks:
+## Contact
 
-- `https://tccg.work`
-- `https://www.tccg.work` redirect behavior
-- `/api/health`
-- `/privacy`
-- `/terms`
-- `/robots.txt`
-- `/sitemap.xml`
-- anonymous access controls for `/operations` and `/capture`
-- the assigned `(754) 350-9675` number
-- removal of public mock pipeline metrics
-
-## Production environment
-
-Copy the required values from `.env.example` into the Vercel Production environment. Do not commit credentials.
-
-Required for public intake:
-
-```env
-TCCG_INTAKE_WEBHOOK_URL="https://approved-https-endpoint.example/path"
-TCCG_INTAKE_WEBHOOK_SECRET="server-only-secret"
-```
-
-Required for protected workspaces:
-
-```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_live_..."
-CLERK_SECRET_KEY="sk_live_..."
-NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
-NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
-```
-
-Optional capture sources:
-
-```env
-SAM_GOV_API_KEY=""
-CANDID_API_KEY=""
-CAPTURE_KEYWORDS="smart HVAC,HVAC controls,building automation,energy efficiency retrofit,indoor air quality,construction workforce,BIM,green building"
-CAPTURE_SOURCE_LIMIT="5"
-```
-
-## Operating boundary
+- **Website:** https://tccg.work
+- **Email:** info@tccg.work
 
 Website content does not constitute a construction proposal, work authorization, engineering opinion, safety determination, license representation, price guarantee, permit guarantee, or schedule commitment. Service availability is confirmed only after scope, jurisdiction, contracting structure, capacity, and commercial review.
 

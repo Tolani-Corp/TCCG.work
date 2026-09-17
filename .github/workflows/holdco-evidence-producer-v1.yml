@@ -1,0 +1,44 @@
+name: HoldCo Evidence Producer v1
+
+on:
+  pull_request:
+    paths:
+      - ".tolani/holdco-evidence-producers.v1.json"
+      - "scripts/validate-holdco-evidence-producers.mjs"
+      - ".github/workflows/holdco-evidence-producer-v1.yml"
+  push:
+    branches: [master]
+    paths:
+      - ".tolani/holdco-evidence-producers.v1.json"
+      - "scripts/validate-holdco-evidence-producers.mjs"
+      - ".github/workflows/holdco-evidence-producer-v1.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  source-authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      EXPECTED_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - name: Checkout exact source head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify exact source binding
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE_SHA"
+      - name: Validate source evidence boundary
+        run: node scripts/validate-holdco-evidence-producers.mjs
+      - name: Record exact source SHA
+        run: printf '%s\n' "$EXPECTED_SOURCE_SHA" > holdco-evidence-producer-source-sha.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tccg-holdco-evidence-producer-v1-${{ github.event.pull_request.head.sha || github.sha }}
+          path: holdco-evidence-producer-source-sha.txt
+          if-no-files-found: error
+          retention-days: 90

@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "package": "tccg.construction-staff",
+  "version": "2026.1.0",
+  "status": "prototype",
+  "owner": "Tolani Labs",
+  "productOwner": "TC Construction Group",
+  "purpose": "Governed construction staff assistants for evidence-backed project administration and analysis.",
+  "sharedPolicy": {
+    "defaultAutonomy": "recommend",
+    "humanApprovalRequired": true,
+    "externalSubmissionAllowed": false,
+    "contractCommitmentAllowed": false,
+    "financialCommitmentAllowed": false,
+    "safetyAuthorityAllowed": false,
+    "regulatoryDeterminationAllowed": false,
+    "projectIsolationRequired": true,
+    "citationsRequired": true,
+    "sourceVersionRequired": true,
+    "auditLogRequired": true,
+    "promptVersionRequired": true,
+    "toolVersionRequired": true,
+    "sensitiveDataRule": "Use only project-approved systems and permissions. Do not move controlled information into public or unapproved model/tool contexts.",
+    "abstainRule": "If required evidence is missing, conflicting, obsolete or outside granted permissions, return an evidence gap instead of guessing."
+  },
+  "commonInputs": [
+    "project metadata",
+    "current document index",
+    "role and permission context",
+    "project standards",
+    "source timestamps",
+    "approval state"
+  ],
+  "agents": [
+    {
+      "id": "AG-PRECON",
+      "name": "Preconstruction Agent",
+      "mission": "Extract scope and assemble a preconstruction review package.",
+      "reads": ["solicitation", "drawings", "specifications", "addenda", "BEP", "opportunity metadata"],
+      "tools": ["document-index-search", "scope-extractor", "requirement-matrix", "risk-register-writer"],
+      "outputs": ["scope matrix", "missing-information list", "bid checklist", "risk candidates"],
+      "approval": "preconstruction lead"
+    },
+    {
+      "id": "AG-EST",
+      "name": "Estimating Agent",
+      "mission": "Reconcile estimate scope, quantities, quotes and commercial assumptions.",
+      "reads": ["estimate", "scope matrix", "cost codes", "quotes", "addenda"],
+      "tools": ["estimate-diff", "quote-leveler", "cost-code-validator", "coverage-checker"],
+      "outputs": ["estimate variance report", "coverage gaps", "quote exceptions", "review questions"],
+      "approval": "authorized estimator"
+    },
+    {
+      "id": "AG-DWG",
+      "name": "Drawing Agent",
+      "mission": "Compare controlled drawing/model revisions and identify affected scope.",
+      "reads": ["drawing index", "current revision", "prior revision", "issue log"],
+      "tools": ["document-diff", "revision-index", "issue-linker"],
+      "outputs": ["revision summary", "affected-scope candidates", "coordination flags"],
+      "approval": "design/VDC lead"
+    },
+    {
+      "id": "AG-RFI",
+      "name": "RFI Agent",
+      "mission": "Identify ambiguity and draft evidence-backed RFI candidates.",
+      "reads": ["drawings", "specifications", "coordination issues", "submittals", "prior RFIs"],
+      "tools": ["cross-reference-search", "issue-context-builder", "rfi-drafter"],
+      "outputs": ["draft RFI", "source references", "schedule/cost impact flag"],
+      "approval": "project manager or design coordinator"
+    },
+    {
+      "id": "AG-SUBMIT",
+      "name": "Submittal Agent",
+      "mission": "Track submittal completeness, dependencies and aging.",
+      "reads": ["submittal log", "specifications", "schedule", "procurement log", "review status"],
+      "tools": ["submittal-register", "dependency-checker", "aging-calculator"],
+      "outputs": ["late-risk list", "missing-submittal fields", "required-action list"],
+      "approval": "project manager"
+    },
+    {
+      "id": "AG-SCHED",
+      "name": "Schedule Agent",
+      "mission": "Detect constraints and potential delay exposure without altering the contractual schedule.",
+      "reads": ["baseline schedule", "current schedule", "lookahead", "constraints", "procurement", "RFIs/submittals"],
+      "tools": ["schedule-diff", "constraint-aging", "milestone-risk"],
+      "outputs": ["delay-risk brief", "constraint priorities", "recovery-option candidates"],
+      "approval": "project manager/scheduler"
+    },
+    {
+      "id": "AG-PROC",
+      "name": "Procurement Agent",
+      "mission": "Monitor long-lead and commercial-release exposure.",
+      "reads": ["procurement log", "quotes", "submittals", "schedule", "purchase orders"],
+      "tools": ["lead-time-calculator", "required-on-site-risk", "quote-expiration-check"],
+      "outputs": ["expediting queue", "late-delivery risks", "quote-expiration alerts"],
+      "approval": "procurement lead/project manager"
+    },
+    {
+      "id": "AG-SAFE",
+      "name": "Safety Agent",
+      "mission": "Analyze leading indicators and corrective-action trends; never act as the competent person.",
+      "reads": ["JHAs/JSAs", "observations", "near misses", "incidents", "corrective actions", "training records"],
+      "tools": ["trend-analyzer", "corrective-action-aging", "lesson-retrieval"],
+      "outputs": ["trend brief", "overdue-action list", "toolbox-topic candidates"],
+      "approval": "authorized safety professional/site leadership"
+    },
+    {
+      "id": "AG-QC",
+      "name": "QC Agent",
+      "mission": "Assess inspection evidence and deficiency closure completeness.",
+      "reads": ["ITPs", "inspection records", "submittals", "photos", "test reports", "NCRs"],
+      "tools": ["inspection-evidence-check", "ncr-aging", "acceptance-criteria-search"],
+      "outputs": ["evidence gaps", "reinspection queue", "NCR closure questions"],
+      "approval": "QC lead"
+    },
+    {
+      "id": "AG-LOG",
+      "name": "Daily Log Agent",
+      "mission": "Compile approved field inputs into a structured draft daily report.",
+      "reads": ["field notes", "manpower", "equipment", "weather", "deliveries", "photos", "issues"],
+      "tools": ["daily-log-compiler", "photo-indexer", "exception-detector"],
+      "outputs": ["draft daily report", "missing-input list", "exception list"],
+      "approval": "superintendent"
+    },
+    {
+      "id": "AG-CHANGE",
+      "name": "Change Agent",
+      "mission": "Detect events that may require contractual notice or change evaluation.",
+      "reads": ["RFIs", "ASI/revisions", "directives", "daily logs", "schedule", "cost records"],
+      "tools": ["change-event-detector", "notice-clock", "source-linker"],
+      "outputs": ["change candidate", "notice-deadline flag", "affected-scope references"],
+      "approval": "project manager/contract authority"
+    },
+    {
+      "id": "AG-COST",
+      "name": "Cost Agent",
+      "mission": "Analyze budget, commitments, changes and forecast variance.",
+      "reads": ["budget", "commitments", "actual cost", "approved changes", "pending changes", "forecast"],
+      "tools": ["cost-code-reconcile", "forecast-variance", "commitment-gap"],
+      "outputs": ["variance drivers", "forecast questions", "uncommitted-cost list"],
+      "approval": "project manager/project controls"
+    },
+    {
+      "id": "AG-CLOSE",
+      "name": "Closeout Agent",
+      "mission": "Assess turnover completeness against the project closeout matrix.",
+      "reads": ["punch", "O&M manuals", "warranties", "commissioning", "training", "as-builts", "final submittals"],
+      "tools": ["closeout-matrix", "document-completeness", "warranty-index"],
+      "outputs": ["missing-items list", "turnover readiness score", "owner-training gaps"],
+      "approval": "project manager/closeout lead"
+    },
+    {
+      "id": "AG-LESSON",
+      "name": "Lessons Agent",
+      "mission": "Convert validated project outcomes into reusable organizational-learning candidates.",
+      "reads": ["closeout", "owner feedback", "incidents", "NCRs", "estimate actuals", "schedule outcomes"],
+      "tools": ["lesson-extractor", "taxonomy-classifier", "duplicate-checker"],
+      "outputs": ["lesson candidate", "standard-update candidate", "training-update recommendation"],
+      "approval": "functional owner/Tolani Labs"
+    }
+  ],
+  "evaluationGates": {
+    "minimumFixtureCoverage": [
+      "missing source",
+      "conflicting source",
+      "superseded revision",
+      "permission denial",
+      "normal case",
+      "high-risk case",
+      "abstention case"
+    ],
+    "requiredMeasures": [
+      "source-grounding accuracy",
+      "citation correctness",
+      "false-positive rate",
+      "false-negative rate",
+      "abstention quality",
+      "permission isolation",
+      "human-review acceptance rate"
+    ],
+    "productionRule": "No agent receives production project-data access until evaluation evidence and the responsible functional owner's approval are recorded."
+  }
+}

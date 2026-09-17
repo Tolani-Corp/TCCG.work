@@ -4,73 +4,98 @@ import Image from "next/image";
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
 
-import { versionedAsset } from "@/lib/brandAssets";
-import { TCCG_CONTACT } from "@/lib/contact";
-
-const publicNav = [
-  { href: "/#services", label: "Services" },
-  { href: "/#sectors", label: "Who we serve" },
-  { href: "/#process", label: "Delivery process" },
-  { href: "/#faq", label: "FAQ" },
-];
+const navLinks = [
+  { href: '/services', label: 'Services' },
+  { href: '/projects', label: 'Portfolio' },
+  { href: '/capabilities', label: 'Capabilities' },
+  { href: '/digital-launch', label: 'Digital Launch' },
+  { href: '/operations', label: 'Operations' },
+  { href: '/capture', label: 'Capture' },
+  { href: '/contact', label: 'Contact' },
+]
 
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  useEffect(() => {
-    if (!mobileOpen) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [mobileOpen]);
-
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/90 bg-white/95 backdrop-blur-xl">
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/" aria-label="TC Construction Group home" className="flex items-center rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-600">
-          <Image src={versionedAsset("/logo.svg")} alt="TC Construction Group" width={230} height={45} className="hidden h-10 w-auto sm:block" priority />
-          <Image src={versionedAsset("/icon.png")} alt="TC Construction Group" width={44} height={44} className="h-11 w-11 sm:hidden" priority />
-        </Link>
-
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
-          {publicNav.map((item) => (
-            <Link key={item.href} href={item.href} className="rounded-lg px-3 py-2 text-sm font-bold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <a href={TCCG_CONTACT.phone.telHref} className="hidden min-h-11 items-center rounded-lg px-3 py-2 text-sm font-black text-slate-700 transition hover:bg-slate-100 hover:text-slate-950 md:inline-flex">
-            {TCCG_CONTACT.phone.display}
-          </a>
-          <Link href="/#contact" className="hidden min-h-11 items-center rounded-lg bg-red-600 px-4 py-2 text-sm font-black text-white transition hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 sm:inline-flex">
-            Request project review
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-[var(--border-subtle)] bg-[rgba(248,246,241,0.92)] backdrop-blur-md">
+      <div className="mx-auto max-w-[90rem] px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <Link href="/" aria-label="TC Construction Group home" className="flex items-center">
+            <Image
+              src={versionedAsset('/logo.svg')}
+              alt="TC Construction Group"
+              width={204}
+              height={40}
+              className="hidden h-10 w-auto sm:block"
+              priority
+            />
+            <Image
+              src={versionedAsset('/icon.png')}
+              alt="TC Construction Group"
+              width={44}
+              height={44}
+              className="h-11 w-11 sm:hidden"
+              priority
+            />
           </Link>
-          <button type="button" aria-label={mobileOpen ? "Close navigation" : "Open navigation"} aria-expanded={mobileOpen} aria-controls="mobile-navigation" onClick={() => setMobileOpen((open) => !open)} className="grid h-11 w-11 place-items-center rounded-lg border border-slate-300 bg-white text-slate-950 lg:hidden">
-            <span aria-hidden="true" className="relative h-5 w-5">
-              <span className={`absolute left-0 top-1 block h-0.5 w-5 bg-current transition-transform ${mobileOpen ? "translate-y-2 rotate-45" : ""}`} />
-              <span className={`absolute left-0 top-2.5 block h-0.5 w-5 bg-current transition-opacity ${mobileOpen ? "opacity-0" : "opacity-100"}`} />
-              <span className={`absolute left-0 top-4 block h-0.5 w-5 bg-current transition-transform ${mobileOpen ? "-translate-y-1.5 -rotate-45" : ""}`} />
-            </span>
-          </button>
+
+          <div className="hidden xl:flex xl:gap-x-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/contact"
+              className="hidden items-center gap-2 rounded-lg bg-[var(--accent-primary)] px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 hover:shadow-md lg:inline-flex"
+            >
+              Request review <span aria-hidden="true">&rarr;</span>
+            </Link>
+            <button
+              type="button"
+              className="-m-2.5 p-2.5 text-[var(--text-secondary)] xl:hidden"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-expanded={mobileOpen}
+              aria-label="Toggle navigation"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                {mobileOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
-      {mobileOpen ? (
-        <div id="mobile-navigation" className="fixed inset-x-0 top-[72px] min-h-[calc(100vh-72px)] overflow-y-auto border-t border-slate-200 bg-slate-950 px-4 py-6 text-white lg:hidden">
-          <nav className="mx-auto grid max-w-7xl gap-2" aria-label="Mobile navigation">
-            {publicNav.map((item) => (
-              <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-4 text-base font-bold text-white">
-                {item.label}
+      {mobileOpen && (
+        <div className="border-t border-[var(--border-subtle)] bg-[var(--bg-surface)] xl:hidden">
+          <div className="grid gap-1 px-6 py-4 sm:grid-cols-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="block rounded-lg px-3 py-2 text-base font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]"
+                onClick={() => setMobileOpen(false)}
+              >
+                {link.label}
               </Link>
             ))}
-            <a href={TCCG_CONTACT.phone.telHref} className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-4 text-base font-bold text-white">
-              Call {TCCG_CONTACT.phone.display}
-            </a>
-            <Link href="/#contact" onClick={() => setMobileOpen(false)} className="mt-3 rounded-xl bg-red-600 px-4 py-4 text-center text-base font-black text-white">
+            <Link
+              href="/contact"
+              className="mt-2 block rounded-lg bg-[var(--accent-primary)] px-4 py-3 text-center text-sm font-semibold text-white sm:col-span-2"
+              onClick={() => setMobileOpen(false)}
+            >
               Request project review
             </Link>
             <Link href="/operations" onClick={() => setMobileOpen(false)} className="rounded-xl px-4 py-3 text-center text-sm font-bold text-white/60 hover:text-white">
@@ -89,43 +114,55 @@ function Footer() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 lg:grid-cols-[1.25fr_0.75fr_0.75fr_0.75fr]">
           <div>
-            <div className="inline-flex rounded-xl bg-white p-2">
-              <Image src={versionedAsset("/logo.svg")} alt="TC Construction Group" width={260} height={51} className="h-11 w-auto" />
+            <div className="inline-flex rounded-lg bg-white p-2">
+              <Image
+                src={versionedAsset('/logo.svg')}
+                alt="TC Construction Group"
+                width={306}
+                height={60}
+                className="h-12 w-auto"
+              />
             </div>
             <p className="mt-5 max-w-md text-sm leading-7 text-white/65">
-              Commercial building modernization, HVAC coordination, BIM-supported delivery, project support, and public-sector opportunity review—backed by disciplined scope and documentation.
+              Technology-forward construction delivery connecting preconstruction, BIM/VDC,
+              HVAC, procurement, project controls, quality, safety, commissioning and owner
+              reporting through evidence-based workflows.
             </p>
-            <a href={TCCG_CONTACT.phone.telHref} className="mt-5 inline-block text-xl font-black text-white hover:text-red-400">{TCCG_CONTACT.phone.display}</a>
-            <p className="mt-1 text-sm text-white/55">{TCCG_CONTACT.email}</p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {['BIM / VDC', 'HVAC', 'Project Controls', 'QA / HSE'].map((label) => (
+                <span key={label} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/75">
+                  {label}
+                </span>
+              ))}
+            </div>
           </div>
 
           <div>
-            <h2 className="text-sm font-black text-white">Services</h2>
-            <ul className="mt-4 grid gap-3 text-sm text-white/60">
-              <li><Link href="/#services" className="hover:text-white">Facility modernization</Link></li>
-              <li><Link href="/#services" className="hover:text-white">HVAC and controls</Link></li>
-              <li><Link href="/#services" className="hover:text-white">BIM and MEP coordination</Link></li>
-              <li><Link href="/#services" className="hover:text-white">Commercial project support</Link></li>
+            <h3 className="text-sm font-semibold leading-6 text-white">TCCG</h3>
+            <ul role="list" className="mt-6 space-y-4">
+              <li><Link href="/services" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Services</Link></li>
+              <li><Link href="/projects" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Verified Portfolio</Link></li>
+              <li><Link href="/capabilities" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Capabilities</Link></li>
+              <li><Link href="/digital-launch" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Digital Launch</Link></li>
+              <li><Link href="/careers" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Careers + Training</Link></li>
+              <li><Link href="/about" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">About</Link></li>
             </ul>
           </div>
 
           <div>
-            <h2 className="text-sm font-black text-white">Company</h2>
-            <ul className="mt-4 grid gap-3 text-sm text-white/60">
-              <li><Link href="/#process" className="hover:text-white">How we work</Link></li>
-              <li><Link href="/#contact" className="hover:text-white">Project review</Link></li>
-              <li><a href="https://tolanicorp.us" target="_blank" rel="noopener noreferrer" className="hover:text-white">Tolani Corp</a></li>
-              <li><Link href="/operations" className="hover:text-white">Team portal</Link></li>
+            <h3 className="text-sm font-semibold leading-6 text-white">Ecosystem</h3>
+            <ul role="list" className="mt-6 space-y-4">
+              <li><a href="https://tolanicorp.us" target="_blank" rel="noopener noreferrer" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Tolani Corp HQ</a></li>
+              <li><a href="https://tolanilabs.io" target="_blank" rel="noopener noreferrer" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Tolani Labs</a></li>
+              <li><Link href="/operations" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Operations Platform</Link></li>
+              <li><Link href="/capture" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Capture Desk</Link></li>
+              <li><Link href="/contact" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Contact TCCG</Link></li>
             </ul>
           </div>
 
           <div>
-            <h2 className="text-sm font-black text-white">Legal</h2>
-            <ul className="mt-4 grid gap-3 text-sm text-white/60">
-              <li><Link href="/privacy" className="hover:text-white">Privacy</Link></li>
-              <li><Link href="/terms" className="hover:text-white">Terms</Link></li>
-              <li><Link href="/sitemap.xml" className="hover:text-white">Sitemap</Link></li>
-            </ul>
+            <p>info@tccg.work</p>
+            <p className="mt-1">Capabilities and qualifications are subject to project-specific verification.</p>
           </div>
         </div>
 
@@ -147,7 +184,7 @@ export function Shell({ children }: { children: ReactNode }) {
         Skip to content
       </a>
       <Header />
-      <div id="main-content">{children}</div>
+      <div className="isolate pt-16">{children}</div>
       <Footer />
     </div>
   );
