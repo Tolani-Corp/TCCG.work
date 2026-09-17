@@ -2,10 +2,12 @@
 
 **Building Beyond** — technology-forward construction, HVAC, BIM/VDC and building-performance delivery.
 
-[![Website](https://img.shields.io/badge/Website-tccg.work-blue)](https://tccg.work)
-[![Tolani Corp](https://img.shields.io/badge/Ecosystem-Tolani%20Corp-red)](https://tolanicorp.us)
+- Website: [tccg.work](https://tccg.work)
+- Parent company: [Tolani Corp](https://tolanicorp.us)
+- Project line: [(754) 350-9675](tel:+17543509675)
+- Email: [info@tccg.work](mailto:info@tccg.work)
 
-## Overview
+## Product surfaces
 
 TCCG is developing an evidence-first digital construction operating model that connects preconstruction, estimating, BIM/VDC, procurement, field execution, quality, safety, owner reporting, closeout and workforce development.
 
@@ -82,7 +84,7 @@ See:
 - **Package manager:** pnpm 9.15
 - **Runtime:** Node.js 20+
 
-## Development
+Required for protected workspaces:
 
 ```bash
 pnpm install
@@ -99,6 +101,6 @@ Pull requests targeting `master` run `.github/workflows/digital-launch-ci.yml`, 
 - **Website:** https://tccg.work
 - **Email:** info@tccg.work
 
----
+Website content does not constitute a construction proposal, work authorization, engineering opinion, safety determination, license representation, price guarantee, permit guarantee, or schedule commitment. Service availability is confirmed only after scope, jurisdiction, contracting structure, capacity, and commercial review.
 
 © 2026 TC Construction Group. A Tolani Corp company.

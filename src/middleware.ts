@@ -1,5 +1,5 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "";
 const secretKey = process.env.CLERK_SECRET_KEY ?? "";
@@ -13,17 +13,37 @@ const hasValidClerkKey =
   /^sk_(test|live)_/.test(secretKey) &&
   !hasPlaceholderKey;
 
+const isProtectedRoute = createRouteMatcher([
+  "/operations(.*)",
+  "/capture(.*)",
+  "/api/operations(.*)",
+  "/api/capture(.*)",
+]);
+
+function unavailableMiddleware(request: NextRequest) {
+  if (!isProtectedRoute(request)) return NextResponse.next();
+
+  if (request.nextUrl.pathname.startsWith("/api/")) {
+    return NextResponse.json(
+      { ok: false, error: "The protected operations service is not configured." },
+      { status: 503 },
+    );
+  }
+
+  const target = new URL("/", request.url);
+  target.searchParams.set("portal", "unavailable");
+  return NextResponse.redirect(target, 307);
+}
+
 export default hasValidClerkKey
-  ? clerkMiddleware()
-  : function middleware() {
-      return NextResponse.next();
-    };
+  ? clerkMiddleware(async (auth, request) => {
+      if (isProtectedRoute(request)) await auth.protect();
+    })
+  : unavailableMiddleware;
 
 export const config = {
-    matcher: [
-        // Skip Next.js internals and all static files, unless found in search params
-        '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|xml|csv|docx?|xlsx?|zip|webmanifest)).*)',
-        // Always run for API routes
-        '/(api|trpc)(.*)',
-    ],
+  matcher: [
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|xml|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
+  ],
 };
