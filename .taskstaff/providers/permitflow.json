@@ -1,0 +1,81 @@
+{
+  "schema": "taskstaff.provider_candidate.v1",
+  "providerId": "permitflow",
+  "displayName": "PermitFlow",
+  "domain": "construction_permitting",
+  "status": "evaluation",
+  "evidenceLevel": "repository_reviewed",
+  "reviewedAt": "2026-07-31T14:48:00.000Z",
+  "integrationDecision": "integrate_not_duplicate",
+  "taskstaffAuthorityFor": [
+    "project and mission staffing",
+    "contractor and professional qualification checks",
+    "permit matrix approval",
+    "budget and fee authorization",
+    "legal and signatory authority",
+    "construction QA/QC and work-package readiness",
+    "internal readiness, risk, and acceptance decisions"
+  ],
+  "providerCandidateFor": [
+    "nationwide AHJ research",
+    "permit and license requirement retrieval",
+    "application preparation and form filling",
+    "authorized AHJ submission",
+    "AHJ coordination and correction follow-up",
+    "inspection scheduling coordination",
+    "issuance and closeout tracking"
+  ],
+  "nonAuthoritativeFor": [
+    "licensed-professional judgment or seals",
+    "contractor, owner, or applicant attestations",
+    "government permit approval or issuance",
+    "financial approval or payment release",
+    "legal-risk acceptance",
+    "TaskStaff readiness or final project acceptance"
+  ],
+  "connection": {
+    "mode": "normalized_event_adapter",
+    "endpointConfigured": false,
+    "credentialsConfigured": false,
+    "commercialAgreementVerified": false,
+    "apiDocumentationVerified": false,
+    "sandboxVerified": false,
+    "realDataAllowed": false
+  },
+  "requiredDueDiligence": [
+    "pricing and project-volume model",
+    "covered project types and jurisdictions",
+    "API, webhook, embedded, and export documentation",
+    "service levels and human support scope",
+    "security reports, subprocessors, and incident terms",
+    "data ownership, export, retention, and deletion rights",
+    "submission-error and missed-deadline responsibility",
+    "termination and manual fallback procedure"
+  ],
+  "pilot": {
+    "projectType": "commercial_hvac_replacement_and_controls_upgrade",
+    "syntheticDataOnly": true,
+    "requiredScenarios": [
+      "project and provider ID mapping",
+      "versioned requirement import",
+      "submission receipt import without automatic TaskStaff approval",
+      "AHJ comment routing to responsible discipline",
+      "inspection scheduling blocked until work-package readiness",
+      "issuance and certificate evidence reconciliation",
+      "duplicate and out-of-order event handling",
+      "provider outage and manual fallback"
+    ]
+  },
+  "marketing": {
+    "caseStudyEligible": false,
+    "permittedClaim": "PermitFlow has been evaluated as an optional permit-execution provider for the TaskStaff and TCCG architecture.",
+    "prohibitedClaims": [
+      "live PermitFlow partnership or integration",
+      "nationwide permitting capability through TaskStaff",
+      "faster permit approval",
+      "reduced permitting workload",
+      "improved inspection results",
+      "production use or outcome proof"
+    ]
+  }
+}

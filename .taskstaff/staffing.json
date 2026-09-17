@@ -1,0 +1,105 @@
+{
+  "schema": "tccg.taskstaff-construction-staffing.v1",
+  "repository": "Tolani-Corp/TCCG.work",
+  "productName": "TC Construction Group",
+  "status": "governed_pilot_contract",
+  "productionEnabled": false,
+  "reviewedAgainst": {
+    "tccgRef": "master@12112d893110db2f2fe45cb9d25050f1c8561135",
+    "taskStaffPackage": "tapf.construction-staff.v1",
+    "taskStaffTargetVersion": "1.1.0-alpha.1",
+    "reviewedAt": "2026-08-20T21:58:00.000Z"
+  },
+  "authority": {
+    "taskStaff": [
+      "project workforce demand",
+      "human/agent/service/hybrid-team assignment recommendations",
+      "competency and credential readiness assertions",
+      "availability and backup coverage",
+      "staffing quality gates and workforce evidence",
+      "training-gap routing"
+    ],
+    "tccg": [
+      "construction and HVAC project records",
+      "field execution and direction",
+      "project safety and quality authority",
+      "contractual and financial decisions",
+      "commissioning and owner acceptance"
+    ],
+    "prohibitedSubstitution": "AI agents cannot satisfy required human PM, superintendent, estimator/scheduler-of-record, competent-person, QC/inspection, design, financial, commissioning, or owner-acceptance authority roles."
+  },
+  "actorTypes": ["HUMAN", "AGENT", "SERVICE", "HYBRID_TEAM"],
+  "sharedStaffingCapabilities": [
+    "taskstaff.assignment-recommend",
+    "taskstaff.credential-readiness",
+    "taskstaff.availability-match",
+    "taskstaff.backup-coverage",
+    "taskstaff.training-gap-route"
+  ],
+  "agentAliases": {
+    "AG-PRECON": "preconstruction",
+    "AG-EST": "estimating",
+    "AG-DWG": "drawing",
+    "AG-RFI": "rfi",
+    "AG-SUBMIT": "submittal",
+    "AG-SCHED": "schedule",
+    "AG-PROC": "procurement",
+    "AG-SAFE": "safety",
+    "AG-QC": "qc",
+    "AG-LOG": "daily-log",
+    "AG-CHANGE": "change",
+    "AG-COST": "cost",
+    "AG-CLOSE": "closeout",
+    "AG-LESSON": "lessons"
+  },
+  "workflow": [
+    "demand_capture",
+    "role_authority_definition",
+    "competency_credential_gate",
+    "availability_capacity_match",
+    "human_ai_team_recommendation",
+    "human_approval",
+    "least_privilege_onboarding",
+    "mobilization_backup_verification",
+    "execution_coverage_monitoring",
+    "quality_hse_authority_gates",
+    "performance_work_evidence",
+    "demobilize_revoke_learn"
+  ],
+  "failClosedGates": [
+    "undefined human authority",
+    "missing required competency evidence",
+    "missing/expired/suspended/unverified credential",
+    "actor unavailable for required work window",
+    "required high-risk backup missing",
+    "project/CDE access not approved",
+    "AI substitution for human authority",
+    "staffing/readiness decision lacks evidence"
+  ],
+  "adapterTargets": [
+    { "id": "autodesk.forma-data", "status": "adapter_required" },
+    { "id": "autodesk.issues", "status": "adapter_required" },
+    { "id": "autodesk.submittals", "status": "adapter_required" },
+    { "id": "autodesk.model-coordination", "status": "adapter_required" },
+    { "id": "openbim.ifc-4.3", "status": "adapter_required" },
+    { "id": "oracle.primavera-cloud", "status": "adapter_required" },
+    { "id": "erp.cost-commitments", "status": "adapter_required" },
+    { "id": "supplier.quote-feed", "status": "adapter_required" },
+    { "id": "weather.field-feed", "status": "adapter_required" }
+  ],
+  "kpis": [
+    "qualified role coverage",
+    "credential currency",
+    "critical-role backup coverage",
+    "time to qualified assignment",
+    "agent capability coverage",
+    "human approval cycle time",
+    "staffing-related schedule exposure",
+    "quality/HSE staffing exceptions",
+    "work evidence completeness",
+    "human override rate",
+    "training gap closure rate",
+    "mission outcome quality"
+  ],
+  "releaseGate": "Keep production disabled until tenant/project isolation, identity/scopes, credential provenance/revocation, adapter sandbox acceptance, idempotency/replay, audit reconstruction, QC/HSE negative tests, hybrid-team evaluation, and explicit production authorization are evidenced."
+}

@@ -1,9 +1,8 @@
-'use client'
+"use client";
 
-import { type ReactNode, useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { versionedAsset } from '@/lib/brandAssets'
+import Image from "next/image";
+import Link from "next/link";
+import { ReactNode, useEffect, useState } from "react";
 
 const navLinks = [
   { href: '/services', label: 'Services' },
@@ -16,7 +15,7 @@ const navLinks = [
 ]
 
 function Header() {
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-[var(--border-subtle)] bg-[rgba(248,246,241,0.92)] backdrop-blur-md">
@@ -99,18 +98,21 @@ function Header() {
             >
               Request project review
             </Link>
-          </div>
+            <Link href="/operations" onClick={() => setMobileOpen(false)} className="rounded-xl px-4 py-3 text-center text-sm font-bold text-white/60 hover:text-white">
+              Team and client portal
+            </Link>
+          </nav>
         </div>
-      )}
+      ) : null}
     </header>
-  )
+  );
 }
 
 function Footer() {
   return (
-    <footer className="mt-16 border-t border-[var(--border-subtle)] bg-[var(--bg-strong)] py-16 text-[var(--text-inverse)] sm:py-20">
-      <div className="mx-auto max-w-[90rem] px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr]">
+    <footer className="border-t border-white/10 bg-slate-950 px-4 py-14 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-10 lg:grid-cols-[1.25fr_0.75fr_0.75fr_0.75fr]">
           <div>
             <div className="inline-flex rounded-lg bg-white p-2">
               <Image
@@ -157,26 +159,33 @@ function Footer() {
               <li><Link href="/contact" className="text-sm leading-6 text-white/65 transition-colors hover:text-white">Contact TCCG</Link></li>
             </ul>
           </div>
-        </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/55 md:flex-row md:items-center md:justify-between">
           <div>
             <p>info@tccg.work</p>
             <p className="mt-1">Capabilities and qualifications are subject to project-specific verification.</p>
           </div>
-          <p>&copy; 2026 TC Construction Group. A Tolani Corp company.</p>
+        </div>
+
+        <div className="mt-12 grid gap-4 border-t border-white/10 pt-6 text-xs leading-5 text-white/45 md:grid-cols-[1fr_auto] md:items-end">
+          <p>
+            Service availability, contracting authority, trade scope, geographic coverage, pricing, schedule, and permit responsibility are confirmed only through an executed agreement. Website content is general information and is not a construction proposal, engineering opinion, or guarantee.
+          </p>
+          <p className="md:text-right">© 2026 TC Construction Group. A Tolani Corp company.</p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
 
 export function Shell({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-[var(--bg-page)] text-[var(--text-primary)] antialiased" style={{ fontFamily: 'var(--font-sans)' }}>
+    <div className="min-h-screen bg-white text-slate-950 antialiased">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-3 focus:font-bold focus:text-slate-950 focus:shadow-xl">
+        Skip to content
+      </a>
       <Header />
       <div className="isolate pt-16">{children}</div>
       <Footer />
     </div>
-  )
+  );
 }

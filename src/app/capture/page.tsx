@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 
 import { CaptureManagementWorkspace } from "@/components/CaptureManagementWorkspace";
+import { requireTccgPortalAccess } from "@/lib/portalAccess";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Capture Management",

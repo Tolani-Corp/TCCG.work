@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - agent/digital-launch-phase
+      - master
 
 permissions:
   contents: read
@@ -38,8 +39,11 @@ jobs:
       - name: Validate digital launch source files
         run: |
           test -f src/lib/digitalLaunch.ts
+          test -f src/lib/publicProductContext.ts
+          test -f src/lib/publicConversionAnalytics.ts
           test -f src/components/DigitalLaunchCommandCenter.tsx
           test -f src/components/PublicMarketingSite.tsx
+          test -f src/components/PublicConversionClient.tsx
           test -f src/components/OwnerDashboardReadiness.tsx
           test -f src/app/digital-launch/page.tsx
           test -f src/app/owner-dashboard/page.tsx
@@ -50,6 +54,8 @@ jobs:
           test -f src/app/careers/page.tsx
           test -f src/app/about/page.tsx
           test -f src/app/contact/page.tsx
+          test -f config/public-product-context.json
+          test -f scripts/validate-public-conversion.mjs
           test -f docs/digital-launch/TCCG_DIGITAL_LAUNCH_PLAYBOOK.md
           test -f docs/digital-launch/TCCG_CDE_IMPLEMENTATION_PLAN.md
           test -f docs/growth/TCCG_CAPABILITIES_STATEMENT.md
@@ -62,6 +68,13 @@ jobs:
       - name: Validate JSON manifests
         run: |
           node -e "JSON.parse(require('fs').readFileSync('agents/construction-staff/manifest.json','utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('config/public-product-context.json','utf8'))"
+
+      - name: Validate governed public conversion
+        run: pnpm marketing:check
+
+      - name: Typecheck
+        run: pnpm test
 
       - name: Smoke test project template generator
         run: |

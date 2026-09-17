@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 
 import { ConstructionOpsPlatform } from "@/components/ConstructionOpsPlatform";
+import { requireTccgPortalAccess } from "@/lib/portalAccess";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Operations Platform",
