@@ -1,0 +1,217 @@
+[
+  {
+    "name": "unavailable research source cannot support a lesson",
+    "context": { "tenantId": "tolani", "projectId": "P-001" },
+    "input": {
+      "id": "LESSON-001",
+      "title": "Unavailable source",
+      "channel": "research",
+      "tenantId": "tolani",
+      "projectId": "P-001",
+      "risk": "low",
+      "impactDomains": ["AI_AGENTS"],
+      "requestedDispositions": ["MONITOR"],
+      "evidence": [
+        {
+          "id": "SRC-YT-001",
+          "tenantId": "tolani",
+          "projectId": "P-001",
+          "status": "unavailable",
+          "supportsClaim": true,
+          "sourceType": "external-media"
+        }
+      ],
+      "z4Approval": { "status": "approved", "lessonId": "Z4-LESSON-001" }
+    },
+    "expectedStatus": "evidence-gap"
+  },
+  {
+    "name": "unresolved conflicting lesson abstains",
+    "context": { "tenantId": "tolani", "projectId": "P-001" },
+    "input": {
+      "id": "LESSON-002",
+      "title": "Conflicting manufacturer guidance",
+      "channel": "research",
+      "tenantId": "tolani",
+      "projectId": "P-001",
+      "risk": "medium",
+      "impactDomains": ["PROCUREMENT"],
+      "requestedDispositions": ["MONITOR"],
+      "evidence": [
+        {
+          "id": "EVID-002A",
+          "tenantId": "tolani",
+          "projectId": "P-001",
+          "status": "approved",
+          "supportsClaim": true,
+          "sourceType": "manufacturer"
+        }
+      ],
+      "conflictStatus": "unresolved",
+      "z4Approval": { "status": "approved", "lessonId": "Z4-LESSON-002" }
+    },
+    "expectedStatus": "abstain"
+  },
+  {
+    "name": "superseded lesson abstains",
+    "context": { "tenantId": "tolani", "projectId": "P-001" },
+    "input": {
+      "id": "LESSON-003",
+      "title": "Superseded standard",
+      "channel": "research",
+      "tenantId": "tolani",
+      "projectId": "P-001",
+      "risk": "medium",
+      "impactDomains": ["HSE"],
+      "requestedDispositions": ["DOCUMENT_UPDATE"],
+      "evidence": [
+        {
+          "id": "EVID-003",
+          "tenantId": "tolani",
+          "projectId": "P-001",
+          "status": "approved",
+          "supportsClaim": true,
+          "sourceType": "standard"
+        }
+      ],
+      "superseded": true,
+      "z4Approval": { "status": "approved", "lessonId": "Z4-LESSON-003" },
+      "programDesign": { "status": "approved", "bundleId": "PD-003" },
+      "comprehension": { "status": "passed", "evidenceId": "COMP-003", "score": 0.9 }
+    },
+    "expectedStatus": "abstain"
+  },
+  {
+    "name": "cross-tenant evidence is denied",
+    "context": { "tenantId": "tolani", "projectId": "P-001" },
+    "input": {
+      "id": "LESSON-004",
+      "title": "Cross tenant evidence",
+      "channel": "operational",
+      "tenantId": "tolani",
+      "projectId": "P-001",
+      "risk": "low",
+      "impactDomains": ["QC"],
+      "requestedDispositions": ["MONITOR"],
+      "evidence": [
+        {
+          "id": "EVID-004",
+          "tenantId": "other-tenant",
+          "projectId": "P-001",
+          "status": "verified",
+          "supportsClaim": true,
+          "sourceType": "project"
+        }
+      ]
+    },
+    "expectedStatus": "denied"
+  },
+  {
+    "name": "normal operational lesson remains a human-review candidate",
+    "context": { "tenantId": "tolani", "projectId": "P-001" },
+    "input": {
+      "id": "LESSON-005",
+      "title": "Closeout checklist improvement",
+      "channel": "operational",
+      "tenantId": "tolani",
+      "projectId": "P-001",
+      "risk": "low",
+      "impactDomains": ["PROJECT_TEMPLATES"],
+      "requestedDispositions": ["EVALUATION_UPDATE"],
+      "evidence": [
+        {
+          "id": "EVID-005",
+          "tenantId": "tolani",
+          "projectId": "P-001",
+          "status": "verified",
+          "supportsClaim": true,
+          "sourceType": "project"
+        }
+      ]
+    },
+    "expectedStatus": "eligible-for-human-review"
+  },
+  {
+    "name": "high risk safety software lesson requires design and comprehension",
+    "context": { "tenantId": "tolani", "projectId": "P-001" },
+    "input": {
+      "id": "LESSON-006",
+      "title": "Safety trend dashboard logic",
+      "channel": "research",
+      "tenantId": "tolani",
+      "projectId": "P-001",
+      "risk": "high",
+      "impactDomains": ["HSE", "AI_AGENTS"],
+      "requestedDispositions": ["SOFTWARE_CHANGE", "EVALUATION_UPDATE"],
+      "evidence": [
+        {
+          "id": "EVID-006",
+          "tenantId": "tolani",
+          "projectId": "P-001",
+          "status": "approved",
+          "supportsClaim": true,
+          "sourceType": "z4"
+        }
+      ],
+      "z4Approval": { "status": "approved", "lessonId": "Z4-LESSON-006" },
+      "programDesign": { "status": "approved", "bundleId": "PD-006" },
+      "comprehension": { "status": "passed", "evidenceId": "COMP-006", "score": 0.94 },
+      "safetyRelated": true
+    },
+    "expectedStatus": "eligible-for-human-review",
+    "expectedApprovals": ["authorized safety professional/site leadership", "named release authority"]
+  },
+  {
+    "name": "substantial change without program design is blocked",
+    "context": { "tenantId": "tolani", "projectId": "P-001" },
+    "input": {
+      "id": "LESSON-007",
+      "title": "Change workflow automation",
+      "channel": "operational",
+      "tenantId": "tolani",
+      "projectId": "P-001",
+      "risk": "medium",
+      "impactDomains": ["AI_AGENTS"],
+      "requestedDispositions": ["PROCESS_UPDATE", "SOFTWARE_CHANGE"],
+      "evidence": [
+        {
+          "id": "EVID-007",
+          "tenantId": "tolani",
+          "projectId": "P-001",
+          "status": "verified",
+          "supportsClaim": true,
+          "sourceType": "project"
+        }
+      ],
+      "programDesign": { "status": "missing" }
+    },
+    "expectedStatus": "blocked-return-to-design"
+  },
+  {
+    "name": "raw external content cannot directly authorize project guidance",
+    "context": { "tenantId": "tolani", "projectId": "P-001" },
+    "input": {
+      "id": "LESSON-008",
+      "title": "Raw video content",
+      "channel": "research",
+      "tenantId": "tolani",
+      "projectId": "P-001",
+      "risk": "low",
+      "impactDomains": ["PRECONSTRUCTION"],
+      "requestedDispositions": ["MONITOR"],
+      "evidence": [
+        {
+          "id": "EVID-008",
+          "tenantId": "tolani",
+          "projectId": "P-001",
+          "status": "approved",
+          "supportsClaim": true,
+          "sourceType": "external-media"
+        }
+      ],
+      "rawExternalContent": true,
+      "z4Approval": { "status": "approved", "lessonId": "Z4-LESSON-008" }
+    },
+    "expectedStatus": "denied"
+  }
+]
