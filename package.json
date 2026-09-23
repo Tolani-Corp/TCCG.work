@@ -12,11 +12,10 @@
     "marketing:check": "node scripts/validate-public-conversion.mjs",
     "test": "tsc --noEmit",
     "build": "next build",
-    "verify": "pnpm marketing:check && pnpm test && pnpm build",
+    "verify": "pnpm typecheck && pnpm build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "verify": "pnpm typecheck && pnpm build",
     "production:verify": "node scripts/verify-production.mjs",
     "audit:prod": "pnpm audit --prod --audit-level=moderate"
   },
@@ -42,5 +41,11 @@
     "node": ">=22.12.0",
     "pnpm": ">=11.15.1"
   },
-  "packageManager": "pnpm@11.15.1"
+  "packageManager": "pnpm@11.15.1",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@clerk/shared",
+      "sharp"
+    ]
+  }
 }
