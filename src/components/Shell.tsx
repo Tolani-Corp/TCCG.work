@@ -101,7 +101,7 @@ function Header() {
             <Link href="/operations" onClick={() => setMobileOpen(false)} className="rounded-xl px-4 py-3 text-center text-sm font-bold text-white/60 hover:text-white">
               Team and client portal
             </Link>
-          </nav>
+          </div>
         </div>
       ) : null}
     </header>
