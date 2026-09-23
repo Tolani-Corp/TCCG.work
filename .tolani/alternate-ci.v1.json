@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema": "tolani.repository-ci-execution-profile.v1",
+  "repository": "Tolani-Corp/TCCG.work",
+  "status": "configured-preview-only",
+  "productionEnabled": false,
+  "nodeVersion": "22",
+  "install": {
+    "command": "corepack enable && corepack prepare pnpm@9.15.0 --activate && pnpm install --frozen-lockfile"
+  },
+  "checks": [
+    {
+      "id": "sourceContract",
+      "command": "test -f src/lib/digitalLaunch.ts && test -f src/components/DigitalLaunchCommandCenter.tsx && test -f src/app/digital-launch/page.tsx && test -f agents/construction-staff/manifest.json && test -f db/schema.sql",
+      "classification": "VALIDATION"
+    },
+    {
+      "id": "jsonManifests",
+      "command": "node -e \"JSON.parse(require('fs').readFileSync('agents/construction-staff/manifest.json','utf8'));JSON.parse(require('fs').readFileSync('config/public-product-context.json','utf8'))\"",
+      "classification": "VALIDATION"
+    },
+    {
+      "id": "publicConversion",
+      "command": "pnpm marketing:check",
+      "classification": "VALIDATION"
+    },
+    {
+      "id": "typecheck",
+      "command": "pnpm test",
+      "classification": "VALIDATION"
+    },
+    {
+      "id": "projectTemplate",
+      "command": "pnpm tccg:project -- --project CI-001 --name 'Digital Launch CI' --template commercial-gc --output .tccg-projects/ci-001 && test -f .tccg-projects/ci-001/project.manifest.json",
+      "classification": "VALIDATION"
+    },
+    {
+      "id": "build",
+      "command": "pnpm build",
+      "classification": "VALIDATION"
+    }
+  ],
+  "cloudflareWorkersBuilds": {
+    "role": "primary-alternate-ci-execution",
+    "workerName": "tolani-ci-tccg",
+    "connectionState": "REQUIRES_ACCOUNT_SIDE_VERIFICATION",
+    "buildCommand": "node scripts/run-tolani-alternate-ci.mjs",
+    "deployCommand": "npx --yes wrangler@4.129.1 versions upload --config infra/cloudflare/enterprise-ci/wrangler.jsonc",
+    "nonProductionBranchesRequired": true,
+    "exactSourceShaRequired": true,
+    "productionActivationAuthorized": false
+  },
+  "githubActions": {
+    "role": "independent-ci-corroboration",
+    "workflow": ".github/workflows/tolani-ci-corroboration.yml",
+    "mergeAuthority": false
+  },
+  "z4": {
+    "role": "evidence-evaluation-plane",
+    "evaluatorAuthorityRepository": "Tolani-Corp/TolaniCorp-HQ",
+    "evaluationContract": "tolani.z4.enterprise-outcome-evaluation.v1",
+    "decisionIdRequired": true,
+    "outcomeReceiptIdRequired": true,
+    "policyMutationAuthorized": false,
+    "promotionAuthority": false
+  },
+  "workflowPolicy": {
+    "validationWorkflows": "ALTERNATE_EXECUTION_ELIGIBLE",
+    "consequentialWorkflows": "EVIDENCE_CONSUMER_ONLY",
+    "excludedConsequentialPatterns": [
+      "deploy",
+      "production",
+      "promotion",
+      "migration",
+      "dns",
+      "payment",
+      "secret",
+      "release",
+      "one-shot",
+      "traffic"
+    ]
+  },
+  "receipt": {
+    "schema": "tolani.ci-execution-receipt.v1",
+    "productionAuthority": false,
+    "mergeAuthority": false,
+    "humanDecisionRequired": true,
+    "githubActionsCorroborationRequired": true,
+    "z4EvaluationRequired": true
+  }
+}
