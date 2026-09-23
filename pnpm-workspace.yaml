@@ -1,6 +1,6 @@
 packages:
   - "."
 
-onlyBuiltDependencies:
-  - "@clerk/shared"
-  - "sharp"
+allowBuilds:
+  "@clerk/shared": true
+  sharp: true
