@@ -78,7 +78,7 @@ function Header() {
         </div>
       </div>
 
-      {mobileOpen && (
+      {mobileOpen ? (
         <div className="border-t border-[var(--border-subtle)] bg-[var(--bg-surface)] xl:hidden">
           <div className="grid gap-1 px-6 py-4 sm:grid-cols-2">
             {navLinks.map((link) => (
