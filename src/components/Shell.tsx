@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
 
+import { versionedAsset } from "@/lib/brandAssets";
+
 const navLinks = [
   { href: '/services', label: 'Services' },
   { href: '/projects', label: 'Portfolio' },
