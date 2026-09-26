@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
 
+import { versionedAsset } from "@/lib/brandAssets";
+
 const navLinks = [
   { href: '/services', label: 'Services' },
   { href: '/projects', label: 'Portfolio' },
@@ -101,9 +103,9 @@ function Header() {
             <Link href="/operations" onClick={() => setMobileOpen(false)} className="rounded-xl px-4 py-3 text-center text-sm font-bold text-white/60 hover:text-white">
               Team and client portal
             </Link>
-          </nav>
+          </div>
         </div>
-      ) : null}
+      )}
     </header>
   );
 }
