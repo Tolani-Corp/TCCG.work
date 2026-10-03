@@ -126,8 +126,10 @@ for (const token of [
   "config/public-product-context.json",
   "Request project review",
   "TCCG Growth / Preconstruction",
-  "project_review_email_prepared",
+  "project_review_received",
+  "POST /api/intake",
   "mailto:info@tccg.work",
+  "TCCG_INTAKE_WEBHOOK_URL",
 ]) {
   if (!commercialContext.includes(token)) fail(`commercial context documentation lost governed contract token: ${token}`);
 }
