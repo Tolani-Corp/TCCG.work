@@ -81,8 +81,10 @@
   },
   "operationalHandoff": {
     "owner": "TCCG Growth / Preconstruction",
-    "state": "project_review_email_prepared",
-    "system": "mailto:info@tccg.work"
+    "state": "project_review_received",
+    "system": "POST /api/intake",
+    "fallback": "mailto:info@tccg.work",
+    "durableAcceptanceRequires": "TCCG_INTAKE_WEBHOOK_URL"
   },
   "pricing": null,
   "serviceArea": null,
@@ -98,12 +100,14 @@
       "public_page_viewed",
       "tccg_project_review_started",
       "tccg_qualification_review_started",
-      "tccg_intake_email_prepared"
+      "tccg_intake_email_prepared",
+      "tccg_intake_submitted",
+      "tccg_intake_delivery_failed"
     ],
     "funnel": [
       "visitor",
       "project_review_started",
-      "project_review_email_prepared",
+      "project_review_received",
       "opportunity_specific_qualification_review"
     ]
   },

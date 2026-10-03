@@ -4,7 +4,9 @@ export type TccgConversionEvent =
   | "public_page_viewed"
   | "tccg_project_review_started"
   | "tccg_qualification_review_started"
-  | "tccg_intake_email_prepared";
+  | "tccg_intake_email_prepared"
+  | "tccg_intake_submitted"
+  | "tccg_intake_delivery_failed";
 
 export type TccgPublicCta = {
   label: string;
@@ -35,7 +37,9 @@ export type TccgPublicProductContext = {
   operationalHandoff: {
     owner: string;
     state: string;
-    system: "mailto:info@tccg.work";
+    system: "POST /api/intake";
+    fallback: "mailto:info@tccg.work";
+    durableAcceptanceRequires: "TCCG_INTAKE_WEBHOOK_URL";
   };
   pricing: null;
   serviceArea: null;

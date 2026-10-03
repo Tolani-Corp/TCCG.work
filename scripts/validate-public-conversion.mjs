@@ -28,7 +28,9 @@ if (context.commercialAuthority !== "local_with_portfolio_governance") fail("com
 if (context.inheritsProtocolFrom !== "Tolani-Corp/TolaniCorp-HQ:tolani.portfolio.commercial_context.v1") fail("central Commercial Context Plane inheritance drifted");
 if (context.primaryCTA?.route !== "/contact") fail("primary CTA must route to /contact");
 if (context.secondaryCTA?.route !== "/capabilities") fail("secondary CTA must route to /capabilities");
-if (context.operationalHandoff?.system !== "mailto:info@tccg.work") fail("handoff must remain the truthful mailto path until a governed server-side intake exists");
+if (context.operationalHandoff?.system !== "POST /api/intake") fail("primary handoff must use the governed server-side intake API");
+if (context.operationalHandoff?.fallback !== "mailto:info@tccg.work") fail("email fallback must remain available");
+if (context.operationalHandoff?.durableAcceptanceRequires !== "TCCG_INTAKE_WEBHOOK_URL") fail("durable intake dependency must be explicit");
 if (context.pricing !== null || context.serviceArea !== null) fail("pricing/service area must remain unset until current evidence authorizes them");
 
 for (const proofPath of context.proof ?? []) {
@@ -41,6 +43,8 @@ const requiredEvents = [
   "tccg_project_review_started",
   "tccg_qualification_review_started",
   "tccg_intake_email_prepared",
+  "tccg_intake_submitted",
+  "tccg_intake_delivery_failed",
 ];
 for (const event of requiredEvents) {
   if (!context.analytics?.events?.includes(event)) fail(`context analytics is missing ${event}`);
@@ -98,10 +102,15 @@ for (const piiField of ["name", "email", "scope", "message", "phone"]) {
   if (analytics.includes(`${piiField}:`)) fail(`analytics emitter must not define PII field ${piiField}`);
 }
 
-if (!contact.includes('emitTccgConversionEvent("tccg_intake_email_prepared"')) fail("contact flow does not emit truthful email-prepared state");
-if (!contact.includes("mailto:info@tccg.work")) fail("contact flow lost the declared operational handoff");
-if (!contact.includes("does not create a server-side lead record")) fail("contact flow must disclose the current mailto-only handoff limitation");
-if (contact.includes("lead_created") || contact.includes("crm")) fail("contact flow may not claim a CRM/server-side lead state");
+if (!contact.includes('fetch("/api/intake"')) fail("contact flow must submit to governed intake API");
+if (!contact.includes('emitTccgConversionEvent("tccg_intake_submitted"')) fail("contact flow must emit durable submission only after accepted API delivery");
+if (!contact.includes('emitTccgConversionEvent("tccg_intake_delivery_failed"')) fail("contact flow must emit delivery failure without claiming conversion");
+if (!contact.includes('emitTccgConversionEvent("tccg_intake_email_prepared"')) fail("contact flow must preserve truthful email fallback event");
+if (!contact.includes("mailto:info@tccg.work")) fail("contact flow lost the declared email fallback");
+if (!contact.includes("privacyAccepted")) fail("contact flow must capture privacy acceptance");
+if (!contact.includes("smsConsent")) fail("contact flow must capture optional SMS consent separately");
+if (!contact.includes("payload?.ok !== true || !payload.reference")) fail("contact flow must require durable acceptance reference");
+if (contact.includes("lead_created")) fail("contact flow may not invent a CRM lead state");
 
 for (const boundary of [
   "Contractor-license authority and geography",
@@ -117,8 +126,10 @@ for (const token of [
   "config/public-product-context.json",
   "Request project review",
   "TCCG Growth / Preconstruction",
-  "project_review_email_prepared",
+  "project_review_received",
+  "POST /api/intake",
   "mailto:info@tccg.work",
+  "TCCG_INTAKE_WEBHOOK_URL",
 ]) {
   if (!commercialContext.includes(token)) fail(`commercial context documentation lost governed contract token: ${token}`);
 }
@@ -135,10 +146,13 @@ console.log(JSON.stringify({
   primaryRoute: context.primaryCTA.route,
   secondaryRoute: context.secondaryCTA.route,
   handoffSystem: context.operationalHandoff.system,
+  fallbackSystem: context.operationalHandoff.fallback,
+  durableAcceptanceRequires: context.operationalHandoff.durableAcceptanceRequires,
   approvedEvents: requiredEvents,
   pricingGate: "unset",
   serviceAreaGate: "opportunity_specific",
   externalQualificationGate: "evidence_required",
+  paidAcquisitionHandoffGate: "server_side_acceptance_required",
   internalReadinessMarketingGate: "pass",
   piiAnalyticsGate: "pass"
 }, null, 2));
