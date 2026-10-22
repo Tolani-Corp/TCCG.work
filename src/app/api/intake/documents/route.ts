@@ -1,4 +1,4 @@
-import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, randomBytes } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -120,16 +120,18 @@ export async function POST(request: NextRequest) {
     submittedAt: new Date().toISOString(), source: "tccg.work/contact",
     intake, documents: manifest, reviewOnly: true, requestedAgents: ["AG-PRECON", "AG-EST", "AG-SCHED", "AG-PROC"] };
   const outgoing = new FormData();
-  outgoing.append("manifest", JSON.stringify(payload));
+  const manifestJson = JSON.stringify(payload);
+  outgoing.append("manifest", manifestJson);
   for (const item of files) outgoing.append("documents", item.file, item.name);
   const timestamp = Math.floor(Date.now() / 1000).toString();
-  const signature = createHmac("sha256", secret).update(timestamp + "." + reference).digest("hex");
+  const manifestSha = createHash("sha256").update(manifestJson).digest("hex");
+  const signature = createHmac("sha256", secret).update(timestamp + "." + reference + "." + manifestSha).digest("hex");
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 25_000);
   try {
     const upstream = await fetch(url, {
       method: "POST",
-      headers: { "x-tccg-timestamp": timestamp, "x-tccg-reference": reference, "x-tccg-signature": signature },
+      headers: { "x-tccg-timestamp": timestamp, "x-tccg-reference": reference, "x-tccg-manifest-sha256": manifestSha, "x-tccg-signature": signature },
       body: outgoing, signal: controller.signal, cache: "no-store",
     });
     const receipt = await upstream.json().catch(() => null) as null | {
