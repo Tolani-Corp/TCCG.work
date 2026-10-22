@@ -5,8 +5,8 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_FILES = 12;
-const MAX_FILE_BYTES = 8 * 1024 * 1024;
-const MAX_TOTAL_BYTES = 24 * 1024 * 1024;
+const MAX_FILE_BYTES = 4 * 1024 * 1024;
+const MAX_TOTAL_BYTES = 4 * 1024 * 1024;
 const TYPES: Record<string, { kind: string; signature: "pdf" | "zip" | "text" | "png" | "jpeg" }> = {
   pdf: { kind: "document", signature: "pdf" },
   docx: { kind: "document", signature: "zip" },
@@ -45,7 +45,7 @@ async function validateUploads(files: File[]): Promise<Uploaded[]> {
   if (!files.length || files.length > MAX_FILES) throw new Error("Attach between 1 and 12 files.");
   if (files.some((f) => f.size > MAX_FILE_BYTES || f.size === 0) ||
       files.reduce((n, f) => n + f.size, 0) > MAX_TOTAL_BYTES)
-    throw new Error("Files must be nonempty, at most 8 MB each and 24 MB per submission.");
+    throw new Error("Files must be nonempty, at most 4 MiB each and 4 MiB total in this hosting-compatible V1.");
   const uploaded: Uploaded[] = [];
   for (const file of files) {
     const name = safeName(file.name);
