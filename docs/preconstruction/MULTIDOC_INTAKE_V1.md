@@ -15,7 +15,7 @@
 ## Acceptance
 
 1. Require project scope and contact details, consent, and confirmation that submitter is authorized to share non-restricted information. Never use public intake for CUI, classified, export-controlled, medical, financial-card or other highly sensitive information.
-2. Maximum 12 files, 8 MiB each, 24 MiB combined. Allowed PDF, DOCX, XLSX, PPTX, ZIP, TXT, CSV, PNG, JPG/JPEG. Check extension and magic signature; ZIP / Office files require post-upload safe archive analysis.
+2. Maximum 12 files, 4 MiB each, 4 MiB combined. Allowed PDF, DOCX, XLSX, PPTX, ZIP, TXT, CSV, PNG, JPG/JPEG. Check extension and magic signature; ZIP / Office files require post-upload safe archive analysis.
 3. The Next.js server computes a SHA-256 digest for each file, signs the package manifest and sends it to the approved HTTPS Worker endpoint. The Worker independently verifies the HMAC, timestamps, manifest hash, file names, counts, lengths and SHA-256 digests.
 4. The Worker writes original bytes to *private* R2 in quarantine and commits a D1 ledger, document rows, AG-PRECON hold and outbox event. Only a full matching receipt is considered successful. On uncertainty or partial failure, return an error, never a success claim.
 5. No user document is indexed, parsed by agents, published, publicly exposed or shared to third-party model providers before malware screening, archive inspection, rights and sensitivity checks, retention policy verification, and human approval.
