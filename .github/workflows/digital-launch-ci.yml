@@ -73,6 +73,9 @@ jobs:
       - name: Validate governed public conversion
         run: pnpm marketing:check
 
+      - name: Validate multi-document intake contract
+        run: node --test scripts/test-multidoc-worker.mjs
+
       - name: Typecheck
         run: pnpm test
 
