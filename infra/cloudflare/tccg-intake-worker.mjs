@@ -4,7 +4,7 @@
 
 const te = new TextEncoder();
 const MAX_FILES = 12;
-const MAX_TOTAL = 24 * 1024 * 1024;
+const MAX_TOTAL = 4 * 1024 * 1024;
 const ALLOWED = new Set(["pdf", "docx", "xlsx", "pptx", "zip", "csv", "txt", "png", "jpg", "jpeg"]);
 
 function error(message, status = 400) {
@@ -68,7 +68,7 @@ async function intake(request, env) {
   let sum = 0;
   for (let i = 0; i < rawFiles.length; i++) {
     const f = rawFiles[i], m = payload.documents[i];
-    if (!restrictedName(m?.name) || f.name !== m.name || f.size !== m.size || f.size === 0 || f.size > 8 * 1024 * 1024)
+    if (!restrictedName(m?.name) || f.name !== m.name || f.size !== m.size || f.size === 0 || f.size > 4 * 1024 * 1024)
       return error("File metadata mismatch.");
     const ext = m.name.split(".").at(-1).toLowerCase();
     if (!ALLOWED.has(ext)) return error("File type not accepted.");
