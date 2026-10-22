@@ -195,17 +195,17 @@ export function ContactIntake() {
         <legend className="px-2 text-sm font-bold text-slate-900">Supporting intake documents (optional)</legend>
         <p className="mb-3 text-xs leading-5 text-slate-600">
           Upload up to 12 PDF, Word, Excel, PowerPoint, ZIP, CSV, text or image files,
-          maximum 8 MB each / 24 MB total. ZIP archives are quarantined and not automatically unpacked.
+          maximum 4 MiB per file and 4 MiB total. ZIP archives are quarantined and not automatically unpacked.
           Files remain unapproved until security screening and preconstruction review.
         </p>
         <input aria-label="Select project files" type="file" multiple
           accept=".pdf,.docx,.xlsx,.pptx,.zip,.csv,.txt,.png,.jpg,.jpeg"
           onChange={(event) => {
             const next = Array.from(event.target.files || []);
-            if (next.length > 12 || next.some((file) => file.size > 8 * 1024 * 1024 || file.size === 0) ||
-                next.reduce((sum, file) => sum + file.size, 0) > 24 * 1024 * 1024) {
+            if (next.length > 12 || next.some((file) => file.size > 4 * 1024 * 1024 || file.size === 0) ||
+                next.reduce((sum, file) => sum + file.size, 0) > 4 * 1024 * 1024) {
               setSubmitState("error");
-              setStatusMessage("Select at most 12 files, 8 MB each and 24 MB total.");
+              setStatusMessage("Select at most 12 files, 4 MiB per file and 4 MiB total.");
               setDocuments([]);
               event.target.value = "";
               return;
