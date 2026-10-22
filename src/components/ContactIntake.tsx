@@ -19,6 +19,8 @@ export function ContactIntake() {
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [smsConsent, setSmsConsent] = useState(false);
   const [website, setWebsite] = useState("");
+  const [documents, setDocuments] = useState<File[]>([]);
+  const [publicMaterialConfirmed, setPublicMaterialConfirmed] = useState(false);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [reference, setReference] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
@@ -59,27 +61,31 @@ export function ContactIntake() {
 
     setSubmitState("submitting");
     setReference("");
-    setStatusMessage("Submitting project review request…");
+    setStatusMessage(documents.length ? "Securely transferring documents for intake quarantine…" : "Submitting project review request…");
+    if (documents.length && !publicMaterialConfirmed) {
+      setSubmitState("error");
+      setStatusMessage("Confirm that you are authorized to submit these non-sensitive files.");
+      return;
+    }
 
     try {
-      const response = await fetch("/api/intake", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: name,
-          organization,
-          email,
-          phone,
-          projectLocation: location,
-          projectType,
-          timeline: needBy,
-          budgetRange: "",
-          message: scope,
-          privacyAccepted,
-          smsConsent,
-          website,
-        }),
-      });
+      const payload = {
+        fullName: name, organization, email, phone, projectLocation: location, projectType,
+        timeline: needBy, budgetRange: "", message: scope, privacyAccepted, smsConsent, website,
+      };
+      let response: Response;
+      if (documents.length) {
+        const multipart = new FormData();
+        for (const [key, value] of Object.entries({ ...payload, publicMaterialConfirmed })) {
+          multipart.append(key, String(value));
+        }
+        for (const file of documents) multipart.append("documents", file, file.name);
+        response = await fetch("/api/intake/documents", { method: "POST", body: multipart });
+      } else {
+        response = await fetch("/api/intake", {
+          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
+        });
+      }
 
       const payload = (await response.json().catch(() => null)) as
         | { ok?: boolean; reference?: string; error?: string }
@@ -102,7 +108,9 @@ export function ContactIntake() {
 
       setReference(payload.reference);
       setSubmitState("success");
-      setStatusMessage("Project review request received.");
+      setStatusMessage(documents.length ? "Documents received into restricted quarantine; preconstruction analysis awaits security and human review." : "Project review request received.");
+      setDocuments([]);
+      setPublicMaterialConfirmed(false);
       emitTccgConversionEvent("tccg_intake_submitted", {
         reference: payload.reference,
         projectType,
@@ -183,6 +191,42 @@ export function ContactIntake() {
         />
       </label>
 
+      <fieldset className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <legend className="px-2 text-sm font-bold text-slate-900">Supporting intake documents (optional)</legend>
+        <p className="mb-3 text-xs leading-5 text-slate-600">
+          Upload up to 12 PDF, Word, Excel, PowerPoint, ZIP, CSV, text or image files,
+          maximum 4 MiB per file and 4 MiB total. ZIP archives are quarantined and not automatically unpacked.
+          Files remain unapproved until security screening and preconstruction review.
+        </p>
+        <input aria-label="Select project files" type="file" multiple
+          accept=".pdf,.docx,.xlsx,.pptx,.zip,.csv,.txt,.png,.jpg,.jpeg"
+          onChange={(event) => {
+            const next = Array.from(event.target.files || []);
+            if (next.length > 12 || next.some((file) => file.size > 4 * 1024 * 1024 || file.size === 0) ||
+                next.reduce((sum, file) => sum + file.size, 0) > 4 * 1024 * 1024) {
+              setSubmitState("error");
+              setStatusMessage("Select at most 12 files, 4 MiB per file and 4 MiB total.");
+              setDocuments([]);
+              event.target.value = "";
+              return;
+            }
+            setDocuments(next);
+            setSubmitState("idle");
+            setStatusMessage("");
+          }}
+          className="block w-full text-sm text-slate-700 file:mr-3 file:rounded-lg file:border-0 file:bg-orange-100 file:px-3 file:py-2 file:font-semibold file:text-orange-900" />
+        {documents.length ? <p className="mt-2 text-xs text-slate-600">
+          {documents.length} selected: {documents.map((file) => file.name).join(" · ")}
+        </p> : null}
+        {documents.length ? <label className="mt-4 flex gap-3 text-sm leading-6 text-slate-700">
+          <input type="checkbox" required checked={publicMaterialConfirmed}
+            onChange={(e) => setPublicMaterialConfirmed(e.target.checked)} className="mt-1" />
+          <span>I have authority to share these documents. They contain no classified, CUI,
+            export-controlled, medical, payment-card or similarly restricted material.
+            I understand they will undergo security and human review before agent processing.</span>
+        </label> : null}
+      </fieldset>
+
       <label className="sr-only" aria-hidden="true">
         Website
         <input tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
@@ -244,7 +288,7 @@ export function ContactIntake() {
       ) : null}
 
       <p className="mt-4 text-xs leading-5 text-slate-500">
-        Successful online submission means the approved intake destination accepted the request and returned a reference. It does not prove project acceptance, availability, licensing, bonding, insurance or other opportunity-specific qualifications. If online delivery is unavailable, use the email fallback.
+        A document receipt confirms restricted storage/quarantine, not document clearance or a consultation result. Successful online submission means the approved intake destination accepted the request and returned a reference. It does not prove project acceptance, availability, licensing, bonding, insurance or other opportunity-specific qualifications. If online delivery is unavailable, use the email fallback.
       </p>
     </form>
   );
