@@ -42,15 +42,19 @@ async function intake(request, env) {
   const reference = request.headers.get("x-tccg-reference");
   const timestamp = request.headers.get("x-tccg-timestamp");
   const signature = request.headers.get("x-tccg-signature");
+  const manifestSha = request.headers.get("x-tccg-manifest-sha256");
   if (!safeReference(reference) || !/^\d{10}$/.test(timestamp || "") ||
       Math.abs(Date.now() - Number(timestamp) * 1000) > 120_000) return error("Unauthorized request.", 401);
-  if (!constantEqual(await mac(env.TCCG_DOCUMENT_INGEST_SECRET, timestamp + "." + reference), signature))
+  if (!/^[a-f0-9]{64}$/.test(manifestSha || "") ||
+      !constantEqual(await mac(env.TCCG_DOCUMENT_INGEST_SECRET, timestamp + "." + reference + "." + manifestSha), signature))
     return error("Unauthorized request.", 401);
   const existing = await env.INTAKE_DB.prepare("SELECT reference FROM intake_submissions WHERE reference = ?").bind(reference).first();
   if (existing) return error("This reference has already been received. Contact TCCG for its status.", 409);
 
   const form = await request.formData().catch(() => null);
   if (!form) return error("Invalid multipart request.");
+  if (!constantEqual(await sha256(te.encode(String(form.get("manifest") || ""))), manifestSha))
+    return error("Manifest digest mismatch.", 401);
   let payload;
   try { payload = JSON.parse(form.get("manifest")); } catch { return error("Missing signed intake manifest."); }
   if (payload?.schemaVersion !== "tccg.preconstruction.intake.v1" || payload?.reference !== reference ||
