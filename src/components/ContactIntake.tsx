@@ -69,21 +69,21 @@ export function ContactIntake() {
     }
 
     try {
-      const payload = {
+      const requestPayload = {
         fullName: name, organization, email, phone, projectLocation: location, projectType,
         timeline: needBy, budgetRange: "", message: scope, privacyAccepted, smsConsent, website,
       };
       let response: Response;
       if (documents.length) {
         const multipart = new FormData();
-        for (const [key, value] of Object.entries({ ...payload, publicMaterialConfirmed })) {
+        for (const [key, value] of Object.entries({ ...requestPayload, publicMaterialConfirmed })) {
           multipart.append(key, String(value));
         }
         for (const file of documents) multipart.append("documents", file, file.name);
         response = await fetch("/api/intake/documents", { method: "POST", body: multipart });
       } else {
         response = await fetch("/api/intake", {
-          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
+          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(requestPayload),
         });
       }
 
